@@ -1,0 +1,38 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">add categories</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+<div class="min-h-screen flex justify-center items-center  mt-4">
+
+  <div class="p-10 border-[1px] -mt-10 border-slate-200 flex flex-col items-center space-y-3">
+        <%= form_with(model: @categories, url: categories_path, method: :post) do |form|%>
+      <div class="py-3">
+        <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none", placeholder: 'Enter Category Name' %>
+      </div>
+
+      <div class="py-3">
+        <% @category.each do |cat| %>
+          <%= form.hidden_field :user_id => cat.user_id %>
+        <% end %>
+      </div>
+
+      <div class="py-3">
+        <%= form.text_field :icon, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none", placeholder: 'Enter Icon Name' %>
+      </div>
+
+      <div class="py-3">
+        <%= form.submit 'Save', class: "w-80 border-blue-900 hover:border-[#4cbb17] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#0070ba] font-bold text-center focus:outline-none" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

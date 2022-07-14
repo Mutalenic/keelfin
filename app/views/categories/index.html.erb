@@ -1,0 +1,35 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between align-center p-5">
+       <li>
+      <h1 class="text-xl uppercase">categories</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-xl uppercase" %>
+    </li>
+  </ul>
+</nav>
+
+<% @categories.each do |category| %>
+  <div class="flex justify-between align-center shadow-lg border p-4 flex mb-6 hover:bg-[#C576F6]">
+        <div class="flex flex-row gap-10 items-start">
+      <%= image_tag "user.png", class: "w-10 h-10" %>
+      <div class="flex flex-col">
+      <p class="text-gray-900 font-bold align-center text-md uppercase"><%= link_to category.name, category_payments_path(category_id: category.id) %></p>
+      <hr/>
+      <small class="text-gray-600"><%= category.created_at.strftime("%m/%d/%Y") %></small>
+      </div>
+    </div>
+    <div class="flex items-start">
+      <div class="text-sm">
+      <p class="text-gray-700">Total: $<%= Payment.where(category_id: category.id).reduce(0) { |sum, t| sum + t.amount } %></p><br />
+        
+    <%= button_to 'Delete', category, class: 'text-red-400  cursor bg-[#e6e6fa] rounded-3xl p-3 px-4  hover:bg-[#ff0000]', method: :delete %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="text-left px-3 mt-6">
+  <%= link_to "Add Category", new_category_path, class: "w-full bg-[#228c22] rounded-3xl p-3 px-4 text-white font-bold hover:bg-[#3778c2] text-center uppercase" %>
+</div>
+
