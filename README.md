@@ -11,10 +11,11 @@
 - Ruby
 - Ruby on Rails
 - PostgreSQL
+- Tailwindcss
 
 ## Live Demo 
 
-- [Check the app](https://stark-island-46203.herokuapp.com/)
+- [Checkout the app](https://joli-choucroute-65855.herokuapp.com/)
 - [Video Presentation](https://www.loom.com/share/3d5c1263e3954ca5a641a0469476e0cc)
 
 ## Getting Started
