@@ -12,24 +12,22 @@ RSpec.describe 'payment/index', type: :feature do
     visit(new_category_payment_path(@category))
   end
 
-
-
   context 'Test item page' do
     it 'I can access this page if user is connected' do
       expect(page).to have_content 'transactions'
       expect(page).to have_content 'Add A New Payment'
     end
 
-      scenario 'confirm that form has a submit button' do
-    expect(page).to have_css('input[type=submit]')
-  end
+    scenario 'confirm that form has a submit button' do
+      expect(page).to have_css('input[type=submit]')
+    end
 
-  scenario 'confirm that the form has a name field' do
-    expect(page).to have_css('input[name=name]')
-  end
+    scenario 'confirm that the form has a name field' do
+      expect(page).to have_css('input[name=name]')
+    end
 
-  scenario 'confirm that the form has an amount field' do
-    expect(page).to have_css('input[name=amount]')
+    scenario 'confirm that the form has an amount field' do
+      expect(page).to have_css('input[name=amount]')
+    end
   end
-end
 end
