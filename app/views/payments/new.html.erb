@@ -1,0 +1,29 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">new transactions</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="text-left px-3 mt-6">
+<h1>Add A New Payment</h1>
+<div class="flex justify-center align-center space-x-4">
+    <%= form_with model: @category_payment, url: category_payments_path do |f| %><br />
+    <%= f.text_field :name, placeholder: 'Name', class: 'w-full border rounded-xl p-2 font-bold hover:bg-[#003087] text-center uppercase' %><br />
+    <br />
+    <%= f.number_field :amount, placeholder: 'Amount', class: 'w-full border rounded-2xl p-2  font-bold hover:bg-[#003087] text-center uppercase' %><br />
+    <br />
+    <%= f.submit 'Add Payment', class: 'w-full border rounded-2xl p-3 font-bold hover:bg-[#003087] text-center uppercase' %>
+    <% end %>
+    </div>
+</div>
+
+
+

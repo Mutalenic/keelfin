@@ -1,0 +1,32 @@
+
+
+<div class="min-h-screen flex justify-center items-center bg-teal">
+  <div class="p-10 border-[1px] -mt-15 border-slate-200 rounded-md flex flex-col items-center space-y-3">
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="field py-3">
+        <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "Enter your name", class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none" %>
+      </div>
+
+      <div class="field py-3">
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Enter your email", class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none" %>
+      </div>
+
+      <div class="field py-3">
+        <%= f.password_field :password, autocomplete: "new-password", placeholder: "Enter your password", class: "p-3 border-[1px] border-slate-500 hover:border-[#FF033E] hover:border-[2px] rounded-sm w-80 focus:outline-none" %>
+      </div>
+
+      <div class="field py-3">
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",  placeholder: "Confirm your password", class: "p-3 border-[1px] border-slate-500 hover:border-[#FF033E] hover:border-[2px] border-[1px] rounded-sm w-80 focus:outline-none" %>
+      </div>
+
+      <div class="actions py-3">
+        <%= f.submit "Sign up", class: "w-80 border-blue-900 hover:border-[#4cbb17] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#3778c2] font-bold text-center focus:outline-none" %>
+      </div>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+
+  </div>
+</div>

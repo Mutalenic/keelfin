@@ -1,0 +1,48 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">transactions</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+<div class="card">
+   <div class="card-body">
+      <% if @payments.blank? %>
+         <p>No Payments yet </p>
+      <% else %>
+      <div >
+         
+           <div class="items-start p-3">
+            <h1><%= @category.name %></h1>
+            </div>
+                  <hr />
+         <ul>
+            <% @payments.each do |payment| %>
+               <li class="flex justify-between align-center shadow-lg hover:bg-[#C576F6] border p-4 flex mb-6">
+                  <a><%= payment.name %></a>
+                  <a>$<%= payment.amount %></a>
+      
+               </li>
+            <% end %>
+         </ul>
+          <hr />
+      </div>
+      <% end %>
+      <div class="text-left px-3 mt-6">
+         <p>Total Amount</p>
+         <p>$<%= @total_amount %></p>
+      </div>
+   </div>
+</div>
+
+<div>
+  <button class=" w-full bg-[#5fb523] text-white p-3 ">
+    <%= link_to "Add Transaction", new_category_payment_path %>
+  </button>
+</div>
