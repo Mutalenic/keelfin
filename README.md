@@ -1,6 +1,9 @@
 # Digi-Budget App
 
 > The Digi-Budget App is a mobile web application that allows the user to manage his/her budget: they have a list of transactions associated with a category, so that the user can see how much money they spend and on a particular category.
+![ror3](https://user-images.githubusercontent.com/19844175/179044384-adb97a02-4ca4-4963-8681-c0ebfbc4c30b.jpg)
+![ror2](https://user-images.githubusercontent.com/19844175/179044408-7b3664fb-4748-4999-b1cd-c2d9dca4c40f.jpg)
+![ror](https://user-images.githubusercontent.com/19844175/179044443-45b4074f-ab51-407b-84b8-709fc9c62a04.jpg)
 
 
 > The project is following data model below: 
