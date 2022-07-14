@@ -19,7 +19,7 @@
 ## Live Demo 
 
 - [Checkout the app](https://joli-choucroute-65855.herokuapp.com/)
-- [Video Presentation](https://www.loom.com/share/3d5c1263e3954ca5a641a0469476e0cc)
+- [Video Presentation](https://www.loom.com/share/215fbedd1dbd47b58d834e3c994c777b)
 
 ## Getting Started
 
