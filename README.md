@@ -27,7 +27,7 @@
 - [Install Ruby on Rails](https://guides.rubyonrails.org/v5.1/getting_started.html)
 - Clone [this repository](https://github.com/Mutalenic/digi_budget.git)
   ```
-  git clone git@github.com:Meri-MG/budget-app-rails.git
+  git clone git@github.com:Mutalenic/digi_budget.git
   ```
 - To get started, In the root directory run:
   ```
