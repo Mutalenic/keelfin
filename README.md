@@ -66,7 +66,7 @@ rubocop
 
 ## Author
 
-:woman: **Lynette Aluoch Acholah**
+**Nicholas Kasonde Mutale**
 
 - GitHub: [@mutalenic](https://github.com/mutalenic)
 - Twitter: [@nicomutale](https://twitter.com/nicomutale)
