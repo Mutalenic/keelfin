@@ -26,7 +26,7 @@
       <div class="text-sm">
       <p class="text-gray-700">Total: $<%= Payment.where(category_id: category.id).reduce(0) { |sum, t| sum + t.amount } %></p><br />
         
-    <%= button_to 'Delete', category_path(category), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-red-400  cursor bg-[#e6e6fa] rounded-3xl p-3 px-4  hover:bg-[#ff0000]' %>
+    <%= button_to 'Delete', category_path(category), method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'text-red-400  cursor bg-[#e6e6fa] rounded-3xl p-3 px-4  hover:bg-[#ff0000]' %>
       </div>
     </div>
   </div>

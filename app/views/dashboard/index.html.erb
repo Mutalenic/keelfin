@@ -1,5 +1,17 @@
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-6">Your Financial Dashboard</h1>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Your Financial Dashboard</h1>
+    <div class="flex space-x-2">
+      <button id="customize-dashboard" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200 flex items-center">
+        <i class="fa-solid fa-gear mr-1"></i> Customize
+      </button>
+      <div class="relative" id="date-filter-container">
+        <button id="date-filter" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200 flex items-center">
+          <i class="fa-solid fa-calendar mr-1"></i> February 2026 <i class="fa-solid fa-chevron-down ml-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
   
   <!-- Debt Alert -->
   <% if @debt_analysis[:is_over_indebted] %>
@@ -10,22 +22,56 @@
     </div>
   <% end %>
   
-  <!-- Economic Indicators -->
-  <% if @latest_economic_data %>
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-      <h2 class="text-lg font-semibold mb-2">📊 Current Economic Indicators (2026)</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <p class="text-sm text-gray-600">USD/ZMW Exchange Rate</p>
-          <p class="text-xl font-bold"><%= @latest_economic_data.usd_zmw_rate ? "K#{number_with_precision(@latest_economic_data.usd_zmw_rate, precision: 2)}" : 'N/A' %></p>
+  <!-- Financial Insights & Economic Indicators -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <!-- Economic Indicators -->
+    <% if @latest_economic_data %>
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h2 class="text-lg font-semibold mb-2">📊 Current Economic Indicators (2026)</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-600">USD/ZMW Exchange Rate</p>
+            <p class="text-xl font-bold"><%= @latest_economic_data.usd_zmw_rate ? "K#{number_with_precision(@latest_economic_data.usd_zmw_rate, precision: 2)}" : 'N/A' %></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Inflation Rate</p>
+            <p class="text-xl font-bold"><%= @latest_economic_data.inflation_rate ? "#{number_with_precision(@latest_economic_data.inflation_rate, precision: 1)}%" : 'N/A' %></p>
+          </div>
         </div>
-        <div>
-          <p class="text-sm text-gray-600">Inflation Rate</p>
-          <p class="text-xl font-bold"><%= @latest_economic_data.inflation_rate ? "#{number_with_precision(@latest_economic_data.inflation_rate, precision: 1)}%" : 'N/A' %></p>
+        <div class="mt-3 text-xs text-gray-500">Source: Bank of Zambia, February 2026</div>
+      </div>
+    <% end %>
+    
+    <!-- Financial Insights -->
+    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-4">
+      <div class="flex items-center mb-3">
+        <div class="p-2 bg-purple-100 rounded-full mr-3">
+          <i class="fa-solid fa-lightbulb text-purple-600"></i>
         </div>
+        <h2 class="text-lg font-semibold">Smart Financial Insights</h2>
+      </div>
+      
+      <% if @financial_insights && @financial_insights.any? %>
+        <ul class="space-y-3">
+          <% @financial_insights.each do |insight| %>
+            <li class="flex items-start">
+              <i class="fa-solid fa-circle-check text-purple-500 mt-1 mr-2"></i>
+              <span><%= insight %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-600 italic">Continue tracking your finances to receive personalized insights.</p>
+      <% end %>
+      
+      <div class="mt-4 text-right">
+        <button class="text-purple-700 hover:text-purple-900 text-sm font-medium flex items-center justify-end w-full">
+          <span>View Detailed Analysis</span>
+          <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
       </div>
     </div>
-  <% end %>
+  </div>
   
   <!-- BNNB Comparison -->
   <% if @bnnb_comparison %>
@@ -83,20 +129,11 @@
     </div>
   </div>
   
-  <!-- Spending by Category -->
-  <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <h2 class="text-xl font-semibold mb-4">Spending by Category</h2>
-    <% if @spending_by_category.any? %>
-      <% @spending_by_category.each do |category, amount| %>
-        <div class="flex justify-between items-center py-2 border-b">
-          <span class="font-medium"><%= category %></span>
-          <span class="font-bold">K<%= number_with_precision(amount, precision: 2) %></span>
-        </div>
-      <% end %>
-    <% else %>
-      <p class="text-gray-500">No spending recorded this month.</p>
-    <% end %>
-  </div>
+  <!-- Spending Analytics with Charts -->
+  <%= render 'spending_charts' %>
+  
+  <!-- Monthly Spending Trend -->
+  <%= render 'monthly_trend_chart' %>
   
   <!-- Recent Transactions -->
   <div class="bg-white rounded-lg shadow p-6">
@@ -122,10 +159,171 @@
     <% end %>
   </div>
   
+  <!-- Financial Goals & Investments -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <!-- Financial Goals -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Financial Goals</h2>
+        <%= link_to "View All", financial_goals_path, class: "text-blue-600 hover:text-blue-800" %>
+      </div>
+      
+      <% if @active_goals && @active_goals.any? %>
+        <div class="space-y-4">
+          <% @active_goals.each do |goal| %>
+            <div class="border rounded-lg p-3 hover:bg-gray-50 transition-colors">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h3 class="font-medium"><%= link_to goal.name, financial_goal_path(goal) %></h3>
+                  <p class="text-sm text-gray-600"><%= goal.days_remaining %> days left</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-bold">K<%= number_with_precision(goal.current_amount, precision: 2) %> / K<%= number_with_precision(goal.target_amount, precision: 2) %></p>
+                  <p class="text-sm"><%= goal.progress_percentage %>% Complete</p>
+                </div>
+              </div>
+              
+              <!-- Progress Bar -->
+              <div class="mt-2 w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-blue-600 h-2 rounded-full" style="width: <%= goal.progress_percentage %>%"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-4 bg-gray-50 rounded-lg">
+          <p class="text-gray-500 mb-2">No active financial goals</p>
+          <%= link_to "Create a Goal", new_financial_goal_path, class: "text-blue-600 hover:text-blue-800" %>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Investments Summary -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Investment Portfolio</h2>
+        <%= link_to "View All", investments_path, class: "text-blue-600 hover:text-blue-800" %>
+      </div>
+      
+      <% if @investments && @investments.any? %>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <p class="text-sm text-gray-600">Total Portfolio Value</p>
+            <p class="text-xl font-bold">K<%= number_with_precision(@total_invested, precision: 2) %></p>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <p class="text-sm text-gray-600">Total Return</p>
+            <p class="text-lg font-bold <%= @investment_return[:percentage] >= 0 ? 'text-green-600' : 'text-red-600' %>">
+              <%= @investment_return[:percentage] >= 0 ? '+' : '' %><%= number_with_precision(@investment_return[:percentage], precision: 2) %>%
+            </p>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <% @investments.each do |investment| %>
+            <div class="border rounded-lg p-3 hover:bg-gray-50 transition-colors">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h3 class="font-medium"><%= link_to investment.name, investment_path(investment) %></h3>
+                  <p class="text-sm text-gray-600"><%= investment.investment_type_text %></p>
+                </div>
+                <div class="text-right">
+                  <p class="font-bold">K<%= number_with_precision(investment.current_value, precision: 2) %></p>
+                  <% return_percentage = investment.return_percentage %>
+                  <p class="text-sm <%= return_percentage >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                    <%= return_percentage >= 0 ? '+' : '' %><%= number_with_precision(return_percentage, precision: 2) %>%
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-4 bg-gray-50 rounded-lg">
+          <p class="text-gray-500 mb-2">No investments yet</p>
+          <%= link_to "Add Investment", new_investment_path, class: "text-blue-600 hover:text-blue-800" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <!-- Upcoming Recurring Transactions -->
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Upcoming Recurring Transactions</h2>
+      <%= link_to "View All", recurring_transactions_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+    
+    <% if @upcoming_recurring && @upcoming_recurring.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Date</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @upcoming_recurring.each do |transaction| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900"><%= link_to transaction.name, recurring_transaction_path(transaction) %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium">K<%= number_with_precision(transaction.amount, precision: 2) %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900"><%= transaction.category.name %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% if transaction.next_occurrence %>
+                    <div class="text-sm text-gray-900"><%= transaction.next_occurrence.strftime('%b %d, %Y') %></div>
+                    <% days_until = (transaction.next_occurrence - Date.current).to_i %>
+                    <div class="text-xs <%= days_until <= 0 ? 'text-red-500 font-bold' : 'text-gray-500' %>">
+                      <%= days_until <= 0 ? 'Due today' : "in #{days_until} days" %>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-4 bg-gray-50 rounded-lg">
+        <p class="text-gray-500 mb-2">No upcoming recurring transactions</p>
+        <%= link_to "Set Up Recurring Transactions", recurring_transactions_path, class: "text-blue-600 hover:text-blue-800" %>
+      </div>
+    <% end %>
+  </div>
+  
   <!-- Quick Actions -->
-  <div class="mt-6 flex gap-4">
-    <%= link_to "Add Transaction", new_category_payment_path(current_user.categories.first || Category.first), class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700" if current_user.categories.any? %>
-    <%= link_to "Manage Debts", debts_path, class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700" %>
-    <%= link_to "View Categories", categories_path, class: "bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700" %>
+  <div class="mt-6 flex flex-wrap gap-4">
+    <%= link_to new_category_payment_path(current_user.categories.first || Category.first), class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center" do %>
+      <i class="fa-solid fa-plus mr-2"></i> Add Transaction
+    <% end if current_user.categories.any? %>
+    
+    <%= link_to financial_goals_path, class: "bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 flex items-center" do %>
+      <i class="fa-solid fa-bullseye mr-2"></i> Financial Goals
+    <% end %>
+    
+    <%= link_to investments_path, class: "bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 flex items-center" do %>
+      <i class="fa-solid fa-chart-line mr-2"></i> Investments
+    <% end %>
+    
+    <%= link_to recurring_transactions_path, class: "bg-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-yellow-700 flex items-center" do %>
+      <i class="fa-solid fa-repeat mr-2"></i> Recurring
+    <% end %>
+    
+    <%= link_to debts_path, class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 flex items-center" do %>
+      <i class="fa-solid fa-credit-card mr-2"></i> Debts
+    <% end %>
+    
+    <%= link_to categories_path, class: "bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 flex items-center" do %>
+      <i class="fa-solid fa-tags mr-2"></i> Categories
+    <% end %>
   </div>
 </div>
