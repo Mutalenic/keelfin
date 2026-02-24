@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   resources :debts
   resources :budgets
   
-  resources :categories, only: %i[index new create show update destroy] do
+  resources :categories, only: %i[index new create show edit update destroy] do
     resources :payments, only: %i[index new create show update destroy]
   end
 end
