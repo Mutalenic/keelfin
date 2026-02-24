@@ -7,7 +7,7 @@
       <h1 class="text-xl text-center uppercase">add categories</h1>
     </li>
     <li>
-      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
     </li>
   </ul>
 </nav>

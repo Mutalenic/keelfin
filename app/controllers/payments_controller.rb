@@ -2,10 +2,9 @@ class PaymentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_category
   before_action :set_payment, only: %i[show edit update destroy]
-  load_and_authorize_resource :category
-  load_and_authorize_resource :payment, through: :category
+  before_action :authorize_payment, only: %i[show edit update destroy]
 
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from CanCan::AccessDenied do
     redirect_to categories_path, alert: 'You are not authorized to perform this action.'
   end
 
@@ -67,5 +66,9 @@ class PaymentsController < ApplicationController
 
   def payment_params
     params.require(:payment).permit(:name, :amount, :payment_method, :is_essential)
+  end
+
+  def authorize_payment
+    authorize! :manage, @payment
   end
 end

@@ -3,6 +3,9 @@ class Budget < ApplicationRecord
   belongs_to :category
   
   validates :monthly_limit, presence: true, numericality: { greater_than: 0 }
+  validates :category_id, uniqueness: { scope: [:user_id, :start_date], message: "already has a budget for this period" }
+  validate :category_belongs_to_user
+  validate :end_date_after_start_date
   
   def current_spending(month = Date.current.beginning_of_month)
     month_start = month.beginning_of_month
@@ -33,5 +36,17 @@ class Budget < ApplicationRecord
     
     self.monthly_limit *= (1 + inflation_rate / 100)
     save
+  end
+
+  private
+
+  def category_belongs_to_user
+    return unless category
+    errors.add(:category, "must belong to you") if category.user_id != user_id
+  end
+
+  def end_date_after_start_date
+    return if end_date.blank? || start_date.blank?
+    errors.add(:end_date, "must be after start date") if end_date < start_date
   end
 end

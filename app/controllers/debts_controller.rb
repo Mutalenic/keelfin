@@ -1,6 +1,11 @@
 class DebtsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_debt, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
+
+  rescue_from CanCan::AccessDenied do
+    redirect_to debts_path, alert: 'You are not authorized to perform this action.'
+  end
   
   def index
     @debts = current_user.debts.order(created_at: :desc)
@@ -43,6 +48,8 @@ class DebtsController < ApplicationController
   
   def set_debt
     @debt = current_user.debts.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to debts_path, alert: 'Debt not found.'
   end
   
   def debt_params
