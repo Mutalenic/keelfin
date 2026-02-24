@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_24_200003) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_24_200007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,7 +46,28 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_200003) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
+    t.string "color", default: "#3778c2"
+    t.string "icon_name"
+    t.string "category_type", default: "variable"
+    t.index ["name", "user_id"], name: "index_categories_on_name_and_user_id", unique: true
+    t.index ["name", "user_id"], name: "unique_categories_per_user", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "category_presets", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "icon"
+    t.string "icon_name"
+    t.string "color", default: "#3778c2"
+    t.string "category_type", null: false
+    t.text "description"
+    t.boolean "is_default", default: false
+    t.integer "display_order", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_type"], name: "index_category_presets_on_category_type"
+    t.index ["name"], name: "index_category_presets_on_name", unique: true
   end
 
   create_table "debts", force: :cascade do |t|
@@ -183,6 +204,21 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_200003) do
     t.index ["user_id"], name: "index_recurring_transactions_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "plan_name", default: "free", null: false
+    t.string "status", default: "active", null: false
+    t.datetime "start_date", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "end_date"
+    t.decimal "amount", precision: 10, scale: 2, default: "0.0"
+    t.jsonb "features", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_name"], name: "index_subscriptions_on_plan_name"
+    t.index ["status"], name: "index_subscriptions_on_status"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -217,4 +253,5 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_200003) do
   add_foreign_key "payments", "users"
   add_foreign_key "recurring_transactions", "categories"
   add_foreign_key "recurring_transactions", "users"
+  add_foreign_key "subscriptions", "users"
 end

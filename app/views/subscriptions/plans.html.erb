@@ -1,0 +1,157 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">Premium Plans</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="text-center mb-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Choose Your DigiBudget Plan</h1>
+    <p class="text-gray-600 max-w-2xl mx-auto">Select the plan that best fits your financial management needs. Upgrade anytime to unlock more powerful features.</p>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <!-- Free Plan -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border-t-4 border-gray-400 hover:shadow-lg transition-shadow">
+      <div class="p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Free</h2>
+        <div class="text-4xl font-bold text-gray-900 mb-6">
+          $0<span class="text-lg text-gray-600 font-normal">/month</span>
+        </div>
+        
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Up to <%= @plans[:free][:features][:max_categories] %> categories</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Up to <%= @plans[:free][:features][:max_budgets] %> budgets</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Basic expense tracking</span>
+          </li>
+          <li class="flex items-center text-gray-400">
+            <i class="fa-solid fa-xmark text-red-400 mr-2"></i>
+            <span>Advanced analytics</span>
+          </li>
+          <li class="flex items-center text-gray-400">
+            <i class="fa-solid fa-xmark text-red-400 mr-2"></i>
+            <span>Export reports</span>
+          </li>
+        </ul>
+        
+        <% if @current_plan == 'free' %>
+          <button class="w-full bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-bold" disabled>Current Plan</button>
+        <% else %>
+          <%= button_to "Downgrade", upgrade_subscription_path(plan_name: 'free'), class: "w-full bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-lg font-bold" %>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Standard Plan -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border-t-4 border-blue-500 hover:shadow-lg transition-shadow transform scale-105">
+      <div class="bg-blue-500 text-white text-center py-2 text-sm font-bold">MOST POPULAR</div>
+      <div class="p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Standard</h2>
+        <div class="text-4xl font-bold text-gray-900 mb-6">
+          $<%= @plans[:standard][:price] %><span class="text-lg text-gray-600 font-normal">/month</span>
+        </div>
+        
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Up to <%= @plans[:standard][:features][:max_categories] %> categories</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Up to <%= @plans[:standard][:features][:max_budgets] %> budgets</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Advanced analytics</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Export reports</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Shopping lists</span>
+          </li>
+          <li class="flex items-center text-gray-400">
+            <i class="fa-solid fa-xmark text-red-400 mr-2"></i>
+            <span>AI insights</span>
+          </li>
+        </ul>
+        
+        <% if @current_plan == 'standard' %>
+          <button class="w-full bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-bold" disabled>Current Plan</button>
+        <% else %>
+          <%= button_to "Upgrade", upgrade_subscription_path(plan_name: 'standard'), class: "w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-bold" %>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Premium Plan -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border-t-4 border-purple-500 hover:shadow-lg transition-shadow">
+      <div class="p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Premium</h2>
+        <div class="text-4xl font-bold text-gray-900 mb-6">
+          $<%= @plans[:premium][:price] %><span class="text-lg text-gray-600 font-normal">/month</span>
+        </div>
+        
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Unlimited categories</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Unlimited budgets</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Advanced analytics</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Export reports</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Shopping lists</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>AI insights & recommendations</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fa-solid fa-check text-green-500 mr-2"></i>
+            <span>Debt payoff strategies</span>
+          </li>
+        </ul>
+        
+        <% if @current_plan == 'premium' %>
+          <button class="w-full bg-gray-300 text-gray-700 py-3 px-4 rounded-lg font-bold" disabled>Current Plan</button>
+        <% else %>
+          <%= button_to "Upgrade", upgrade_subscription_path(plan_name: 'premium'), class: "w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-lg font-bold" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mt-12 text-center">
+    <p class="text-gray-600 mb-4">All plans include our core budgeting and expense tracking features.</p>
+    <p class="text-sm text-gray-500">Prices shown in USD. Billed monthly. Cancel anytime.</p>
+  </div>
+</div>

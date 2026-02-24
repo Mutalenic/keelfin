@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resource :subscription, only: [:show, :new, :create, :update] do
+    member do
+      get :plans
+      post :upgrade
+      post :cancel
+    end
+  end
   devise_for :users
 
   devise_scope :user do
@@ -37,5 +44,8 @@ Rails.application.routes.draw do
   
   resources :categories, only: %i[index new create show edit update destroy] do
     resources :payments, only: %i[index new create show update destroy]
+    collection do
+      post :add_preset
+    end
   end
 end
