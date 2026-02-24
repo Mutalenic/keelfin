@@ -14,15 +14,13 @@
 <div class="min-h-screen flex justify-center items-center  mt-4">
 
   <div class="p-10 border-[1px] -mt-10 border-slate-200 flex flex-col items-center space-y-3">
-        <%= form_with(model: @categories, url: categories_path, method: :post) do |form|%>
+        <%= form_with(model: @category, url: categories_path, method: :post) do |form|%>
       <div class="py-3">
         <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none", placeholder: 'Enter Category Name' %>
       </div>
 
       <div class="py-3">
-        <% @category.each do |cat| %>
-          <%= form.hidden_field :user_id => cat.user_id %>
-        <% end %>
+        <%= form.hidden_field :user_id, value: current_user.id %>
       </div>
 
       <div class="py-3">

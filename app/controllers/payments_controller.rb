@@ -1,37 +1,71 @@
 class PaymentsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_category
+  before_action :set_payment, only: %i[show edit update destroy]
+  load_and_authorize_resource :category
+  load_and_authorize_resource :payment, through: :category
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to categories_path, alert: 'You are not authorized to perform this action.'
+  end
+
   def index
-    @category = Category.find(params[:category_id])
-    @payments = Payment.where(category_id: @category.id)
+    @payments = @category.payments.order(created_at: :desc)
     @total_amount = @payments.sum(:amount)
   end
 
-  def new; end
+  def new
+    @payment = @category.payments.new
+  end
 
   def edit; end
 
   def create
-    @payments = current_user.payments.new(payment_params)
+    @payment = @category.payments.new(payment_params)
+    @payment.user = current_user
 
-    if @payments.save
-      redirect_to category_payments_path, notice: 'Payment added'
+    if @payment.save
+      redirect_to category_payments_path(@category), notice: 'Payment was successfully added.'
     else
-      render :new, alert: 'Payment failed'
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    authorize! :update, @payment
+
+    if @payment.update(payment_params)
+      redirect_to category_payments_path(@category), notice: 'Payment was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @payment = Payment.find(params[:id])
+    authorize! :destroy, @payment
 
     if @payment.destroy
-      redirect_to categories_path, notice: 'Payment deleted'
+      redirect_to category_payments_path(@category), notice: 'Payment was successfully deleted.'
     else
-      render :index, alert: 'Failed to delete payment'
+      redirect_to category_payments_path(@category), alert: 'Failed to delete payment.'
     end
   end
 
   private
 
+  def set_category
+    @category = current_user.categories.find(params[:category_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to categories_path, alert: 'Category not found.'
+  end
+
+  def set_payment
+    @payment = @category.payments.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to category_payments_path(@category), alert: 'Payment not found.'
+  end
+
   def payment_params
-    params.permit(:name, :amount, :category_id)
+    params.permit(:name, :amount)
   end
 end
