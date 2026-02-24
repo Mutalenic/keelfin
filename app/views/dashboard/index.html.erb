@@ -17,11 +17,11 @@
       <div class="grid grid-cols-2 gap-4">
         <div>
           <p class="text-sm text-gray-600">USD/ZMW Exchange Rate</p>
-          <p class="text-xl font-bold">K<%= number_with_precision(@latest_economic_data.usd_zmw_rate, precision: 2) %></p>
+          <p class="text-xl font-bold"><%= @latest_economic_data.usd_zmw_rate ? "K#{number_with_precision(@latest_economic_data.usd_zmw_rate, precision: 2)}" : 'N/A' %></p>
         </div>
         <div>
           <p class="text-sm text-gray-600">Inflation Rate</p>
-          <p class="text-xl font-bold"><%= number_with_precision(@latest_economic_data.inflation_rate, precision: 1) %>%</p>
+          <p class="text-xl font-bold"><%= @latest_economic_data.inflation_rate ? "#{number_with_precision(@latest_economic_data.inflation_rate, precision: 1)}%" : 'N/A' %></p>
         </div>
       </div>
     </div>

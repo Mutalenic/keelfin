@@ -31,8 +31,6 @@ class PaymentsController < ApplicationController
   end
 
   def update
-    authorize! :update, @payment
-
     if @payment.update(payment_params)
       redirect_to category_payments_path(@category), notice: 'Payment was successfully updated.'
     else
@@ -41,8 +39,6 @@ class PaymentsController < ApplicationController
   end
 
   def destroy
-    authorize! :destroy, @payment
-
     if @payment.destroy
       redirect_to category_payments_path(@category), notice: 'Payment was successfully deleted.'
     else

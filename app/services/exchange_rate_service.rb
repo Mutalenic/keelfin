@@ -18,8 +18,17 @@ class ExchangeRateService
     return nil unless data.is_a?(Hash) && data['rates'].is_a?(Hash)
     
     data['rates']['ZMW']
-  rescue StandardError => e
-    Rails.logger.error "Exchange rate fetch failed: #{e.message}"
+  rescue Net::OpenTimeout, Net::ReadTimeout => e
+    Rails.logger.error "Exchange rate API timeout: #{e.message}"
+    nil
+  rescue JSON::ParserError => e
+    Rails.logger.error "Exchange rate JSON parse error: #{e.message}"
+    nil
+  rescue SocketError, Errno::ECONNREFUSED => e
+    Rails.logger.error "Exchange rate network error: #{e.message}"
+    nil
+  rescue => e
+    Rails.logger.error "Unexpected error fetching exchange rate: #{e.class} - #{e.message}"
     nil
   end
   

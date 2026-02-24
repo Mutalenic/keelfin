@@ -39,9 +39,10 @@ class BnnbComparisonService
   def generate_insights(bnnb)
     insights = []
     
-    return insights if bnnb.food_basket.zero?
+    return insights if bnnb.food_basket.nil? || bnnb.food_basket.zero?
+    return insights if user_food_spending.nil?
     
-    food_diff = ((user_food_spending / bnnb.food_basket - 1) * 100).round(2)
+    food_diff = ((user_food_spending.to_f / bnnb.food_basket - 1) * 100).round(2)
     if food_diff < -10
       insights << "✅ Your food spending is #{food_diff.abs}% below JCTR average - great budgeting!"
     elsif food_diff > 10
