@@ -1,10 +1,13 @@
 <nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
   <ul class="w-full flex flex-row justify-between align-center p-5">
-       <li>
+    <li>
+      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
+    </li>
+    <li>
       <h1 class="text-xl uppercase">categories</h1>
     </li>
     <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-xl uppercase" %>
+      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
     </li>
   </ul>
 </nav>
