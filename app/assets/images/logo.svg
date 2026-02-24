@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <linearGradient id="dArcGrad" x1="0%" y1="0%" x2="60%" y2="100%">
+      <stop offset="0%" stop-color="#1a7a2e"/>
+      <stop offset="55%" stop-color="#4db830"/>
+      <stop offset="100%" stop-color="#e8d000"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="16" flood-color="rgba(0,0,0,0.15)"/>
+    </filter>
+  </defs>
+
+  <!-- Mint green background -->
+  <rect width="500" height="500" fill="#b8d8c4"/>
+
+  <!-- White rounded square card -->
+  <rect x="55" y="55" width="390" height="390" rx="72" ry="72" fill="white" filter="url(#shadow)"/>
+
+  <!-- Big D arc – thick open curve with gradient -->
+  <path
+    d="M 158,155 C 265,148 375,190 375,250 C 375,310 265,352 158,345"
+    fill="none"
+    stroke="url(#dArcGrad)"
+    stroke-width="38"
+    stroke-linecap="round"
+  />
+
+  <!-- Hollow ring – centered exactly between the two arc endpoints (158,155) and (158,345) → midpoint (158,250) -->
+  <circle cx="158" cy="250" r="24" fill="white" stroke="#1a7a2e" stroke-width="15"/>
+  <circle cx="158" cy="250" r="9" fill="white"/>
+
+
+
+</svg>

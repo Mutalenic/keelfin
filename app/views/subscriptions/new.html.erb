@@ -1,0 +1,48 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">Welcome to DigiBudget</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="container mx-auto px-4 py-12">
+  <div class="max-w-3xl mx-auto text-center">
+    <div class="mb-8">
+      <i class="fa-solid fa-wallet text-6xl text-[#3778c2] mb-4"></i>
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome to DigiBudget Premium</h1>
+      <p class="text-gray-600 mb-6">Take control of your finances with our powerful budgeting tools and insights.</p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Activate Your Free Account</h2>
+      <p class="text-gray-600 mb-6">Start with our free plan and upgrade anytime to unlock more powerful features.</p>
+      
+      <div class="space-y-4 mb-8">
+        <div class="flex items-center">
+          <i class="fa-solid fa-check text-green-500 mr-3"></i>
+          <span class="text-gray-700">Up to 10 categories</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fa-solid fa-check text-green-500 mr-3"></i>
+          <span class="text-gray-700">Up to 5 budgets</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fa-solid fa-check text-green-500 mr-3"></i>
+          <span class="text-gray-700">Basic expense tracking</span>
+        </div>
+      </div>
+      
+      <%= button_to "Activate Free Account", subscription_path, method: :post, class: "bg-[#3778c2] hover:bg-[#2c5d99] text-white font-bold py-3 px-6 rounded-lg" %>
+    </div>
+    
+    <p class="text-gray-600 mb-2">Want more features?</p>
+    <%= link_to "View Premium Plans", plans_subscription_path, class: "text-[#3778c2] hover:text-[#2c5d99] font-semibold" %>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">Category Details</h1>
+    </li>
+    <li>
+      <%= link_to '', edit_category_path(@category), class: "text-xl fa-solid fa-pencil" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="container mx-auto px-4 py-6">
+  <!-- Category Header -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-6" style="border-left: 8px solid <%= @category.color || '#3778c2' %>;">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background-color: <%= @category.color || '#3778c2' %>;">
+          <i class="<%= @category.icon_name.present? ? @category.icon_name : 'fa-solid fa-tag' %> text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold"><%= @category.name %></h2>
+          <p class="text-gray-600"><%= @category.description.present? ? @category.description : "No description available" %></p>
+        </div>
+      </div>
+      <div class="text-right">
+        <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+          <%= @category.category_type&.capitalize || "Uncategorized" %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <!-- Total Amount -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-lg font-semibold text-gray-600 mb-2">Total Spending</h3>
+      <p class="text-3xl font-bold text-gray-800">$<%= number_with_precision(@total_amount, precision: 2) %></p>
+    </div>
+    
+    <!-- Monthly Average -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-lg font-semibold text-gray-600 mb-2">Monthly Average</h3>
+      <p class="text-3xl font-bold text-gray-800">$<%= number_with_precision(@monthly_average, precision: 2) %></p>
+    </div>
+    
+    <!-- Percentage of Total -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-lg font-semibold text-gray-600 mb-2">% of Total Spending</h3>
+      <p class="text-3xl font-bold text-gray-800"><%= number_with_precision(@percentage_of_total, precision: 1) %>%</p>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold">Recent Transactions</h3>
+      <%= link_to "View All", category_payments_path(@category), class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+    
+    <% if @payments.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="py-2 px-4 text-left text-gray-600">Date</th>
+              <th class="py-2 px-4 text-left text-gray-600">Description</th>
+              <th class="py-2 px-4 text-right text-gray-600">Amount</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% @payments.each do |payment| %>
+              <tr class="hover:bg-gray-50">
+                <td class="py-3 px-4 text-gray-800"><%= payment.created_at.strftime("%b %d, %Y") %></td>
+                <td class="py-3 px-4 text-gray-800"><%= payment.name %></td>
+                <td class="py-3 px-4 text-right font-medium <%= payment.amount > 0 ? 'text-red-600' : 'text-green-600' %>">
+                  $<%= number_with_precision(payment.amount, precision: 2) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-8 text-gray-500">
+        <p>No transactions found for this category.</p>
+        <%= link_to "Add a payment", new_category_payment_path(@category), class: "mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-between mt-6">
+    <%= link_to "Add Payment", new_category_payment_path(@category), class: "bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to "Edit Category", edit_category_path(@category), class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= button_to "Delete Category", category_path(@category), method: :delete, data: { turbo_confirm: "Are you sure? This will delete all payments in this category." }, class: "bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+</div>

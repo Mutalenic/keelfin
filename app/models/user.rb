@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :recurring_transactions, dependent: :destroy
   has_many :investments, dependent: :destroy
   has_many :investment_transactions, through: :investments
+  has_one :subscription, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 50, minimum: 2 }
   validates :monthly_income, numericality: { greater_than: 0 }, allow_nil: true
@@ -61,5 +62,53 @@ class User < ApplicationRecord
     
     daily_burn = burn_rate(days_elapsed)
     monthly_income.to_f - (daily_burn * days_in_month)
+  end
+  
+  # Subscription and premium features
+  def has_subscription?
+    subscription.present?
+  end
+  
+  def active_subscription?
+    has_subscription? && subscription.active?
+  end
+  
+  def premium?
+    active_subscription? && subscription.plan_name == 'premium'
+  end
+  
+  def standard?
+    active_subscription? && subscription.plan_name == 'standard'
+  end
+  
+  def free_plan?
+    !has_subscription? || subscription.plan_name == 'free'
+  end
+  
+  def can_access_feature?(feature)
+    return true if admin?
+    return false unless has_subscription?
+    subscription.can_access_feature?(feature)
+  end
+  
+  def max_categories
+    return Float::INFINITY if admin?
+    return Subscription::PLANS[:free][:features][:max_categories] unless has_subscription?
+    
+    max = subscription.features['max_categories']
+    max == -1 ? Float::INFINITY : max
+  end
+  
+  def max_budgets
+    return Float::INFINITY if admin?
+    return Subscription::PLANS[:free][:features][:max_budgets] unless has_subscription?
+    
+    max = subscription.features['max_budgets']
+    max == -1 ? Float::INFINITY : max
+  end
+  
+  def ensure_subscription
+    return subscription if has_subscription?
+    Subscription.create_free_subscription(self)
   end
 end
