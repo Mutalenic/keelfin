@@ -1,0 +1,131 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Your Financial Dashboard</h1>
+  
+  <!-- Debt Alert -->
+  <% if @debt_analysis[:is_over_indebted] %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+      <p class="font-bold">⚠️ Debt Alert</p>
+      <p>Your debt payments (<%= @debt_analysis[:debt_to_income] %>%) exceed the safe 40% threshold.</p>
+      <%= link_to "Manage Debts", debts_path, class: "underline font-semibold" %>
+    </div>
+  <% end %>
+  
+  <!-- Economic Indicators -->
+  <% if @latest_economic_data %>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-semibold mb-2">📊 Current Economic Indicators (2026)</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-sm text-gray-600">USD/ZMW Exchange Rate</p>
+          <p class="text-xl font-bold">K<%= number_with_precision(@latest_economic_data.usd_zmw_rate, precision: 2) %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Inflation Rate</p>
+          <p class="text-xl font-bold"><%= number_with_precision(@latest_economic_data.inflation_rate, precision: 1) %>%</p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <!-- BNNB Comparison -->
+  <% if @bnnb_comparison %>
+    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">📊 Your Spending vs. JCTR Benchmark</h2>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <p class="text-sm text-gray-600">JCTR Total Basket</p>
+          <p class="text-2xl font-bold">K<%= number_with_precision(@bnnb_comparison[:bnnb_total], precision: 2) %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Your Total Spending</p>
+          <p class="text-2xl font-bold">K<%= number_with_precision(@bnnb_comparison[:user_total], precision: 2) %></p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <p class="text-sm text-gray-600">JCTR Food Basket</p>
+          <p class="text-lg font-semibold">K<%= number_with_precision(@bnnb_comparison[:bnnb_food], precision: 2) %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Your Food Spending</p>
+          <p class="text-lg font-semibold">K<%= number_with_precision(@bnnb_comparison[:user_food], precision: 2) %></p>
+        </div>
+      </div>
+      
+      <div class="mt-4">
+        <% @bnnb_comparison[:insights].each do |insight| %>
+          <p class="text-sm mt-2"><%= insight %></p>
+        <% end %>
+      </div>
+      
+      <p class="text-xs text-gray-500 mt-4">Source: JCTR BNNB January 2026</p>
+    </div>
+  <% end %>
+  
+  <!-- Spending Summary -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-sm text-gray-600 mb-2">This Month's Spending</h3>
+      <p class="text-3xl font-bold">K<%= number_with_precision(@total_spending, precision: 2) %></p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-sm text-gray-600 mb-2">Daily Burn Rate</h3>
+      <p class="text-3xl font-bold">K<%= number_with_precision(@burn_rate, precision: 2) %></p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-sm text-gray-600 mb-2">Projected Month-End Balance</h3>
+      <p class="text-3xl font-bold <%= @projected_balance < 0 ? 'text-red-600' : 'text-green-600' %>">
+        K<%= number_with_precision(@projected_balance, precision: 2) %>
+      </p>
+    </div>
+  </div>
+  
+  <!-- Spending by Category -->
+  <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-xl font-semibold mb-4">Spending by Category</h2>
+    <% if @spending_by_category.any? %>
+      <% @spending_by_category.each do |category, amount| %>
+        <div class="flex justify-between items-center py-2 border-b">
+          <span class="font-medium"><%= category %></span>
+          <span class="font-bold">K<%= number_with_precision(amount, precision: 2) %></span>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-gray-500">No spending recorded this month.</p>
+    <% end %>
+  </div>
+  
+  <!-- Recent Transactions -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Recent Transactions</h2>
+    <% if @recent_payments.any? %>
+      <% @recent_payments.each do |payment| %>
+        <div class="flex justify-between items-center py-3 border-b">
+          <div>
+            <p class="font-medium"><%= payment.name %></p>
+            <p class="text-sm text-gray-600">
+              <%= payment.category.name %> • 
+              <%= payment.created_at.strftime('%b %d, %Y') %>
+              <% if payment.payment_method %>
+                • <%= payment.payment_method.titleize %>
+              <% end %>
+            </p>
+          </div>
+          <p class="font-bold">K<%= number_with_precision(payment.amount, precision: 2) %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-gray-500">No transactions yet.</p>
+    <% end %>
+  </div>
+  
+  <!-- Quick Actions -->
+  <div class="mt-6 flex gap-4">
+    <%= link_to "Add Transaction", new_category_payment_path(current_user.categories.first || Category.first), class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700" if current_user.categories.any? %>
+    <%= link_to "Manage Debts", debts_path, class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700" %>
+    <%= link_to "View Categories", categories_path, class: "bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700" %>
+  </div>
+</div>
