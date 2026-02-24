@@ -10,16 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_24_093840) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_24_113313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bnnb_datas", force: :cascade do |t|
     t.date "month", null: false
     t.string "location", default: "Lusaka"
-    t.decimal "total_basket", precision: 10, scale: 2, null: false
-    t.decimal "food_basket", precision: 10, scale: 2, null: false
-    t.decimal "non_food_basket", precision: 10, scale: 2, null: false
+    t.decimal "total_basket", precision: 10, scale: 2
+    t.decimal "food_basket", precision: 10, scale: 2
+    t.decimal "non_food_basket", precision: 10, scale: 2
     t.jsonb "item_breakdown", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

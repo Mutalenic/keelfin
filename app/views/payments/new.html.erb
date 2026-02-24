@@ -15,7 +15,7 @@
 <div class="text-left px-3 mt-6">
 <h1>Add A New Payment</h1>
 <div class="flex justify-center align-center space-x-4">
-    <%= form_with model: @category_payment, url: category_payments_path do |f| %><br />
+    <%= form_with model: @payment, url: category_payments_path do |f| %><br />
     <%= f.text_field :name, placeholder: 'Name', class: 'w-full border rounded-xl p-2 font-bold hover:bg-[#003087] text-center uppercase' %><br />
     <br />
     <%= f.number_field :amount, placeholder: 'Amount', class: 'w-full border rounded-2xl p-2  font-bold hover:bg-[#003087] text-center uppercase' %><br />

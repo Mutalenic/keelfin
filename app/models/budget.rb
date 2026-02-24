@@ -31,11 +31,12 @@ class Budget < ApplicationRecord
   end
   
   def adjust_for_inflation!(inflation_rate)
-    return unless inflation_adjusted
-    return if inflation_rate.nil? || inflation_rate.zero?
+    return false unless inflation_adjusted
+    return false if inflation_rate.nil? || inflation_rate.zero?
     
-    new_limit = monthly_limit * (1 + inflation_rate / 100)
-    update(monthly_limit: new_limit)
+    new_limit = monthly_limit * (1 + inflation_rate / 100.0)
+    update!(monthly_limit: new_limit)
+    true
   end
 
   private

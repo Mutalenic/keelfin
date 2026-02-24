@@ -3,18 +3,25 @@ class AdjustBudgetsForInflationJob < ApplicationJob
   
   def perform
     latest_inflation = EconomicIndicator.latest_inflation
-    return unless latest_inflation
+    
+    unless latest_inflation
+      Rails.logger.warn "No inflation data available for budget adjustment"
+      return
+    end
     
     # Convert annual inflation to monthly
     monthly_inflation = latest_inflation / 12
     
+    adjusted_count = 0
     Budget.where(inflation_adjusted: true).find_each do |budget|
-      budget.adjust_for_inflation!(monthly_inflation)
+      if budget.adjust_for_inflation!(monthly_inflation)
+        adjusted_count += 1
+      end
     end
     
-    count = Budget.where(inflation_adjusted: true).count
-    Rails.logger.info "Adjusted #{count} budgets for inflation (#{monthly_inflation}% monthly)"
+    Rails.logger.info "Adjusted #{adjusted_count} budgets for inflation (#{monthly_inflation}% monthly)"
   rescue StandardError => e
-    Rails.logger.error "Failed to adjust budgets for inflation: #{e.message}"
+    Rails.logger.error "Failed to adjust budgets for inflation: #{e.message}\n#{e.backtrace.join("\n")}"
+    raise
   end
 end
