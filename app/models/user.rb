@@ -45,7 +45,7 @@ class User < ApplicationRecord
     start_date = days.days.ago
     total = total_spending(start_date..Date.current)
     return 0 if days.zero?
-    total / days
+    total.to_f / days
   end
   
   def projected_month_end_balance

@@ -3,12 +3,9 @@ class Budget < ApplicationRecord
   belongs_to :category
   
   validates :monthly_limit, presence: true, numericality: { greater_than: 0 }
-  validates :category_id, uniqueness: { 
-    scope: [:user_id, ->(budget) { budget.start_date.present? ? [budget.start_date] : [] }], 
-    message: "already has a budget for this period" 
-  }
   validate :category_belongs_to_user
   validate :end_date_after_start_date
+  validate :unique_category_budget
   
   def current_spending(month = Date.current.beginning_of_month)
     month_start = month.beginning_of_month
@@ -26,7 +23,7 @@ class Budget < ApplicationRecord
   
   def percentage_used(month = Date.current.beginning_of_month)
     return 0 if monthly_limit.zero?
-    (current_spending(month) / monthly_limit * 100).round(2)
+    (current_spending(month).to_f / monthly_limit * 100).round(2)
   end
   
   def is_overspent?(month = Date.current.beginning_of_month)
@@ -52,5 +49,13 @@ class Budget < ApplicationRecord
   def end_date_after_start_date
     return if end_date.blank? || start_date.blank?
     errors.add(:end_date, "must be after start date") if end_date < start_date
+  end
+
+  def unique_category_budget
+    existing = Budget.where(user_id: user_id, category_id: category_id)
+    existing = existing.where(start_date: start_date) if start_date.present?
+    existing = existing.where.not(id: id) if persisted?
+    
+    errors.add(:category_id, "already has a budget for this period") if existing.exists?
   end
 end

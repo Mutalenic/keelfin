@@ -47,7 +47,7 @@ class DebtAnalysisService
     active_debts = @user.debts.active
     
     {
-      avalanche: active_debts.order(interest_rate: :desc).pluck(:lender_name, :interest_rate),
+      avalanche: active_debts.where.not(interest_rate: nil).order(interest_rate: :desc).pluck(:lender_name, :interest_rate),
       snowball: active_debts.order(principal_amount: :asc).pluck(:lender_name, :principal_amount)
     }
   end

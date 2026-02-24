@@ -41,8 +41,6 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    authorize! :destroy, @category
-
     if @category.destroy
       redirect_to categories_path, notice: 'Category was successfully deleted.'
     else

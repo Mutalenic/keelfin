@@ -23,7 +23,7 @@
       </div>
       <div>
         <p class="text-sm text-gray-600">Monthly Payment</p>
-        <p class="text-xl font-bold">K<%= number_with_precision(@debt.monthly_payment, precision: 2) %></p>
+        <p class="text-xl font-bold">K<%= number_with_precision(@debt.monthly_payment || 0, precision: 2) %></p>
       </div>
     </div>
     
@@ -67,7 +67,7 @@
     
     <div class="mt-6 flex space-x-4">
       <%= link_to 'Edit', edit_debt_path(@debt), class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700" %>
-      <%= button_to 'Delete', @debt, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700" %>
+      <%= button_to 'Delete', @debt, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700" %>
     </div>
   </div>
 </div>
