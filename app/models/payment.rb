@@ -9,10 +9,18 @@ class Payment < ApplicationRecord
     in: %w[cash mtn_momo airtel_money bank], 
     allow_nil: true 
   }
+  validate :category_belongs_to_user
   
   scope :recent, -> { order(created_at: :desc) }
   scope :this_month, -> { where('created_at >= ?', Date.current.beginning_of_month) }
   scope :essential, -> { where(is_essential: true) }
   scope :discretionary, -> { where(is_essential: false) }
   scope :by_method, ->(method) { where(payment_method: method) }
+
+  private
+
+  def category_belongs_to_user
+    return unless category && user
+    errors.add(:category, "must belong to you") if category.user_id != user_id
+  end
 end

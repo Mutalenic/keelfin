@@ -22,18 +22,18 @@ class BnnbComparisonService
   private
   
   def user_total_spending
-    @user.payments.where('created_at >= ? AND created_at <= ?', @month, @month.end_of_month).sum(:amount)
+    @user_total_spending ||= @user.payments.where('created_at >= ? AND created_at <= ?', @month, @month.end_of_month).sum(:amount)
   end
   
   def user_food_spending
-    @user.payments.joins(:category)
+    @user_food_spending ||= @user.payments.joins(:category)
       .where('categories.name ILIKE ?', '%food%')
       .where('payments.created_at >= ? AND payments.created_at <= ?', @month, @month.end_of_month)
       .sum(:amount)
   end
   
   def user_non_food_spending
-    user_total_spending - user_food_spending
+    @user_non_food_spending ||= user_total_spending - user_food_spending
   end
   
   def generate_insights(bnnb)

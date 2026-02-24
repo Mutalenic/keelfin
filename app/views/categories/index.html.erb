@@ -7,7 +7,7 @@
       <h1 class="text-xl uppercase">categories</h1>
     </li>
     <li>
-      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
     </li>
   </ul>
 </nav>
@@ -26,7 +26,7 @@
       <div class="text-sm">
       <p class="text-gray-700">Total: $<%= Payment.where(category_id: category.id).reduce(0) { |sum, t| sum + t.amount } %></p><br />
         
-    <%= button_to 'Delete', category_path(category), method: :delete, class: 'text-red-400  cursor bg-[#e6e6fa] rounded-3xl p-3 px-4  hover:bg-[#ff0000]', data: { turbo_confirm: 'Are you sure?' } %>
+    <%= button_to 'Delete', category_path(category), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-red-400  cursor bg-[#e6e6fa] rounded-3xl p-3 px-4  hover:bg-[#ff0000]' %>
       </div>
     </div>
   </div>
