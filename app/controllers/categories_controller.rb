@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_category, only: %i[show update destroy]
+  before_action :set_category, only: %i[show edit update destroy]
   load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -16,6 +16,9 @@ class CategoriesController < ApplicationController
     @category = current_user.categories.new
   end
 
+  def edit
+  end
+
   def create
     @category = current_user.categories.new(category_params)
 
@@ -27,6 +30,14 @@ class CategoriesController < ApplicationController
   end
 
   def show
+  end
+
+  def update
+    if @category.update(category_params)
+      redirect_to categories_path, notice: 'Category was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
