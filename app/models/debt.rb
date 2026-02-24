@@ -15,7 +15,7 @@ class Debt < ApplicationRecord
   
   def total_interest_cost
     return 0 unless monthly_payment && end_date && start_date
-    months = ((end_date - start_date) / 30).to_i
+    months = ((end_date.year - start_date.year) * 12 + end_date.month - start_date.month)
     (monthly_payment * months) - principal_amount
   end
   

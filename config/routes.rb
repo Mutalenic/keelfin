@@ -1,10 +1,4 @@
 Rails.application.routes.draw do
-  get "budgets/index"
-  get "budgets/new"
-  get "budgets/create"
-  get "budgets/edit"
-  get "budgets/update"
-  get "budgets/destroy"
   devise_for :users
 
   devise_scope :user do

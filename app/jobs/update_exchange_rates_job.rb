@@ -5,15 +5,17 @@ class UpdateExchangeRatesJob < ApplicationJob
     rate = ExchangeRateService.fetch_latest_usd_zmw
     return unless rate
     
-    EconomicIndicator.create!(
-      date: Date.current,
-      usd_zmw_rate: rate,
-      source: 'exchangerate-api.com'
-    )
+    indicator = EconomicIndicator.find_or_create_by(date: Date.current) do |ind|
+      ind.usd_zmw_rate = rate
+      ind.source = 'exchangerate-api.com'
+    end
+    
+    # Update if it already existed
+    if indicator.persisted? && indicator.usd_zmw_rate != rate
+      indicator.update(usd_zmw_rate: rate, source: 'exchangerate-api.com')
+    end
     
     Rails.logger.info "Updated USD/ZMW rate: #{rate}"
-  rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.warn "Exchange rate already exists for today: #{e.message}"
   rescue StandardError => e
     Rails.logger.error "Failed to update exchange rates: #{e.message}"
   end

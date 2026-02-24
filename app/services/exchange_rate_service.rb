@@ -4,7 +4,15 @@ require 'json'
 class ExchangeRateService
   def self.fetch_latest_usd_zmw
     url = URI("https://api.exchangerate-api.com/v4/latest/USD")
-    response = Net::HTTP.get(url)
+    
+    response = Net::HTTP.start(url.host, url.port, 
+                               use_ssl: true, 
+                               open_timeout: 5, 
+                               read_timeout: 10) do |http|
+      request = Net::HTTP::Get.new(url)
+      http.request(request).body
+    end
+    
     data = JSON.parse(response)
     
     return nil unless data.is_a?(Hash) && data['rates'].is_a?(Hash)

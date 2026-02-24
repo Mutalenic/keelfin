@@ -9,7 +9,7 @@
       <h1 class="text-2xl text-center italic font-bold text-[#3671b9]">Welcome</h1>
     </div><br />
 <button class="w-full bg-[#3671b9] rounded-xl p-3 text-white font-bold hover:bg-[#4cbb17] text-center uppercase" onclick="location.href='/categories'">Categories</button><br /><br />
-<%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "w-full bg-[#3671b9] rounded-2xl p-3 text-white font-bold hover:bg-[#B1365B] text-center uppercase" %>
+<%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "w-full bg-[#3671b9] rounded-2xl p-3 text-white font-bold hover:bg-[#B1365B] text-center uppercase" %>
 <% else %>
 <div class="flex justify-center">
 <div class="w-full">
