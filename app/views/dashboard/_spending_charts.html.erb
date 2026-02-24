@@ -1,0 +1,92 @@
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Spending Analytics</h2>
+    <div class="flex space-x-2">
+      <button id="view-as-chart" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200">
+        <i class="fa-solid fa-chart-bar mr-1"></i> Chart
+      </button>
+      <button id="view-as-table" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
+        <i class="fa-solid fa-table mr-1"></i> Table
+      </button>
+    </div>
+  </div>
+  
+  <div id="spending-chart" class="mb-6">
+    <!-- Chart will be rendered here -->
+    <div class="h-64">
+      <canvas id="spending-by-category-chart"></canvas>
+    </div>
+  </div>
+  
+  <script>
+    // Make spending by category data available to the charts.js script
+    const spendingByCategoryData = <%= raw @spending_by_category.to_json %>;
+  </script>
+  
+  <div id="spending-table" class="hidden">
+    <% if @spending_by_category.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @spending_by_category.each do |category, amount| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900"><%= category %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium">K<%= number_with_precision(amount, precision: 2) %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2 w-24">
+                      <div class="bg-blue-600 h-2.5 rounded-full" style="width: <%= (amount / @total_spending * 100).round(1) %>%"></div>
+                    </div>
+                    <span class="text-sm font-medium"><%= number_with_precision((amount / @total_spending * 100), precision: 1) %>%</span>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-gray-500 text-center py-4">No spending data available</p>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const chartButton = document.getElementById('view-as-chart');
+    const tableButton = document.getElementById('view-as-table');
+    const chartDiv = document.getElementById('spending-chart');
+    const tableDiv = document.getElementById('spending-table');
+    
+    if (chartButton && tableButton && chartDiv && tableDiv) {
+      chartButton.addEventListener('click', function() {
+        chartDiv.classList.remove('hidden');
+        tableDiv.classList.add('hidden');
+        chartButton.classList.remove('bg-gray-100', 'text-gray-700');
+        chartButton.classList.add('bg-blue-100', 'text-blue-700');
+        tableButton.classList.remove('bg-blue-100', 'text-blue-700');
+        tableButton.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      
+      tableButton.addEventListener('click', function() {
+        chartDiv.classList.add('hidden');
+        tableDiv.classList.remove('hidden');
+        chartButton.classList.remove('bg-blue-100', 'text-blue-700');
+        chartButton.classList.add('bg-gray-100', 'text-gray-700');
+        tableButton.classList.remove('bg-gray-100', 'text-gray-700');
+        tableButton.classList.add('bg-blue-100', 'text-blue-700');
+      });
+    }
+  });
+</script>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_24_113313) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_24_200003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -75,6 +75,71 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_113313) do
     t.index ["date"], name: "index_economic_indicators_on_date", unique: true
   end
 
+  create_table "financial_goals", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "category_id"
+    t.string "name", null: false
+    t.string "description"
+    t.decimal "target_amount", precision: 12, scale: 2, null: false
+    t.decimal "current_amount", precision: 12, scale: 2, default: "0.0"
+    t.date "start_date", null: false
+    t.date "target_date", null: false
+    t.date "completion_date"
+    t.string "goal_type", null: false
+    t.boolean "completed", default: false
+    t.boolean "recurring", default: false
+    t.string "recurrence_period"
+    t.jsonb "milestones", default: {}
+    t.string "priority", default: "medium"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_financial_goals_on_category_id"
+    t.index ["user_id", "completed"], name: "index_financial_goals_on_user_id_and_completed"
+    t.index ["user_id", "goal_type"], name: "index_financial_goals_on_user_id_and_goal_type"
+    t.index ["user_id"], name: "index_financial_goals_on_user_id"
+  end
+
+  create_table "investment_transactions", force: :cascade do |t|
+    t.bigint "investment_id", null: false
+    t.bigint "user_id", null: false
+    t.decimal "amount", precision: 12, scale: 2, null: false
+    t.date "transaction_date", null: false
+    t.string "transaction_type", null: false
+    t.string "description"
+    t.string "reference_number"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["investment_id", "transaction_type"], name: "idx_on_investment_id_transaction_type_64c1170fd4"
+    t.index ["investment_id"], name: "index_investment_transactions_on_investment_id"
+    t.index ["transaction_date"], name: "index_investment_transactions_on_transaction_date"
+    t.index ["user_id"], name: "index_investment_transactions_on_user_id"
+  end
+
+  create_table "investments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.string "investment_type", null: false
+    t.decimal "initial_amount", precision: 12, scale: 2, default: "0.0", null: false
+    t.decimal "current_value", precision: 12, scale: 2, default: "0.0", null: false
+    t.decimal "target_value", precision: 12, scale: 2
+    t.date "start_date"
+    t.date "target_date"
+    t.date "last_updated"
+    t.integer "risk_level"
+    t.string "institution"
+    t.string "account_number"
+    t.boolean "active", default: true
+    t.text "notes"
+    t.jsonb "value_history", default: []
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "active"], name: "index_investments_on_user_id_and_active"
+    t.index ["user_id", "investment_type"], name: "index_investments_on_user_id_and_investment_type"
+    t.index ["user_id"], name: "index_investments_on_user_id"
+  end
+
   create_table "payments", force: :cascade do |t|
     t.string "name"
     t.decimal "amount"
@@ -92,6 +157,30 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_113313) do
     t.index ["user_id", "category_id"], name: "index_payments_on_user_id_and_category_id"
     t.index ["user_id", "created_at"], name: "index_payments_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_payments_on_user_id"
+  end
+
+  create_table "recurring_transactions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "category_id", null: false
+    t.string "name", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "frequency", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.date "next_occurrence"
+    t.date "last_occurrence"
+    t.boolean "active", default: true
+    t.string "payment_method"
+    t.boolean "is_essential", default: true
+    t.text "notes"
+    t.integer "occurrences_count", default: 0
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_recurring_transactions_on_category_id"
+    t.index ["next_occurrence"], name: "index_recurring_transactions_on_next_occurrence"
+    t.index ["user_id", "active"], name: "index_recurring_transactions_on_user_id_and_active"
+    t.index ["user_id"], name: "index_recurring_transactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -119,6 +208,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_113313) do
   add_foreign_key "budgets", "users"
   add_foreign_key "categories", "users"
   add_foreign_key "debts", "users"
+  add_foreign_key "financial_goals", "categories"
+  add_foreign_key "financial_goals", "users"
+  add_foreign_key "investment_transactions", "investments"
+  add_foreign_key "investment_transactions", "users"
+  add_foreign_key "investments", "users"
   add_foreign_key "payments", "categories"
   add_foreign_key "payments", "users"
+  add_foreign_key "recurring_transactions", "categories"
+  add_foreign_key "recurring_transactions", "users"
 end

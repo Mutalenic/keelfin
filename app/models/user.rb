@@ -8,6 +8,10 @@ class User < ApplicationRecord
   has_many :payments, dependent: :destroy
   has_many :debts, dependent: :destroy
   has_many :budgets, dependent: :destroy
+  has_many :financial_goals, dependent: :destroy
+  has_many :recurring_transactions, dependent: :destroy
+  has_many :investments, dependent: :destroy
+  has_many :investment_transactions, through: :investments
 
   validates :name, presence: true, length: { maximum: 50, minimum: 2 }
   validates :monthly_income, numericality: { greater_than: 0 }, allow_nil: true

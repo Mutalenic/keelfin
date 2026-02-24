@@ -1,0 +1,99 @@
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Budget vs Actual Spending</h2>
+    <div class="flex space-x-2">
+      <button id="view-as-chart" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200">
+        <i class="fa-solid fa-chart-bar mr-1"></i> Chart
+      </button>
+      <button id="view-as-table" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
+        <i class="fa-solid fa-table mr-1"></i> Table
+      </button>
+    </div>
+  </div>
+  
+  <div id="budget-chart" class="mb-6">
+    <!-- Chart will be rendered here -->
+    <div class="h-64">
+      <canvas id="budget-vs-actual-chart"></canvas>
+    </div>
+  </div>
+  
+  <script>
+    // Make budget vs actual data available to the charts.js script
+    const budgetVsActualData = {
+      categories: <%= raw @budget_categories.to_json %>,
+      budgetAmounts: <%= raw @budget_amounts.to_json %>,
+      actualAmounts: <%= raw @actual_amounts.to_json %>
+    };
+  </script>
+  
+  <div id="budget-table" class="hidden">
+    <% if @budget_categories.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Budget</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actual</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variance</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @budget_categories.each_with_index do |category, index| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900"><%= category %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium">K<%= number_with_precision(@budget_amounts[index], precision: 2) %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium">K<%= number_with_precision(@actual_amounts[index], precision: 2) %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% variance = @actual_amounts[index] - @budget_amounts[index] %>
+                  <div class="text-sm font-medium <%= variance > 0 ? 'text-red-600' : 'text-green-600' %>">
+                    <%= variance > 0 ? '+' : '' %>K<%= number_with_precision(variance, precision: 2) %>
+                    (<%= number_with_precision((variance / @budget_amounts[index] * 100).abs, precision: 1) %>% <%= variance > 0 ? 'over' : 'under' %>)
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-gray-500 text-center py-4">No budget data available</p>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const chartButton = document.getElementById('view-as-chart');
+    const tableButton = document.getElementById('view-as-table');
+    const chartDiv = document.getElementById('budget-chart');
+    const tableDiv = document.getElementById('budget-table');
+    
+    if (chartButton && tableButton && chartDiv && tableDiv) {
+      chartButton.addEventListener('click', function() {
+        chartDiv.classList.remove('hidden');
+        tableDiv.classList.add('hidden');
+        chartButton.classList.remove('bg-gray-100', 'text-gray-700');
+        chartButton.classList.add('bg-blue-100', 'text-blue-700');
+        tableButton.classList.remove('bg-blue-100', 'text-blue-700');
+        tableButton.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      
+      tableButton.addEventListener('click', function() {
+        chartDiv.classList.add('hidden');
+        tableDiv.classList.remove('hidden');
+        chartButton.classList.remove('bg-blue-100', 'text-blue-700');
+        chartButton.classList.add('bg-gray-100', 'text-gray-700');
+        tableButton.classList.remove('bg-gray-100', 'text-gray-700');
+        tableButton.classList.add('bg-blue-100', 'text-blue-700');
+      });
+    }
+  });
+</script>
