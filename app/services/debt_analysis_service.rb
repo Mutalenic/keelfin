@@ -44,11 +44,11 @@ class DebtAnalysisService
   end
   
   def payoff_strategies
-    debts = @user.debts.active.order(interest_rate: :desc)
+    active_debts = @user.debts.active
     
     {
-      avalanche: debts.pluck(:lender_name, :interest_rate),
-      snowball: @user.debts.active.order(principal_amount: :asc).pluck(:lender_name, :principal_amount)
+      avalanche: active_debts.order(interest_rate: :desc).pluck(:lender_name, :interest_rate),
+      snowball: active_debts.order(principal_amount: :asc).pluck(:lender_name, :principal_amount)
     }
   end
 end

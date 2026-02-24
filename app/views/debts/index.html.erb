@@ -97,8 +97,8 @@
               <tr>
                 <td class="px-6 py-4 whitespace-nowrap font-medium"><%= debt.lender_name %></td>
                 <td class="px-6 py-4 whitespace-nowrap">K<%= number_with_precision(debt.principal_amount, precision: 2) %></td>
-                <td class="px-6 py-4 whitespace-nowrap"><%= number_with_precision(debt.interest_rate, precision: 1) %>%</td>
-                <td class="px-6 py-4 whitespace-nowrap">K<%= number_with_precision(debt.monthly_payment, precision: 2) %></td>
+                <td class="px-6 py-4 whitespace-nowrap"><%= debt.interest_rate ? "#{number_with_precision(debt.interest_rate, precision: 1)}%" : 'N/A' %></td>
+                <td class="px-6 py-4 whitespace-nowrap"><%= debt.monthly_payment ? "K#{number_with_precision(debt.monthly_payment, precision: 2)}" : 'N/A' %></td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= debt.status == 'active' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
                     <%= debt.status.titleize %>
