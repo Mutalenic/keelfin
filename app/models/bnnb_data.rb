@@ -2,7 +2,7 @@ class BnnbData < ApplicationRecord
   self.table_name = 'bnnb_datas'
   validates :month, presence: true, uniqueness: { scope: :location }
   validates :total_basket, :food_basket, :non_food_basket, 
-            numericality: { greater_than: 0 }
+            numericality: { greater_than: 0 }, allow_nil: true
   
   scope :recent, -> { order(month: :desc).limit(12) }
   scope :for_location, ->(loc) { where(location: loc) }
@@ -14,6 +14,7 @@ class BnnbData < ApplicationRecord
   def self.compare_user_spending(user, month = Date.current.beginning_of_month)
     bnnb = where(month: month.beginning_of_month).first
     return nil unless bnnb
+    return nil unless bnnb.food_basket.present?
     
     user_food = user.payments.joins(:category)
       .where('categories.name ILIKE ?', '%food%')

@@ -8,11 +8,24 @@ RSpec.describe Debt, type: :model do
   end
   
   describe 'validations' do
+    subject { user.debts.build(lender_name: 'Test', principal_amount: 1000) }
+    
     it { should validate_presence_of(:lender_name) }
     it { should validate_presence_of(:principal_amount) }
     it { should validate_numericality_of(:principal_amount).is_greater_than(0) }
     it { should validate_numericality_of(:interest_rate).is_greater_than_or_equal_to(0).allow_nil }
     it { should validate_numericality_of(:monthly_payment).is_greater_than(0).allow_nil }
+    it 'validates status inclusion' do
+      debt = user.debts.build(lender_name: 'Test', principal_amount: 1000, status: 'invalid')
+      expect(debt).not_to be_valid
+      expect(debt.errors[:status]).to include('invalid is not a valid status')
+      
+      debt.status = 'active'
+      expect(debt).to be_valid
+      
+      debt.status = nil
+      expect(debt).to be_valid
+    end
   end
   
   describe 'scopes' do
@@ -60,6 +73,28 @@ RSpec.describe Debt, type: :model do
     
     it 'returns 0 when dates are missing' do
       debt = user.debts.create!(lender_name: 'Bayport', principal_amount: 50000, monthly_payment: 2500)
+      expect(debt.total_interest_cost).to eq(0)
+    end
+    
+    it 'returns 0 when end_date equals start_date' do
+      debt = user.debts.create!(
+        lender_name: 'Bayport',
+        principal_amount: 50000,
+        monthly_payment: 2500,
+        start_date: Date.today,
+        end_date: Date.today
+      )
+      expect(debt.total_interest_cost).to eq(0)
+    end
+    
+    it 'returns 0 when end_date is before start_date' do
+      debt = user.debts.create!(
+        lender_name: 'Bayport',
+        principal_amount: 50000,
+        monthly_payment: 2500,
+        start_date: Date.today,
+        end_date: Date.today - 1.month
+      )
       expect(debt.total_interest_cost).to eq(0)
     end
   end

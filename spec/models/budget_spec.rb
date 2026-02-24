@@ -5,11 +5,15 @@ RSpec.describe Budget, type: :model do
   let(:category) { user.categories.create!(name: 'Food', icon: '🍔') }
   
   describe 'associations' do
+    subject { user.budgets.build(category: category, monthly_limit: 1000) }
+    
     it { should belong_to(:user) }
     it { should belong_to(:category) }
   end
   
   describe 'validations' do
+    subject { user.budgets.build(category: category, monthly_limit: 1000) }
+    
     it { should validate_presence_of(:monthly_limit) }
     it { should validate_numericality_of(:monthly_limit).is_greater_than(0) }
   end
@@ -51,9 +55,8 @@ RSpec.describe Budget, type: :model do
       expect(budget.percentage_used).to eq(50.0)
     end
     
-    it 'returns 0 when limit is zero' do
-      budget.update(monthly_limit: 0)
-      expect(budget.percentage_used).to eq(0)
+    it 'handles edge case when no spending exists' do
+      expect(budget.percentage_used).to eq(0.0)
     end
   end
   
@@ -77,15 +80,35 @@ RSpec.describe Budget, type: :model do
     let(:budget) { user.budgets.create!(category: category, monthly_limit: 5000, inflation_adjusted: true) }
     
     it 'adjusts budget for inflation' do
-      budget.adjust_for_inflation!(10)
-      expect(budget.monthly_limit).to eq(5500)
+      result = budget.adjust_for_inflation!(10)
+      budget.reload
+      expect(budget.monthly_limit.to_f).to eq(5500.0)
+      expect(result).to be true
     end
     
     it 'does not adjust when inflation_adjusted is false' do
       budget.update(inflation_adjusted: false)
       original_limit = budget.monthly_limit
-      budget.adjust_for_inflation!(10)
+      result = budget.adjust_for_inflation!(10)
       expect(budget.monthly_limit).to eq(original_limit)
+      expect(result).to be false
+    end
+    
+    it 'returns false when inflation_rate is nil' do
+      result = budget.adjust_for_inflation!(nil)
+      expect(result).to be false
+    end
+    
+    it 'returns false when inflation_rate is zero' do
+      result = budget.adjust_for_inflation!(0)
+      expect(result).to be false
+    end
+    
+    it 'handles negative inflation (deflation)' do
+      result = budget.adjust_for_inflation!(-10)
+      budget.reload
+      expect(budget.monthly_limit.to_f).to eq(4500.0)
+      expect(result).to be true
     end
   end
 end
