@@ -18,7 +18,7 @@ class User < ApplicationRecord
   end
   
   def total_debt_payments
-    debts.active.sum(:monthly_payment)
+    debts.active.where.not(monthly_payment: nil).sum(:monthly_payment)
   end
   
   def debt_to_income_ratio
@@ -49,6 +49,8 @@ class User < ApplicationRecord
   end
   
   def projected_month_end_balance
+    return 0 unless monthly_income
+    
     days_in_month = Date.current.end_of_month.day
     days_elapsed = Date.current.day
     return 0 if days_elapsed.zero?

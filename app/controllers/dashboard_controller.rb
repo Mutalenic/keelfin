@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
     @projected_balance = current_user.projected_month_end_balance
     @debt_analysis = DebtAnalysisService.new(current_user).analyze
     @bnnb_comparison = BnnbComparisonService.new(current_user).compare
-    @recent_payments = current_user.payments.recent.limit(10)
+    @recent_payments = current_user.payments.includes(:category).recent.limit(10)
     @latest_economic_data = EconomicIndicator.latest
   end
 end

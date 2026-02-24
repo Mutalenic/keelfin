@@ -66,6 +66,6 @@ class PaymentsController < ApplicationController
   end
 
   def payment_params
-    params.permit(:name, :amount)
+    params.require(:payment).permit(:name, :amount, :payment_method, :is_essential)
   end
 end

@@ -1,6 +1,11 @@
 class BudgetsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_budget, only: [:edit, :update, :destroy]
+  load_and_authorize_resource
+  
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to budgets_path, alert: 'You are not authorized to perform this action.'
+  end
   
   def index
     @budgets = current_user.budgets.includes(:category).order(created_at: :desc)
@@ -44,6 +49,8 @@ class BudgetsController < ApplicationController
   
   def set_budget
     @budget = current_user.budgets.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to budgets_path, alert: 'Budget not found.'
   end
   
   def budget_params
