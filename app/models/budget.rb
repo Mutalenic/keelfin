@@ -3,7 +3,10 @@ class Budget < ApplicationRecord
   belongs_to :category
   
   validates :monthly_limit, presence: true, numericality: { greater_than: 0 }
-  validates :category_id, uniqueness: { scope: [:user_id, :start_date], message: "already has a budget for this period" }
+  validates :category_id, uniqueness: { 
+    scope: [:user_id, ->(budget) { budget.start_date.present? ? [budget.start_date] : [] }], 
+    message: "already has a budget for this period" 
+  }
   validate :category_belongs_to_user
   validate :end_date_after_start_date
   

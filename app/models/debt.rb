@@ -11,20 +11,27 @@ class Debt < ApplicationRecord
   scope :paid_off, -> { where(status: 'paid_off') }
   
   def remaining_balance
-    # TODO: Implement actual remaining balance calculation based on payments made
-    # For now, return principal amount as placeholder
-    principal_amount
+    # Calculate remaining balance based on payments made and time elapsed
+    return principal_amount unless monthly_payment && start_date
+    
+    months_elapsed = [((Date.current.year * 12 + Date.current.month) - (start_date.year * 12 + start_date.month)), 0].max
+    total_paid = monthly_payment.to_f * months_elapsed
+    
+    # Simple calculation: principal - total payments made
+    # TODO: In future, track actual payment records for more accuracy
+    [principal_amount.to_f - total_paid, 0].max
   end
   
   def total_interest_cost
     return 0 unless monthly_payment && end_date && start_date
     return 0 if end_date < start_date
     
-    months = ((end_date.year - start_date.year) * 12 + end_date.month - start_date.month)
+    # Calculate months more accurately
+    months = ((end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month))
     return 0 if months <= 0
     
-    total_paid = monthly_payment * months
-    interest = total_paid - principal_amount
+    total_paid = monthly_payment.to_f * months
+    interest = total_paid - principal_amount.to_f
     [interest, 0].max # Ensure non-negative
   end
   

@@ -12,11 +12,11 @@
       <div class="grid grid-cols-2 gap-4">
         <div>
           <p class="text-sm text-gray-600">JCTR Food Basket</p>
-          <p class="text-xl font-bold">K<%= number_with_precision(@bnnb_comparison[:bnnb_food], precision: 2) %></p>
+          <p class="text-xl font-bold">K<%= number_with_precision(@bnnb_comparison[:bnnb_food] || 0, precision: 2) %></p>
         </div>
         <div>
           <p class="text-sm text-gray-600">Your Food Spending</p>
-          <p class="text-xl font-bold">K<%= number_with_precision(@bnnb_comparison[:user_food], precision: 2) %></p>
+          <p class="text-xl font-bold">K<%= number_with_precision(@bnnb_comparison[:user_food] || 0, precision: 2) %></p>
         </div>
       </div>
       <p class="text-xs text-gray-500 mt-4">Source: JCTR BNNB January 2026</p>

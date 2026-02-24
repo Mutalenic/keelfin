@@ -2,10 +2,6 @@ class BudgetsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
   
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to budgets_path, alert: 'You are not authorized to perform this action.'
-  end
-  
   def index
     @budgets = current_user.budgets.includes(:category).order(created_at: :desc)
     @bnnb_comparison = BnnbComparisonService.new(current_user).compare
