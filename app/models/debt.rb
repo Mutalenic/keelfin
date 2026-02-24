@@ -20,7 +20,7 @@ class Debt < ApplicationRecord
   end
   
   def debt_to_income_ratio
-    return 0 unless user.monthly_income && user.monthly_income > 0
+    return 0 unless user.monthly_income && user.monthly_income > 0 && monthly_payment
     (monthly_payment.to_f / user.monthly_income * 100).round(2)
   end
 end

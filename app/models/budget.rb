@@ -5,9 +5,12 @@ class Budget < ApplicationRecord
   validates :monthly_limit, presence: true, numericality: { greater_than: 0 }
   
   def current_spending(month = Date.current.beginning_of_month)
+    month_start = month.beginning_of_month
+    month_end = month_start.end_of_month
+    
     category.payments
       .where(user: user)
-      .where('created_at >= ? AND created_at <= ?', month, month.end_of_month)
+      .where('created_at >= ? AND created_at <= ?', month_start, month_end)
       .sum(:amount)
   end
   
@@ -26,6 +29,8 @@ class Budget < ApplicationRecord
   
   def adjust_for_inflation!(inflation_rate)
     return unless inflation_adjusted
+    return if inflation_rate.nil? || inflation_rate.zero?
+    
     self.monthly_limit *= (1 + inflation_rate / 100)
     save
   end

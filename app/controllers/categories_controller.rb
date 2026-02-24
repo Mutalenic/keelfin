@@ -27,11 +27,9 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    @category = current_user.categories.find(params[:id])
   end
 
   def destroy
-    @category = current_user.categories.find(params[:id])
     authorize! :destroy, @category
 
     if @category.destroy

@@ -6,6 +6,9 @@ class ExchangeRateService
     url = URI("https://api.exchangerate-api.com/v4/latest/USD")
     response = Net::HTTP.get(url)
     data = JSON.parse(response)
+    
+    return nil unless data.is_a?(Hash) && data['rates'].is_a?(Hash)
+    
     data['rates']['ZMW']
   rescue StandardError => e
     Rails.logger.error "Exchange rate fetch failed: #{e.message}"
