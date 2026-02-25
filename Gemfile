@@ -82,3 +82,11 @@ end
 gem 'cancancan'
 
 gem 'ffi'
+
+# Deployment
+group :development do
+  gem 'capistrano', '~> 3.17'
+  gem 'capistrano-rails', '~> 1.6'
+  gem 'capistrano-bundler', '~> 2.0'
+  gem 'capistrano-puma', '~> 0.2'
+end

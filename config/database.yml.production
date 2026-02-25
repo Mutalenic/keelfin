@@ -1,0 +1,8 @@
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: keelfin_production
+  pool: 5
+  username: deploy
+  password:  # Leave empty for peer authentication
+  host: localhost
