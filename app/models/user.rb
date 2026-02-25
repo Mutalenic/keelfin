@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
+  DEBT_TO_INCOME_THRESHOLD = 40
+  
   has_many :categories, dependent: :destroy
   has_many :payments, dependent: :destroy
   has_many :debts, dependent: :destroy
@@ -108,10 +110,6 @@ class User < ApplicationRecord
   end
   
   def ensure_subscription
-    return subscription if has_subscription?
-    Subscription.create_free_subscription(self)
-  end
-end
     return subscription if has_subscription?
     Subscription.create_free_subscription(self)
   end

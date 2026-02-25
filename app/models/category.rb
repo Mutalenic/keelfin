@@ -32,7 +32,7 @@ class Category < ApplicationRecord
   
   def percentage_of_total_spending
     user_total = user.total_spending
-    return 0 if user_total.zero?
+    return 0 if user_total.nil? || user_total.zero?
     
     ((total_amount / user_total) * 100).round(2)
   end

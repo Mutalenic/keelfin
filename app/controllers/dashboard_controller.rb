@@ -1,6 +1,8 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
   
+  HIGH_CATEGORY_SPENDING_THRESHOLD = 40
+  
   def index
     # Date range filtering (default to current month)
     @start_date = parse_date_param(params[:start_date]) || Date.current.beginning_of_month
@@ -23,7 +25,7 @@ class DashboardController < ApplicationController
     
     # Investments data
     @investments = current_user.investments.active.order(current_value: :desc).limit(3)
-    @total_invested = current_user.investments.sum(:current_value)
+    @total_invested = @investments.sum(:current_value)
     @investment_return = calculate_investment_return
     @portfolio_allocation = calculate_portfolio_allocation
     
@@ -68,12 +70,12 @@ class DashboardController < ApplicationController
   end
   
   def calculate_portfolio_allocation
-    investments = current_user.investments.active
-    total = investments.sum(:current_value)
+    grouped_investments = current_user.investments.active.group(:investment_type).sum(:current_value)
+    total = grouped_investments.values.sum
     return {} if total <= 0
     
     allocation = {}
-    investments.group(:investment_type).sum(:current_value).each do |type, value|
+    grouped_investments.each do |type, value|
       percentage = ((value / total) * 100).round(1)
       allocation[type] = { total: value, percentage: percentage }
     end
@@ -90,17 +92,20 @@ class DashboardController < ApplicationController
     result = { labels: [], values: [] }
     
     # Calculate spending for each month in the range
-    (start_date.to_date..end_date.to_date).select { |d| d.day == 1 }.each do |month_start|
-      month_end = month_start.end_of_month
-      month_label = month_start.strftime('%b %Y')
+    current_month = start_date
+    while current_month <= end_date
+      month_end = current_month.end_of_month
+      month_label = current_month.strftime('%b %Y')
       
       # Calculate total spending for this month
       monthly_spending = current_user.payments
-                                    .where(created_at: month_start..month_end)
+                                    .where(created_at: current_month..month_end)
                                     .sum(:amount)
       
       result[:labels] << month_label
       result[:values] << monthly_spending.to_f
+      
+      current_month = current_month.next_month.beginning_of_month
     end
     
     result
@@ -115,7 +120,7 @@ class DashboardController < ApplicationController
       if highest_category
         category_name, amount = highest_category
         percentage = ((amount / @total_spending) * 100).round
-        if percentage > 40
+        if percentage > HIGH_CATEGORY_SPENDING_THRESHOLD
           insights << "Your #{category_name} spending (#{percentage}%) is significantly higher than other categories."
         end
       end
@@ -133,7 +138,7 @@ class DashboardController < ApplicationController
     
     # Goal-related insights
     if @active_goals.any?
-      behind_goals = @active_goals.select { |goal| goal.progress_percentage < 25 && goal.days_remaining < 30 }
+      behind_goals = @active_goals.select { |goal| goal.progress_percentage < 25 && goal.days_remaining && goal.days_remaining < 30 }
       if behind_goals.any?
         insights << "You're behind on #{behind_goals.count} financial goals that are due soon."
       end

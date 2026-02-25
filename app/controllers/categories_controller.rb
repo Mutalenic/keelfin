@@ -58,6 +58,8 @@ class CategoriesController < ApplicationController
   end
   
   def add_preset
+    authorize! :create, Category
+    
     preset_name = params[:preset_name]
     preset = Category.preset_categories.find { |p| p[:name] == preset_name }
     
