@@ -9,6 +9,7 @@ class SeedEconomicDataJob < ApplicationJob
     Rails.logger.info "Economic data seeded successfully"
   rescue StandardError => e
     Rails.logger.error "Failed to seed economic data: #{e.message}"
+    raise e
   end
   
   private

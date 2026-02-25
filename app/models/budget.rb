@@ -58,24 +58,16 @@ class Budget < ApplicationRecord
     existing = Budget.where(user_id: user_id, category_id: category_id)
     existing = existing.where.not(id: id) if persisted?
     
-    # Check for overlapping date ranges
+    # Check for overlapping date ranges using standard overlap logic:
+    # Two ranges overlap if: (start1 <= end2) AND (end1 >= start2)
     if start_date.present?
-      # If this budget has an end_date, check for any overlap
-      if end_date.present?
-        existing = existing.where(
-          "(start_date <= ? AND (end_date IS NULL OR end_date >= ?)) OR " \
-          "(start_date <= ? AND (end_date IS NULL OR end_date >= ?)) OR " \
-          "(start_date >= ? AND start_date <= ?)",
-          end_date, start_date,  # Existing budget starts before this one ends
-          start_date, start_date, # Existing budget ends after this one starts
-          start_date, end_date    # Existing budget is contained within this one
-        )
-      else
-        # This budget has no end_date (ongoing), check if any existing budget overlaps
-        existing = existing.where(
-          "end_date IS NULL OR end_date >= ?", start_date
-        )
-      end
+      this_end = end_date || Date.new(9999, 12, 31) # Use far future date for NULL end_date
+      
+      # Check for overlaps: existing budget overlaps if its range intersects with this budget's range
+      existing = existing.where(
+        "(start_date <= ? AND (COALESCE(end_date, '9999-12-31') >= ?))",
+        this_end, start_date
+      )
     end
     
     errors.add(:category_id, "already has a budget for this period") if existing.exists?

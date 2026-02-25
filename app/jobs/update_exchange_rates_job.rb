@@ -16,5 +16,6 @@ class UpdateExchangeRatesJob < ApplicationJob
     end
   rescue StandardError => e
     Rails.logger.error "Failed to update exchange rates: #{e.message}"
+    raise e
   end
 end
