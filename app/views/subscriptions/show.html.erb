@@ -1,0 +1,160 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between p-5">
+    <li>
+      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">Subscription</h1>
+    </li>
+    <li>
+      <%= link_to '', plans_subscription_path, class: "text-xl fa-solid fa-crown" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-3xl mx-auto">
+    <!-- Subscription Status Card -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Your Subscription</h2>
+          <span class="px-4 py-1 rounded-full text-sm font-semibold <%= @subscription.active? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+            <%= @subscription.active? ? 'Active' : 'Inactive' %>
+          </span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p class="text-gray-600 text-sm">Current Plan</p>
+            <p class="text-xl font-semibold"><%= @subscription.plan_name.capitalize %></p>
+          </div>
+          
+          <div>
+            <p class="text-gray-600 text-sm">Monthly Price</p>
+            <p class="text-xl font-semibold">K<%= number_with_precision(@subscription.amount, precision: 2) %></p>
+          </div>
+          
+          <div>
+            <p class="text-gray-600 text-sm">Start Date</p>
+            <p class="text-xl font-semibold"><%= @subscription.start_date.strftime("%B %d, %Y") %></p>
+          </div>
+          
+          <div>
+            <p class="text-gray-600 text-sm">Renewal Date</p>
+            <p class="text-xl font-semibold">
+              <% if @subscription.end_date.present? %>
+                <%= @subscription.end_date.strftime("%B %d, %Y") %>
+              <% else %>
+                N/A
+              <% end %>
+            </p>
+          </div>
+        </div>
+        
+        <% if @subscription.plan_name != 'free' && @subscription.active? %>
+          <div class="mt-6 pt-6 border-t border-gray-200">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-gray-600">Next billing date</p>
+                <p class="text-sm text-gray-500">You will be charged K<%= number_with_precision(@subscription.amount, precision: 2) %> on <%= @subscription.end_date.strftime("%B %d, %Y") %></p>
+              </div>
+              <%= button_to "Cancel Subscription", cancel_subscription_path, method: :post, data: { turbo_confirm: "Are you sure you want to cancel your subscription?" }, class: "text-red-600 hover:text-red-800 font-semibold" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Features Card -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+      <div class="p-6">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Your Plan Features</h3>
+        
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Categories</span>
+            <span class="font-semibold">
+              <% if @subscription.features['max_categories'] == -1 %>
+                Unlimited
+              <% else %>
+                Up to <%= @subscription.features['max_categories'] %>
+              <% end %>
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Budgets</span>
+            <span class="font-semibold">
+              <% if @subscription.features['max_budgets'] == -1 %>
+                Unlimited
+              <% else %>
+                Up to <%= @subscription.features['max_budgets'] %>
+              <% end %>
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Advanced Analytics</span>
+            <span>
+              <% if @subscription.features['advanced_analytics'] %>
+                <i class="fa-solid fa-check text-green-500"></i>
+              <% else %>
+                <i class="fa-solid fa-xmark text-red-400"></i>
+              <% end %>
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Export Reports</span>
+            <span>
+              <% if @subscription.features['export_reports'] %>
+                <i class="fa-solid fa-check text-green-500"></i>
+              <% else %>
+                <i class="fa-solid fa-xmark text-red-400"></i>
+              <% end %>
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Shopping Lists</span>
+            <span>
+              <% if @subscription.features['shopping_lists'] %>
+                <i class="fa-solid fa-check text-green-500"></i>
+              <% else %>
+                <i class="fa-solid fa-xmark text-red-400"></i>
+              <% end %>
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">AI Insights</span>
+            <span>
+              <% if @subscription.features['ai_insights'] %>
+                <i class="fa-solid fa-check text-green-500"></i>
+              <% else %>
+                <i class="fa-solid fa-xmark text-red-400"></i>
+              <% end %>
+            </span>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="text-gray-700">Debt Strategies</span>
+            <span>
+              <% if @subscription.features['debt_strategies'] %>
+                <i class="fa-solid fa-check text-green-500"></i>
+              <% else %>
+                <i class="fa-solid fa-xmark text-red-400"></i>
+              <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="flex justify-center">
+      <%= link_to "View Available Plans", plans_subscription_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg" %>
+    </div>
+  </div>
+</div>

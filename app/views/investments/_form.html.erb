@@ -1,0 +1,138 @@
+<%= form_with(model: investment, class: "space-y-6") do |form| %>
+  <% if investment.errors.any? %>
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+      <h2 class="font-bold mb-2"><%= pluralize(investment.errors.count, "error") %> prohibited this investment from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% investment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Basic Information -->
+    <div class="space-y-6">
+      <h3 class="text-lg font-medium border-b pb-2">Basic Information</h3>
+      
+      <div class="mb-4">
+        <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "e.g., Retirement Fund" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :investment_type, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :investment_type, 
+          [
+            ['Stocks', 'stocks'],
+            ['Bonds', 'bonds'],
+            ['Mutual Funds', 'mutual_funds'],
+            ['ETFs', 'etfs'],
+            ['Real Estate', 'real_estate'],
+            ['Cryptocurrency', 'crypto'],
+            ['Savings Account', 'savings'],
+            ['Fixed Deposit', 'fixed_deposit'],
+            ['Pension Fund', 'pension'],
+            ['Other', 'other']
+          ],
+          { include_blank: 'Select investment type' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :risk_level, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :risk_level, 
+          [
+            ['Very Low (1)', 1],
+            ['Low (2)', 2],
+            ['Moderate (3)', 3],
+            ['High (4)', 4],
+            ['Very High (5)', 5]
+          ],
+          { include_blank: 'Select risk level' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :institution, "Financial Institution (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :institution, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "e.g., Bank of Zambia" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :account_number, "Account Number (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :account_number, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "e.g., 123456789" %>
+      </div>
+      
+      <% unless investment.new_record? %>
+        <div class="flex items-center mb-4">
+          <div class="flex items-center h-5">
+            <%= form.check_box :active, class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= form.label :active, "Active", class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">Uncheck to mark this investment as inactive</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Financial Details -->
+    <div class="space-y-6">
+      <h3 class="text-lg font-medium border-b pb-2">Financial Details</h3>
+      
+      <div class="mb-4">
+        <%= form.label :initial_amount, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">K</span>
+          <%= form.number_field :initial_amount, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <p class="mt-1 text-sm text-gray-500">The amount initially invested</p>
+      </div>
+      
+      <% unless investment.new_record? %>
+        <div class="mb-4">
+          <%= form.label :current_value, class: "block text-sm font-medium text-gray-700 mb-1" %>
+          <div class="mt-1 flex rounded-md shadow-sm">
+            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">K</span>
+            <%= form.number_field :current_value, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500" %>
+          </div>
+          <p class="mt-1 text-sm text-gray-500">The current market value of the investment</p>
+        </div>
+      <% end %>
+      
+      <div class="mb-4">
+        <%= form.label :target_value, "Target Value (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">K</span>
+          <%= form.number_field :target_value, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <p class="mt-1 text-sm text-gray-500">Your target value for this investment</p>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :start_date, "Start Date (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :start_date, value: investment.start_date || Date.current, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :target_date, "Target Date (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :target_date, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+        <p class="mt-1 text-sm text-gray-500">When you plan to reach your target value</p>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :notes, "Notes (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_area :notes, rows: 3, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "Any additional notes about this investment" %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="pt-5 border-t border-gray-200">
+    <div class="flex justify-end">
+      <%= link_to "Cancel", investment.new_record? ? investments_path : investment_path(investment), class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      <%= form.submit investment.new_record? ? "Create Investment" : "Update Investment", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+    </div>
+  </div>
+<% end %>

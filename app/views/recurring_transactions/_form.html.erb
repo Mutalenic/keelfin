@@ -1,0 +1,198 @@
+<%= form_with(model: recurring_transaction, class: "space-y-6") do |form| %>
+  <% if recurring_transaction.errors.any? %>
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+      <h2 class="font-bold mb-2"><%= pluralize(recurring_transaction.errors.count, "error") %> prohibited this recurring transaction from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% recurring_transaction.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Basic Information -->
+    <div class="space-y-6">
+      <h3 class="text-lg font-medium border-b pb-2">Transaction Details</h3>
+      
+      <div class="mb-4">
+        <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "e.g., Netflix Subscription" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :amount, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">K</span>
+          <%= form.number_field :amount, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :category_id, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.collection_select :category_id, @categories, :id, :name, 
+          { include_blank: 'Select a category' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :payment_method, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :payment_method, 
+          [
+            ['Cash', 'cash'],
+            ['Debit Card', 'debit_card'],
+            ['Credit Card', 'credit_card'],
+            ['Bank Transfer', 'bank_transfer'],
+            ['Mobile Money', 'mobile_money'],
+            ['Automatic Debit', 'automatic_debit']
+          ],
+          { include_blank: 'Select payment method' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="flex items-center mb-4">
+        <div class="flex items-center h-5">
+          <%= form.check_box :is_essential, class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" %>
+        </div>
+        <div class="ml-3 text-sm">
+          <%= form.label :is_essential, "This is an essential expense", class: "font-medium text-gray-700" %>
+          <p class="text-gray-500">Mark this if the expense is necessary for basic needs</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Schedule Details -->
+    <div class="space-y-6">
+      <h3 class="text-lg font-medium border-b pb-2">Schedule Details</h3>
+      
+      <div class="mb-4">
+        <%= form.label :frequency, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :frequency, 
+          [
+            ['Daily', 'daily'],
+            ['Weekly', 'weekly'],
+            ['Every Two Weeks', 'biweekly'],
+            ['Monthly', 'monthly'],
+            ['Quarterly', 'quarterly'],
+            ['Yearly', 'yearly']
+          ],
+          { include_blank: 'Select frequency' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :start_date, "Start Date", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :start_date, value: recurring_transaction.start_date || Date.current, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :end_date, "End Date (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :end_date, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+        <p class="mt-1 text-sm text-gray-500">Leave blank if this is an ongoing transaction</p>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :notes, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_area :notes, rows: 3, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "Any additional notes about this recurring transaction" %>
+      </div>
+      
+      <% unless recurring_transaction.new_record? %>
+        <div class="flex items-center mb-4">
+          <div class="flex items-center h-5">
+            <%= form.check_box :active, class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" %>
+          </div>
+          <div class="ml-3 text-sm">
+            <%= form.label :active, "Active", class: "font-medium text-gray-700" %>
+            <p class="text-gray-500">Uncheck to pause this recurring transaction</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  <!-- Impact Preview -->
+  <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <h3 class="font-medium text-lg mb-2">Financial Impact Preview</h3>
+    <p class="text-sm text-gray-700">Based on the frequency and amount you've entered, this recurring transaction will have the following impact:</p>
+    
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <p class="text-xs text-gray-500">Monthly Impact</p>
+        <p class="text-lg font-bold" id="monthly-impact">--</p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500">Yearly Impact</p>
+        <p class="text-lg font-bold" id="yearly-impact">--</p>
+      </div>
+      <div>
+        <p class="text-xs text-gray-500">% of Monthly Income</p>
+        <p class="text-lg font-bold" id="income-percentage">--</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="pt-5 border-t border-gray-200">
+    <div class="flex justify-end">
+      <%= link_to "Cancel", recurring_transaction.new_record? ? recurring_transactions_path : recurring_transaction_path(recurring_transaction), class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      <%= form.submit recurring_transaction.new_record? ? "Create Recurring Transaction" : "Update Recurring Transaction", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const amountField = document.querySelector('#recurring_transaction_amount');
+    const frequencyField = document.querySelector('#recurring_transaction_frequency');
+    const monthlyImpact = document.querySelector('#monthly-impact');
+    const yearlyImpact = document.querySelector('#yearly-impact');
+    const incomePercentage = document.querySelector('#income-percentage');
+    const monthlyIncome = <%= current_user.monthly_income || 0 %>;
+    
+    function calculateImpact() {
+      const amount = parseFloat(amountField.value) || 0;
+      const frequency = frequencyField.value;
+      let monthlyAmount = 0;
+      
+      switch(frequency) {
+        case 'daily':
+          monthlyAmount = amount * 30;
+          break;
+        case 'weekly':
+          monthlyAmount = amount * 4.33;
+          break;
+        case 'biweekly':
+          monthlyAmount = amount * 2.17;
+          break;
+        case 'monthly':
+          monthlyAmount = amount;
+          break;
+        case 'quarterly':
+          monthlyAmount = amount / 3;
+          break;
+        case 'yearly':
+          monthlyAmount = amount / 12;
+          break;
+        default:
+          monthlyAmount = 0;
+      }
+      
+      const yearlyAmount = monthlyAmount * 12;
+      const percentage = monthlyIncome > 0 ? (monthlyAmount / monthlyIncome * 100).toFixed(1) : 0;
+      
+      monthlyImpact.textContent = 'K' + monthlyAmount.toFixed(2);
+      yearlyImpact.textContent = 'K' + yearlyAmount.toFixed(2);
+      incomePercentage.textContent = percentage + '%';
+    }
+    
+    if (amountField && frequencyField) {
+      amountField.addEventListener('input', calculateImpact);
+      frequencyField.addEventListener('change', calculateImpact);
+      
+      // Calculate initial values if editing existing transaction
+      calculateImpact();
+    }
+  });
+</script>

@@ -1,0 +1,222 @@
+<%= form_with(model: financial_goal, class: "space-y-6") do |form| %>
+  <% if financial_goal.errors.any? %>
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6">
+      <h2 class="font-bold mb-2"><%= pluralize(financial_goal.errors.count, "error") %> prohibited this goal from being saved:</h2>
+      <ul class="list-disc pl-5">
+        <% financial_goal.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Basic Information -->
+    <div class="space-y-6">
+      <h3 class="text-lg font-medium border-b pb-2">Basic Information</h3>
+      
+      <div class="mb-4">
+        <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :description, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.text_area :description, rows: 3, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :goal_type, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :goal_type, 
+          [
+            ['Saving', 'saving'],
+            ['Debt Payment', 'debt_payment'],
+            ['Investment', 'investment'],
+            ['Expense Reduction', 'expense_reduction']
+          ],
+          { include_blank: 'Select a goal type' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :category_id, "Related Category (Optional)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.collection_select :category_id, @categories, :id, :name, 
+          { include_blank: 'None' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :priority, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :priority, 
+          [
+            ['High', 'high'],
+            ['Medium', 'medium'],
+            ['Low', 'low']
+          ],
+          { selected: 'medium' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+    </div>
+    
+    <!-- Financial Details -->
+    <div class="space-y-6">
+      <h3 class="text-lg font-medium border-b pb-2">Financial Details</h3>
+      
+      <div class="mb-4">
+        <%= form.label :target_amount, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">K</span>
+          <%= form.number_field :target_amount, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :current_amount, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="mt-1 flex rounded-md shadow-sm">
+          <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500">K</span>
+          <%= form.number_field :current_amount, step: "0.01", min: "0", value: financial_goal.current_amount || 0, class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-gray-300 focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :start_date, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :start_date, value: financial_goal.start_date || Date.current, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="mb-4">
+        <%= form.label :target_date, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.date_field :target_date, value: financial_goal.target_date || 3.months.from_now.to_date, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+      </div>
+      
+      <div class="flex items-center mb-4">
+        <div class="flex items-center h-5">
+          <%= form.check_box :recurring, class: "focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" %>
+        </div>
+        <div class="ml-3 text-sm">
+          <%= form.label :recurring, "Make this a recurring goal", class: "font-medium text-gray-700" %>
+        </div>
+      </div>
+      
+      <div id="recurrence_options" class="<%= 'hidden' unless financial_goal.recurring? %>">
+        <%= form.label :recurrence_period, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.select :recurrence_period, 
+          [
+            ['Monthly', 'monthly'],
+            ['Quarterly', 'quarterly'],
+            ['Yearly', 'yearly']
+          ],
+          { include_blank: 'Select recurrence period' },
+          { class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" }
+        %>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Milestones Section -->
+  <div class="mt-8">
+    <h3 class="text-lg font-medium border-b pb-2 mb-4">Milestones (Optional)</h3>
+    
+    <div id="milestones" class="space-y-4">
+      <!-- JavaScript will add milestone fields here -->
+      <% if financial_goal.milestones.present? %>
+        <% financial_goal.milestones.each_with_index do |milestone, index| %>
+          <div class="milestone-item grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg">
+            <div>
+              <%= form.text_field "milestones[#{index}][name]", value: milestone['name'], placeholder: "Milestone name", class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+            </div>
+            <div>
+              <%= form.number_field "milestones[#{index}][amount]", value: milestone['amount'], step: "0.01", min: "0", placeholder: "Amount", class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+            </div>
+            <div>
+              <%= form.date_field "milestones[#{index}][target_date]", value: milestone['target_date'], class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+            </div>
+            <div class="flex items-center">
+              <button type="button" class="remove-milestone text-red-600 hover:text-red-800">
+                <i class="fa-solid fa-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    
+    <div class="mt-4">
+      <button type="button" id="add-milestone" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <i class="fa-solid fa-plus mr-2"></i> Add Milestone
+      </button>
+    </div>
+  </div>
+  
+  <div class="pt-5 border-t border-gray-200">
+    <div class="flex justify-end">
+      <%= link_to "Cancel", financial_goal.new_record? ? financial_goals_path : financial_goal_path(financial_goal), class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      <%= form.submit financial_goal.new_record? ? "Create Goal" : "Update Goal", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle recurrence options
+    const recurringCheckbox = document.querySelector('#financial_goal_recurring');
+    const recurrenceOptions = document.querySelector('#recurrence_options');
+    
+    if (recurringCheckbox) {
+      recurringCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+          recurrenceOptions.classList.remove('hidden');
+        } else {
+          recurrenceOptions.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Add milestone functionality
+    const milestonesContainer = document.querySelector('#milestones');
+    const addMilestoneButton = document.querySelector('#add-milestone');
+    let milestoneCount = document.querySelectorAll('.milestone-item').length;
+    
+    if (addMilestoneButton) {
+      addMilestoneButton.addEventListener('click', function() {
+        const milestoneItem = document.createElement('div');
+        milestoneItem.className = 'milestone-item grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg';
+        milestoneItem.innerHTML = `
+          <div>
+            <input type="text" name="financial_goal[milestones[${milestoneCount}][name]]" placeholder="Milestone name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          <div>
+            <input type="number" name="financial_goal[milestones[${milestoneCount}][amount]]" step="0.01" min="0" placeholder="Amount" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          <div>
+            <input type="date" name="financial_goal[milestones[${milestoneCount}][target_date]]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+          </div>
+          <div class="flex items-center">
+            <button type="button" class="remove-milestone text-red-600 hover:text-red-800">
+              <i class="fa-solid fa-trash"></i> Remove
+            </button>
+          </div>
+        `;
+        
+        milestonesContainer.appendChild(milestoneItem);
+        milestoneCount++;
+        
+        // Add event listener to the new remove button
+        const removeButton = milestoneItem.querySelector('.remove-milestone');
+        removeButton.addEventListener('click', function() {
+          milestonesContainer.removeChild(milestoneItem);
+        });
+      });
+    }
+    
+    // Add event listeners to existing remove buttons
+    document.querySelectorAll('.remove-milestone').forEach(button => {
+      button.addEventListener('click', function() {
+        const milestoneItem = this.closest('.milestone-item');
+        milestonesContainer.removeChild(milestoneItem);
+      });
+    });
+  });
+</script>

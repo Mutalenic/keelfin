@@ -1,0 +1,74 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Add New Debt</h1>
+  
+  <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
+    <%= form_with(model: @debt, local: true, class: "space-y-6") do |form| %>
+      <% if @debt.errors.any? %>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <h2 class="font-bold mb-2"><%= pluralize(@debt.errors.count, "error") %> prohibited this debt from being saved:</h2>
+          <ul class="list-disc list-inside">
+            <% @debt.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :lender_name, "Lender Name", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.text_field :lender_name, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", placeholder: "e.g., Bayport, Madison Finance" %>
+      </div>
+
+      <div>
+        <%= form.label :principal_amount, "Principal Amount (ZMW)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.number_field :principal_amount, step: 0.01, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", placeholder: "e.g., 50000.00" %>
+      </div>
+
+      <div>
+        <%= form.label :interest_rate, "Interest Rate (%)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.number_field :interest_rate, step: 0.1, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", placeholder: "e.g., 15.5" %>
+      </div>
+
+      <div>
+        <%= form.label :monthly_payment, "Monthly Payment (ZMW)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.number_field :monthly_payment, step: 0.01, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", placeholder: "e.g., 2500.00" %>
+      </div>
+
+      <div>
+        <%= form.label :term, "Loan Term (months)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.number_field :term, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500", placeholder: "e.g., 24" %>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= form.label :start_date, "Start Date", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.date_field :start_date, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" %>
+        </div>
+
+        <div>
+          <%= form.label :end_date, "End Date", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.date_field :end_date, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.select :status, [['Active', 'active'], ['Paid Off', 'paid_off']], {}, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" %>
+      </div>
+
+      <div class="flex gap-4">
+        <%= form.submit "Add Debt", class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 cursor-pointer" %>
+        <%= link_to "Cancel", debts_path, class: "bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-2xl">
+    <h3 class="font-semibold mb-2">💡 Tip: Managing Debt in Zambia</h3>
+    <p class="text-sm text-gray-700">
+      Keep your total debt payments below 40% of your monthly income to maintain financial health. 
+      Many Zambian civil servants face over-indebtedness due to multiple concurrent loans. 
+      Track all your debts here to avoid exceeding the safe threshold.
+    </p>
+  </div>
+</div>

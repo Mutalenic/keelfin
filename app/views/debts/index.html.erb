@@ -1,0 +1,125 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Debt Management</h1>
+    <%= link_to "Add New Debt", new_debt_path, class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700" %>
+  </div>
+  
+  <!-- Debt Analysis Summary -->
+  <% if @analysis[:is_over_indebted] %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-6 mb-6" role="alert">
+      <h2 class="font-bold text-xl mb-2">⚠️ Over-Indebtedness Alert</h2>
+      <p class="mb-2">Your debt-to-income ratio is <strong><%= @analysis[:debt_to_income] %>%</strong>, exceeding the safe 40% threshold.</p>
+      <p class="text-sm">This is a common issue among Zambian civil servants. Consider the recommendations below.</p>
+    </div>
+  <% end %>
+  
+  <!-- Debt Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-sm text-gray-600 mb-2">Total Debt</h3>
+      <p class="text-3xl font-bold text-red-600">K<%= number_with_precision(@analysis[:total_debt], precision: 2) %></p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-sm text-gray-600 mb-2">Monthly Payments</h3>
+      <p class="text-3xl font-bold">K<%= number_with_precision(@analysis[:monthly_payments], precision: 2) %></p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-sm text-gray-600 mb-2">Debt-to-Income Ratio</h3>
+      <p class="text-3xl font-bold <%= @analysis[:debt_to_income] > 40 ? 'text-red-600' : 'text-green-600' %>">
+        <%= number_with_precision(@analysis[:debt_to_income], precision: 1) %>%
+      </p>
+      <p class="text-xs text-gray-500 mt-1">Safe threshold: ≤40%</p>
+    </div>
+  </div>
+  
+  <!-- Recommendations -->
+  <% if @analysis[:recommendations].any? %>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">💡 Recommendations</h2>
+      <ul class="list-disc list-inside space-y-2">
+        <% @analysis[:recommendations].each do |recommendation| %>
+          <li class="text-sm"><%= recommendation %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <!-- Payoff Strategies -->
+  <% if @analysis[:payoff_strategies][:avalanche].any? || @analysis[:payoff_strategies][:snowball].any? %>
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">📊 Suggested Payoff Strategies</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="font-semibold mb-2">Avalanche Method (High Interest First)</h3>
+          <p class="text-sm text-gray-600 mb-2">Pay off highest interest rate debts first to save money.</p>
+          <% @analysis[:payoff_strategies][:avalanche].each do |lender, rate| %>
+            <div class="text-sm py-1">
+              <%= lender %> - <%= number_with_precision(rate, precision: 1) %>%
+            </div>
+          <% end %>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-2">Snowball Method (Smallest Balance First)</h3>
+          <p class="text-sm text-gray-600 mb-2">Pay off smallest debts first for quick wins and motivation.</p>
+          <% @analysis[:payoff_strategies][:snowball].each do |lender, amount| %>
+            <div class="text-sm py-1">
+              <%= lender %> - K<%= number_with_precision(amount, precision: 2) %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <!-- Debts List -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Your Debts</h2>
+    
+    <% if @debts.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lender</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Principal</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Interest Rate</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Monthly Payment</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @debts.each do |debt| %>
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap font-medium"><%= debt.lender_name %></td>
+                <td class="px-6 py-4 whitespace-nowrap">K<%= number_with_precision(debt.principal_amount, precision: 2) %></td>
+                <td class="px-6 py-4 whitespace-nowrap"><%= debt.interest_rate ? "#{number_with_precision(debt.interest_rate, precision: 1)}%" : 'N/A' %></td>
+                <td class="px-6 py-4 whitespace-nowrap"><%= debt.monthly_payment ? "K#{number_with_precision(debt.monthly_payment, precision: 2)}" : 'N/A' %></td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= debt.status == 'active' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+                    <%= debt.status.titleize %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <%= link_to "View", debt_path(debt), class: "text-blue-600 hover:text-blue-900 mr-3" %>
+                  <%= link_to "Edit", edit_debt_path(debt), class: "text-green-600 hover:text-green-900 mr-3" %>
+                  <%= link_to "Delete", debt_path(debt), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-900" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-gray-500 text-center py-8">No debts recorded. Click "Add New Debt" to start tracking your loans.</p>
+    <% end %>
+  </div>
+  
+  <div class="mt-6">
+    <%= link_to "← Back to Dashboard", dashboard_path, class: "text-blue-600 hover:text-blue-800" %>
+  </div>
+</div>

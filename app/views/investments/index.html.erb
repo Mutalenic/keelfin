@@ -1,0 +1,254 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between align-center p-5">
+    <li>
+      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
+    </li>
+    <li>
+      <h1 class="text-xl uppercase">Investment Portfolio</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="container mx-auto px-4 py-6">
+  <!-- Portfolio Summary -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+      <h3 class="text-sm text-gray-600 mb-2">Total Portfolio Value</h3>
+      <p class="text-3xl font-bold">K<%= number_with_precision(@total_invested, precision: 2) %></p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+      <h3 class="text-sm text-gray-600 mb-2">Total Return</h3>
+      <p class="text-3xl font-bold <%= @total_return >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= @total_return >= 0 ? '+' : '' %>K<%= number_with_precision(@total_return, precision: 2) %>
+      </p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+      <h3 class="text-sm text-gray-600 mb-2">Return Percentage</h3>
+      <p class="text-3xl font-bold <%= @return_percentage >= 0 ? 'text-green-600' : 'text-red-600' %>">
+        <%= @return_percentage >= 0 ? '+' : '' %><%= number_with_precision(@return_percentage, precision: 2) %>%
+      </p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
+      <h3 class="text-sm text-gray-600 mb-2">Active Investments</h3>
+      <p class="text-3xl font-bold"><%= @investments.active.count %></p>
+    </div>
+  </div>
+
+  <!-- Portfolio Allocation -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Portfolio Allocation</h2>
+      <div class="flex space-x-2">
+        <button id="view-as-chart" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200">
+          <i class="fa-solid fa-chart-pie mr-1"></i> Chart
+        </button>
+        <button id="view-as-table" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
+          <i class="fa-solid fa-table mr-1"></i> Table
+        </button>
+      </div>
+    </div>
+    
+    <div id="allocation-chart" class="mb-6">
+      <!-- Chart will be rendered here -->
+      <div class="h-64">
+        <canvas id="portfolio-allocation-chart"></canvas>
+      </div>
+    </div>
+    
+    <script>
+      // Make portfolio allocation data available to the charts.js script
+      const portfolioAllocationData = <%= raw @portfolio_allocation.to_json %>;
+    </script>
+    
+    <div id="allocation-table" class="hidden">
+      <% if @portfolio_allocation.any? %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Investment Type</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allocation</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @portfolio_allocation.each do |type, data| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900"><%= Investment.new(investment_type: type).investment_type_text %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium">K<%= number_with_precision(data[:total], precision: 2) %></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2 w-24">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: <%= data[:percentage] %>%"></div>
+                      </div>
+                      <span class="text-sm font-medium"><%= number_with_precision(data[:percentage], precision: 1) %>%</span>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-gray-500 text-center py-4">No investment data available</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Investments List -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Your Investments</h2>
+      <%= link_to "Add New Investment", new_investment_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+    </div>
+    
+    <% if @investments.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Value</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Level</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @investments.each do |investment| %>
+              <tr class="hover:bg-gray-50 <%= investment.active? ? '' : 'bg-gray-100' %>">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900"><%= link_to investment.name, investment_path(investment) %></div>
+                  <div class="text-xs text-gray-500">
+                    <% if investment.institution.present? %>
+                      <%= investment.institution %>
+                    <% end %>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900"><%= investment.investment_type_text %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium">K<%= number_with_precision(investment.current_value, precision: 2) %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% return_value = investment.total_return %>
+                  <% return_percentage = investment.return_percentage %>
+                  <div class="text-sm font-medium <%= return_value >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                    <%= return_value >= 0 ? '+' : '' %>K<%= number_with_precision(return_value, precision: 2) %>
+                  </div>
+                  <div class="text-xs <%= return_percentage >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                    <%= return_percentage >= 0 ? '+' : '' %><%= number_with_precision(return_percentage, precision: 2) %>%
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% if investment.risk_level %>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                      <%= case investment.risk_level
+                          when 1 then 'bg-green-100 text-green-800'
+                          when 2 then 'bg-blue-100 text-blue-800'
+                          when 3 then 'bg-yellow-100 text-yellow-800'
+                          when 4 then 'bg-orange-100 text-orange-800'
+                          when 5 then 'bg-red-100 text-red-800'
+                          end %>">
+                      <%= investment.risk_level_text %>
+                    </span>
+                  <% else %>
+                    <span class="text-gray-500">-</span>
+                  <% end %>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <div class="flex space-x-2 justify-end">
+                    <%= link_to "View", investment_path(investment), class: "text-blue-600 hover:text-blue-900" %>
+                    <%= link_to "Edit", edit_investment_path(investment), class: "text-indigo-600 hover:text-indigo-900" %>
+                    <%= link_to "Transactions", investment_investment_transactions_path(investment), class: "text-green-600 hover:text-green-900" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-8 bg-gray-50 rounded-lg">
+        <p class="text-gray-500 mb-4">You don't have any investments yet.</p>
+        <%= link_to "Add Your First Investment", new_investment_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+      </div>
+    <% end %>
+  </div>
+  
+  <!-- Investment Tips -->
+  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Investment Tips</h2>
+    
+    <div class="space-y-4">
+      <div class="flex items-start">
+        <div class="mr-3 text-blue-500">
+          <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <p class="text-sm">Diversify your portfolio across different asset classes to reduce risk.</p>
+      </div>
+      
+      <div class="flex items-start">
+        <div class="mr-3 text-blue-500">
+          <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <p class="text-sm">Consider your time horizon and risk tolerance when choosing investments.</p>
+      </div>
+      
+      <div class="flex items-start">
+        <div class="mr-3 text-blue-500">
+          <i class="fa-solid fa-lightbulb"></i>
+        </div>
+        <p class="text-sm">Regularly review and rebalance your portfolio to maintain your target asset allocation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="fixed bottom-6 right-6">
+  <div class="flex flex-col space-y-2">
+    <%= link_to new_investment_path, class: "bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700" do %>
+      <i class="fa-solid fa-plus"></i>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const chartButton = document.getElementById('view-as-chart');
+    const tableButton = document.getElementById('view-as-table');
+    const chartDiv = document.getElementById('allocation-chart');
+    const tableDiv = document.getElementById('allocation-table');
+    
+    chartButton.addEventListener('click', function() {
+      chartDiv.classList.remove('hidden');
+      tableDiv.classList.add('hidden');
+      chartButton.classList.remove('bg-gray-100', 'text-gray-700');
+      chartButton.classList.add('bg-blue-100', 'text-blue-700');
+      tableButton.classList.remove('bg-blue-100', 'text-blue-700');
+      tableButton.classList.add('bg-gray-100', 'text-gray-700');
+    });
+    
+    tableButton.addEventListener('click', function() {
+      chartDiv.classList.add('hidden');
+      tableDiv.classList.remove('hidden');
+      chartButton.classList.remove('bg-blue-100', 'text-blue-700');
+      chartButton.classList.add('bg-gray-100', 'text-gray-700');
+      tableButton.classList.remove('bg-gray-100', 'text-gray-700');
+      tableButton.classList.add('bg-blue-100', 'text-blue-700');
+    });
+  });
+</script>
