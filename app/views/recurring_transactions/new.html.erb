@@ -1,0 +1,17 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between align-center p-5">
+    <li>
+      <%= link_to '', recurring_transactions_path, class: "text-xl fa-solid fa-arrow-left" %>
+    </li>
+    <li>
+      <h1 class="text-xl uppercase">New Recurring Transaction</h1>
+    </li>
+    <li></li>
+  </ul>
+</nav>
+
+<div class="container mx-auto px-4 py-6">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <%= render 'form', recurring_transaction: @recurring_transaction %>
+  </div>
+</div>

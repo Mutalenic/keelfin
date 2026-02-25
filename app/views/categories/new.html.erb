@@ -4,35 +4,110 @@
       <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
     </li>
     <li>
-      <h1 class="text-xl text-center uppercase">add categories</h1>
+      <h1 class="text-xl text-center uppercase">Add Category</h1>
     </li>
     <li>
-      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
     </li>
   </ul>
 </nav>
-<div class="min-h-screen flex justify-center items-center  mt-4">
 
-  <div class="p-10 border-[1px] -mt-10 border-slate-200 flex flex-col items-center space-y-3">
-        <%= form_with(model: @categories, url: categories_path, method: :post) do |form|%>
-      <div class="py-3">
-        <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none", placeholder: 'Enter Category Name' %>
-      </div>
+<div class="container mx-auto px-4 py-6">
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Custom Category Form -->
+    <div class="bg-white rounded-lg shadow-md p-6 flex-1">
+      <h2 class="text-xl font-bold mb-4">Create Custom Category</h2>
+      
+      <%= form_with(model: @category, url: categories_path, method: :post) do |form| %>
+        <% if @category.errors.any? %>
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <h2><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h2>
+            <ul>
+              <% @category.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-      <div class="py-3">
-        <% @category.each do |cat| %>
-          <%= form.hidden_field :user_id => cat.user_id %>
+        <div class="mb-4">
+          <%= form.label :name, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Name' %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :description, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.text_area :description, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Description', rows: 3 %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :icon, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.text_field :icon, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Icon Name' %>
+        </div>
+        
+        <div class="mb-4">
+          <%= form.label :icon_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.select :icon_name, 
+            [
+              ['Apple', 'fa-apple-whole'],
+              ['Home', 'fa-home'],
+              ['Car', 'fa-car'],
+              ['Shopping', 'fa-shopping-cart'],
+              ['Food', 'fa-utensils'],
+              ['Health', 'fa-hospital'],
+              ['Education', 'fa-graduation-cap'],
+              ['Entertainment', 'fa-film'],
+              ['Bills', 'fa-file-invoice-dollar'],
+              ['Savings', 'fa-piggy-bank']
+            ],
+            { include_blank: 'Select an icon' },
+            { class: "p-3 border-[1px] border-slate-500 rounded-sm w-full focus:outline-none" }
+          %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :color, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.color_field :color, class: "p-1 border-[1px] border-slate-500 rounded-sm w-full focus:outline-none h-10" %>
+        </div>
+
+        <div class="mb-4">
+          <%= form.label :category_type, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.select :category_type, 
+            @category_types.map { |type| [type.capitalize, type] },
+            { include_blank: 'Select a type' },
+            { class: "p-3 border-[1px] border-slate-500 rounded-sm w-full focus:outline-none" }
+          %>
+        </div>
+
+        <div class="py-3">
+          <%= form.submit 'Create Category', class: "w-full bg-[#3778c2] hover:bg-[#2c5d99] rounded-lg p-3 text-white font-bold text-center focus:outline-none" %>
+        </div>
+      <% end %>
+    </div>
+    
+    <!-- Preset Categories -->
+    <div class="bg-white rounded-lg shadow-md p-6 flex-1">
+      <h2 class="text-xl font-bold mb-4">Quick Add Preset Categories</h2>
+      <p class="text-gray-600 mb-4">Choose from our predefined categories to get started quickly.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% @preset_categories.each do |preset| %>
+          <div class="border rounded-lg p-4 hover:shadow-md transition-shadow" style="border-left: 4px solid <%= preset[:color] %>">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white mr-3" style="background-color: <%= preset[:color] %>">
+                  <i class="<%= preset[:icon_name] %>"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold"><%= preset[:name] %></h3>
+                  <p class="text-xs text-gray-500"><%= preset[:category_type].capitalize %></p>
+                </div>
+              </div>
+              <%= button_to 'Add', add_preset_categories_path(preset_name: preset[:name]), class: "text-sm bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-3 rounded" %>
+            </div>
+          </div>
         <% end %>
       </div>
-
-      <div class="py-3">
-        <%= form.text_field :icon, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-80 focus:outline-none", placeholder: 'Enter Icon Name' %>
-      </div>
-
-      <div class="py-3">
-        <%= form.submit 'Save', class: "w-80 border-blue-900 hover:border-[#4cbb17] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#0070ba] font-bold text-center focus:outline-none" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>
-

@@ -31,3 +31,10 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore cookie files with session data
+cookies*.txt
+
+# Ignore test scripts and documentation
+tests/
+docs/

@@ -1,0 +1,56 @@
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+  <h2 class="text-xl font-semibold mb-4">Monthly Spending Trend</h2>
+  
+  <% if @monthly_spending_trend[:labels].any? %>
+    <div class="h-64">
+      <canvas id="monthly-spending-trend-chart"></canvas>
+    </div>
+    
+    <script>
+      // Make monthly spending trend data available to the charts.js script
+      const monthlySpendingTrendData = <%= raw @monthly_spending_trend.to_json %>;
+    </script>
+    
+    <div class="mt-4 overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Month</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spending</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Change</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <% previous_value = nil %>
+          <% @monthly_spending_trend[:labels].each_with_index do |month, index| %>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900"><%= month %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium">K<%= number_with_precision(@monthly_spending_trend[:values][index], precision: 2) %></div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <% if previous_value && previous_value > 0 %>
+                  <% change = @monthly_spending_trend[:values][index] - previous_value %>
+                  <% change_percentage = (change / previous_value * 100).round(1) %>
+                  <div class="text-sm font-medium <%= change >= 0 ? 'text-red-600' : 'text-green-600' %>">
+                    <%= change >= 0 ? '+' : '' %>K<%= number_with_precision(change, precision: 2) %>
+                    (<%= change_percentage >= 0 ? '+' : '' %><%= number_with_precision(change_percentage, precision: 1) %>%)
+                  </div>
+                <% else %>
+                  <div class="text-sm text-gray-500">-</div>
+                <% end %>
+              </td>
+            </tr>
+            <% previous_value = @monthly_spending_trend[:values][index] %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="text-center py-8 bg-gray-50 rounded-lg">
+      <p class="text-gray-500">Not enough spending history to display trend.</p>
+    </div>
+  <% end %>
+</div>

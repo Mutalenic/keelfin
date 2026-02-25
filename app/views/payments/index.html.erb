@@ -7,7 +7,7 @@
       <h1 class="text-xl text-center uppercase">transactions</h1>
     </li>
     <li>
-      <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "text-white text-l uppercase" %>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
     </li>
   </ul>
 </nav>
@@ -26,7 +26,7 @@
             <% @payments.each do |payment| %>
                <li class="flex justify-between align-center shadow-lg hover:bg-[#C576F6] border p-4 flex mb-6">
                   <a><%= payment.name %></a>
-                  <a>$<%= payment.amount %></a>
+                  <a>K<%= payment.amount %></a>
       
                </li>
             <% end %>
@@ -36,7 +36,7 @@
       <% end %>
       <div class="text-left px-3 mt-6">
          <p>Total Amount</p>
-         <p>$<%= @total_amount %></p>
+         <p>K<%= @total_amount %></p>
       </div>
    </div>
 </div>

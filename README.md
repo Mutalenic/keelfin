@@ -1,6 +1,6 @@
-# Digi-Budget App
+# Keelfin
 
-> The Digi-Budget App is a mobile web application that allows the user to manage his/her budget: they have a list of transactions associated with a category, so that the user can see how much money they spend and on a particular category.
+> Keelfin is a comprehensive financial management application that helps users manage their budget, track spending, monitor debts, set financial goals, and make informed financial decisions with real-time economic indicators.
 ![ror3](https://user-images.githubusercontent.com/19844175/179044384-adb97a02-4ca4-4963-8681-c0ebfbc4c30b.jpg)
 ![ror2](https://user-images.githubusercontent.com/19844175/179044408-7b3664fb-4748-4999-b1cd-c2d9dca4c40f.jpg)
 ![ror](https://user-images.githubusercontent.com/19844175/179044443-45b4074f-ab51-407b-84b8-709fc9c62a04.jpg)
@@ -18,16 +18,16 @@
 
 ## Live Demo 
 
-- [Checkout the app](https://joli-choucroute-65855.herokuapp.com/)
+- [Checkout the app](https://keelfin.app)
 - [Video Presentation](https://www.loom.com/share/215fbedd1dbd47b58d834e3c994c777b)
 
 ## Getting Started
 
 - [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/) on your local machine 
 - [Install Ruby on Rails](https://guides.rubyonrails.org/v5.1/getting_started.html)
-- Clone [this repository](https://github.com/Mutalenic/digi_budget.git)
+- Clone [this repository](https://github.com/Mutalenic/keelfin.git)
   ```
-  git clone git@github.com:Mutalenic/digi_budget.git
+  git clone git@github.com:Mutalenic/keelfin.git
   ```
 - To get started, In the root directory run:
   ```
@@ -66,7 +66,7 @@ rubocop
 
 ## Author
 
-**Nicholas Kasonde Mutale**
+:woman: **Lynette Aluoch Acholah**
 
 - GitHub: [@mutalenic](https://github.com/mutalenic)
 - Twitter: [@nicomutale](https://twitter.com/nicomutale)
@@ -76,7 +76,7 @@ rubocop
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/Mutalenic/digi_budget/issues).
+Feel free to check the [issues page](https://github.com/Mutalenic/keelfin/issues).
 
 ## Show your support
 

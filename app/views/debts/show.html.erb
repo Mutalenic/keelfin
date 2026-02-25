@@ -1,0 +1,73 @@
+<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
+  <ul class="w-full flex flex-row justify-between align-center p-5">
+    <li>
+      <%= link_to '', debts_path, class: "text-xl fa-solid fa-arrow-left" %>
+    </li>
+    <li>
+      <h1 class="text-xl text-center uppercase">debt details</h1>
+    </li>
+    <li>
+      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
+    </li>
+  </ul>
+</nav>
+
+<div class="text-left px-3 mt-6">
+  <h1 class="text-2xl font-bold mb-4"><%= @debt.lender_name %></h1>
+  
+  <div class="bg-white rounded-lg shadow p-6">
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <p class="text-sm text-gray-600">Principal Amount</p>
+        <p class="text-xl font-bold">K<%= number_with_precision(@debt.principal_amount, precision: 2) %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Monthly Payment</p>
+        <p class="text-xl font-bold">K<%= number_with_precision(@debt.monthly_payment || 0, precision: 2) %></p>
+      </div>
+    </div>
+    
+    <% if @debt.interest_rate.present? %>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <p class="text-sm text-gray-600">Interest Rate</p>
+          <p class="text-xl font-bold"><%= number_with_precision(@debt.interest_rate, precision: 2) %>%</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Status</p>
+          <p class="text-xl font-bold capitalize"><%= @debt.status || 'Active' %></p>
+        </div>
+      </div>
+    <% end %>
+    
+    <% if @debt.start_date.present? && @debt.end_date.present? %>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div>
+          <p class="text-sm text-gray-600">Start Date</p>
+          <p class="text-xl font-bold"><%= @debt.start_date.strftime('%B %d, %Y') %></p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">End Date</p>
+          <p class="text-xl font-bold"><%= @debt.end_date.strftime('%B %d, %Y') %></p>
+        </div>
+      </div>
+    <% end %>
+    
+    <div class="mt-6">
+      <p class="text-sm text-gray-600 mb-2">Total Interest Cost</p>
+      <p class="text-2xl font-bold text-red-600">K<%= number_with_precision(@debt.total_interest_cost, precision: 2) %></p>
+    </div>
+    
+    <div class="mt-6">
+      <p class="text-sm text-gray-600 mb-2">Debt-to-Income Ratio</p>
+      <p class="text-2xl font-bold <%= @debt.debt_to_income_ratio > 30 ? 'text-red-600' : 'text-green-600' %>">
+        <%= number_with_precision(@debt.debt_to_income_ratio, precision: 2) %>%
+      </p>
+    </div>
+    
+    <div class="mt-6 flex space-x-4">
+      <%= link_to 'Edit', edit_debt_path(@debt), class: "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700" %>
+      <%= button_to 'Delete', @debt, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700" %>
+    </div>
+  </div>
+</div>
