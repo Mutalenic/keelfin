@@ -12,7 +12,7 @@ class FinancialGoal < ApplicationRecord
   
   scope :active, -> { where('target_date >= ?', Date.current) }
   scope :completed, -> { where(completed: true) }
-  scope :in_progress, -> { where(completed: false).where('target_date >= ?', Date.current) }
+  scope :in_progress, -> { active.where(completed: false) }
   scope :overdue, -> { where(completed: false).where('target_date < ?', Date.current) }
   
   def progress_percentage
