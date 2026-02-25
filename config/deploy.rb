@@ -27,6 +27,7 @@ set :keep_releases, 3
 
 # Skip asset precompilation for now
 Rake::Task["deploy:assets:precompile"].clear_actions
+Rake::Task["deploy:assets:backup_manifest"].clear_actions
 
 # Puma configuration
 set :puma_threads, [1, 2]
