@@ -1,4 +1,6 @@
 {
+  "name": "keelfin",
+  "version": "1.0.0",
   "devDependencies": {
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^21.0.0",
