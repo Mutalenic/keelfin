@@ -90,4 +90,6 @@ group :development do
   gem 'capistrano-bundler', '~> 2.0'
   gem 'capistrano-rbenv', '~> 2.2'
   gem 'capistrano-puma', '~> 0.2'
+  gem 'ed25519', '~> 1.3'
+  gem 'bcrypt_pbkdf', '~> 1.1'
 end
