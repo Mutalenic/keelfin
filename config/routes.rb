@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   resource :subscription, only: [:show, :new, :create, :update] do
-    member do
+    collection do
       get :plans
       post :upgrade
+    end
+    member do
       post :cancel
     end
   end
@@ -15,6 +17,7 @@ Rails.application.routes.draw do
   root to: "dashboard#index"
   
   get 'dashboard', to: 'dashboard#index'
+  get 'coming_soon', to: 'coming_soon#index'
   
   resources :users, only: %i[index]
   resources :debts

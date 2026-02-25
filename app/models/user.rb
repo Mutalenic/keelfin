@@ -32,7 +32,7 @@ class User < ApplicationRecord
   end
   
   def is_over_indebted?
-    debt_to_income_ratio > 40
+    debt_to_income_ratio > DEBT_TO_INCOME_THRESHOLD
   end
   
   def total_spending(period = Date.current.beginning_of_month..Date.current.end_of_month)
@@ -95,7 +95,7 @@ class User < ApplicationRecord
     return Float::INFINITY if admin?
     return Subscription::PLANS[:free][:features][:max_categories] unless has_subscription?
     
-    max = subscription.features['max_categories']
+    max = subscription.features&.[]('max_categories') || Subscription::PLANS[:free][:features][:max_categories]
     max == -1 ? Float::INFINITY : max
   end
   
@@ -103,11 +103,15 @@ class User < ApplicationRecord
     return Float::INFINITY if admin?
     return Subscription::PLANS[:free][:features][:max_budgets] unless has_subscription?
     
-    max = subscription.features['max_budgets']
+    max = subscription.features&.[]('max_budgets') || Subscription::PLANS[:free][:features][:max_budgets]
     max == -1 ? Float::INFINITY : max
   end
   
   def ensure_subscription
+    return subscription if has_subscription?
+    Subscription.create_free_subscription(self)
+  end
+end
     return subscription if has_subscription?
     Subscription.create_free_subscription(self)
   end

@@ -3,8 +3,8 @@ class DashboardController < ApplicationController
   
   def index
     # Date range filtering (default to current month)
-    @start_date = params[:start_date].present? ? Date.parse(params[:start_date]) : Date.current.beginning_of_month
-    @end_date = params[:end_date].present? ? Date.parse(params[:end_date]) : Date.current.end_of_month
+    @start_date = parse_date_param(params[:start_date]) || Date.current.beginning_of_month
+    @end_date = parse_date_param(params[:end_date]) || Date.current.end_of_month
     @date_range = @start_date..@end_date
     
     # Core financial data
@@ -140,5 +140,12 @@ class DashboardController < ApplicationController
     end
     
     insights
+  end
+  
+  def parse_date_param(date_string)
+    return nil if date_string.blank?
+    Date.parse(date_string)
+  rescue ArgumentError, TypeError
+    nil
   end
 end
