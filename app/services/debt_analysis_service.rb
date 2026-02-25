@@ -29,7 +29,7 @@ class DebtAnalysisService
   end
   
   def is_over_indebted?
-    debt_to_income_ratio > 40
+    debt_to_income_ratio > User::DEBT_TO_INCOME_THRESHOLD
   end
   
   def recommendations

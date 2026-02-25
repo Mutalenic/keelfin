@@ -18,7 +18,7 @@ class Subscription < ApplicationRecord
     },
     standard: {
       name: 'Standard',
-      price: 4.99,
+      price: 135.0, # ~K135 (was $4.99)
       features: {
         max_categories: 50,
         max_budgets: 20,
@@ -31,7 +31,7 @@ class Subscription < ApplicationRecord
     },
     premium: {
       name: 'Premium',
-      price: 9.99,
+      price: 270.0, # ~K270 (was $9.99)
       features: {
         max_categories: -1, # unlimited
         max_budgets: -1, # unlimited

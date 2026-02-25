@@ -15,22 +15,35 @@ class RecurringTransaction < ApplicationRecord
   def process_transaction
     return unless active? && next_occurrence <= Date.current
     
-    # Create the actual payment
-    payment = Payment.create!(
-      name: name,
-      amount: amount,
-      user: user,
-      category: category,
-      payment_method: payment_method,
-      is_essential: is_essential,
-      notes: "Auto-generated from recurring transaction: #{name}"
-    )
-    
-    # Update the next occurrence date
-    update_next_occurrence
-    
-    # Return the created payment
-    payment
+    # Use a transaction with lock to prevent race conditions
+    transaction do
+      # Lock this record for update
+      lock!
+      
+      # Double-check conditions after acquiring lock
+      return unless active? && next_occurrence <= Date.current
+      
+      # Create the actual payment
+      payment = Payment.create!(
+        name: name,
+        amount: amount,
+        user: user,
+        category: category,
+        payment_method: payment_method,
+        is_essential: is_essential,
+        notes: "Auto-generated from recurring transaction: #{name}"
+      )
+      
+      # Update the next occurrence date
+      update_next_occurrence
+      
+      # Return the created payment
+      payment
+    end
+  rescue ActiveRecord::RecordNotUnique, ActiveRecord::StaleObjectError
+    # Handle race condition gracefully
+    Rails.logger.warn "Race condition detected for recurring transaction #{id}"
+    nil
   end
   
   def update_next_occurrence

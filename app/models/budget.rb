@@ -52,9 +52,31 @@ class Budget < ApplicationRecord
   end
 
   def unique_category_budget
+    return unless user_id && category_id
+    
+    # Build base query for same user and category
     existing = Budget.where(user_id: user_id, category_id: category_id)
-    existing = existing.where(start_date: start_date) if start_date.present?
     existing = existing.where.not(id: id) if persisted?
+    
+    # Check for overlapping date ranges
+    if start_date.present?
+      # If this budget has an end_date, check for any overlap
+      if end_date.present?
+        existing = existing.where(
+          "(start_date <= ? AND (end_date IS NULL OR end_date >= ?)) OR " \
+          "(start_date <= ? AND (end_date IS NULL OR end_date >= ?)) OR " \
+          "(start_date >= ? AND start_date <= ?)",
+          end_date, start_date,  # Existing budget starts before this one ends
+          start_date, start_date, # Existing budget ends after this one starts
+          start_date, end_date    # Existing budget is contained within this one
+        )
+      else
+        # This budget has no end_date (ongoing), check if any existing budget overlaps
+        existing = existing.where(
+          "end_date IS NULL OR end_date >= ?", start_date
+        )
+      end
+    end
     
     errors.add(:category_id, "already has a budget for this period") if existing.exists?
   end
