@@ -18,9 +18,14 @@ class InvestmentTransactionsController < ApplicationController
     
     # Filter by date range if specified
     if params[:start_date].present? && params[:end_date].present?
-      start_date = Date.parse(params[:start_date])
-      end_date = Date.parse(params[:end_date])
-      @transactions = @transactions.where(transaction_date: start_date..end_date)
+      begin
+        start_date = Date.parse(params[:start_date])
+        end_date = Date.parse(params[:end_date])
+        @transactions = @transactions.where(transaction_date: start_date..end_date)
+      rescue ArgumentError => e
+        Rails.logger.warn "Invalid date format in params: #{e.message}"
+        flash.now[:alert] = "Invalid date format provided"
+      end
     end
     
     # Analytics

@@ -88,22 +88,23 @@ class DashboardController < ApplicationController
     end_date = Date.current.end_of_month
     start_date = (end_date - 5.months).beginning_of_month
     
+    # Fetch all payments for the date range and group by month at database level
+    monthly_totals = current_user.payments
+                                 .where(created_at: start_date..end_date)
+                                 .group("DATE_TRUNC('month', created_at)")
+                                 .sum(:amount)
+    
     # Initialize result structure
     result = { labels: [], values: [] }
     
-    # Calculate spending for each month in the range
+    # Build the result with all months, including those with zero spending
     current_month = start_date
     while current_month <= end_date
-      month_end = current_month.end_of_month
       month_label = current_month.strftime('%b %Y')
-      
-      # Calculate total spending for this month
-      monthly_spending = current_user.payments
-                                    .where(created_at: current_month..month_end)
-                                    .sum(:amount)
+      month_key = current_month.beginning_of_month
       
       result[:labels] << month_label
-      result[:values] << monthly_spending.to_f
+      result[:values] << (monthly_totals[month_key] || 0).to_f
       
       current_month = current_month.next_month.beginning_of_month
     end

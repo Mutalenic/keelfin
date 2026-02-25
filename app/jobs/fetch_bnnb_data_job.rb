@@ -23,5 +23,6 @@ class FetchBnnbDataJob < ApplicationJob
     Rails.logger.info "BNNB data seeded successfully"
   rescue StandardError => e
     Rails.logger.error "Failed to fetch BNNB data: #{e.message}"
+    raise e
   end
 end

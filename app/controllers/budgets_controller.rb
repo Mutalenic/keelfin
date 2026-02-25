@@ -64,19 +64,17 @@ class BudgetsController < ApplicationController
     @budget_amounts = []
     @actual_amounts = []
     
+    # Fetch all actual spending for the active budget categories in one query
+    actuals = current_user.payments
+                          .where(category_id: active_budgets.map(&:category_id))
+                          .where(created_at: current_month_start..current_month_end)
+                          .group(:category_id)
+                          .sum(:amount)
+    
     active_budgets.each do |budget|
-      category_name = budget.category.name
-      budget_amount = budget.monthly_limit
-      
-      # Calculate actual spending for this category in the current month
-      actual_amount = current_user.payments
-                                 .where(category_id: budget.category_id)
-                                 .where(created_at: current_month_start..current_month_end)
-                                 .sum(:amount)
-      
-      @budget_categories << category_name
-      @budget_amounts << budget_amount
-      @actual_amounts << actual_amount
+      @budget_categories << budget.category.name
+      @budget_amounts << budget.monthly_limit
+      @actual_amounts << (actuals[budget.category_id] || 0)
     end
   end
 end
