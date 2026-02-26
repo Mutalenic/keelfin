@@ -25,9 +25,7 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 # Keep only 3 releases
 set :keep_releases, 3
 
-# Skip asset precompilation for now
-Rake::Task["deploy:assets:precompile"].clear_actions
-Rake::Task["deploy:assets:backup_manifest"].clear_actions
+# Official Capistrano workflow - don't skip tasks
 
 # Puma configuration
 set :puma_threads, [1, 2]
