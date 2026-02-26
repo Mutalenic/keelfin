@@ -25,9 +25,13 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 # Keep only 3 releases
 set :keep_releases, 3
 
-# Official Capistrano workflow - Passenger configuration
+# Official Capistrano workflow - Passenger standalone configuration
 set :passenger_roles, :app
 set :passenger_restart_with_touch, true
+set :passenger_in_gemfile, true
+set :passenger_environment_variables, { 
+  'PASSENGER_INSTANCE_REGISTRY_DIR' => '/tmp/passenger_instances'
+}
 
 # Default value for :pty is false
 set :pty, true
