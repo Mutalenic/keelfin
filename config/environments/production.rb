@@ -3,6 +3,12 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Allow requests from these hosts
+  config.hosts << "keelfin.app"
+  config.hosts << "www.keelfin.app"
+  config.hosts << "localhost"
+  config.hosts << /.*\.keelfin\.app/
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
