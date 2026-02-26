@@ -16,8 +16,8 @@ gem 'sprockets-rails'
 gem 'devise'
 gem 'pg', '~> 1.5'
 
-# Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.4'
+# Use Passenger as the app server
+gem 'passenger', '~> 6.0', require: false
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
@@ -85,11 +85,12 @@ gem 'ffi'
 
 # Deployment
 group :development do
+  # Capistrano deployment
   gem 'capistrano', '~> 3.17'
-  gem 'capistrano-rails', '~> 1.6'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-rails'
+  gem 'capistrano-passenger'
   gem 'capistrano-bundler', '~> 2.0'
-  gem 'capistrano-rbenv', '~> 2.2'
-  gem 'capistrano-puma', '~> 0.2'
   gem 'ed25519', '~> 1.3'
   gem 'bcrypt_pbkdf', '~> 1.1'
 end

@@ -25,17 +25,9 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 # Keep only 3 releases
 set :keep_releases, 3
 
-# Official Capistrano workflow - don't skip tasks
-
-# Puma configuration
-set :puma_threads, [1, 2]
-set :puma_workers, 1
-set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"
-set :puma_state, "#{shared_path}/tmp/pids/puma.state"
-set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
-set :puma_access_log, "#{release_path}/log/puma.error.log"
-set :puma_error_log, "#{release_path}/log/puma.access.log"
-set :puma_preload_app, true
+# Official Capistrano workflow - Passenger configuration
+set :passenger_roles, :app
+set :passenger_restart_with_touch, true
 
 # Default value for :pty is false
 set :pty, true
