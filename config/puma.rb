@@ -17,7 +17,7 @@ worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 # Production configuration
 if ENV.fetch("RAILS_ENV") { "development" } == "production"
   # Bind to Unix socket for NGINX
-  bind "unix://home/deploy/keelfin/shared/tmp/sockets/puma.sock"
+  bind "unix:///home/deploy/keelfin/shared/tmp/sockets/puma.sock"
   
   # Single worker for 1GB RAM
   workers 1
