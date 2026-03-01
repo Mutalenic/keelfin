@@ -4,8 +4,20 @@ class DashboardController < ApplicationController
     end_date = parse_date_param(params[:end_date]) || Date.current.end_of_month
 
     @presenter = DashboardPresenter.new(current_user, start_date: start_date, end_date: end_date)
+    assign_presenter_variables
+  end
 
-    # Assign individual instance variables for backward-compatibility with existing views
+  private
+
+  def parse_date_param(date_string)
+    return nil if date_string.blank?
+
+    Date.parse(date_string)
+  rescue ArgumentError, TypeError
+    nil
+  end
+
+  def assign_presenter_variables
     @start_date = @presenter.start_date
     @end_date = @presenter.end_date
     @date_range = @presenter.date_range
@@ -26,15 +38,5 @@ class DashboardController < ApplicationController
     @latest_economic_data = @presenter.latest_economic_data
     @monthly_spending_trend = @presenter.monthly_spending_trend
     @financial_insights = @presenter.financial_insights
-  end
-
-  private
-
-  def parse_date_param(date_string)
-    return nil if date_string.blank?
-
-    Date.parse(date_string)
-  rescue ArgumentError, TypeError
-    nil
   end
 end

@@ -34,9 +34,11 @@ class User < ApplicationRecord
     (total_debt_payments / monthly_income * 100).round(2)
   end
 
-  def is_over_indebted?
+  def over_indebted?
     debt_to_income_ratio > DEBT_TO_INCOME_THRESHOLD
   end
+
+  alias is_over_indebted? over_indebted?
 
   def total_spending(period = Date.current.all_month)
     payments.where(created_at: period).sum(:amount)
@@ -69,9 +71,11 @@ class User < ApplicationRecord
   end
 
   # Subscription and premium features
-  def has_subscription?
+  def subscription?
     subscription.present?
   end
+
+  alias has_subscription? subscription?
 
   def active_subscription?
     has_subscription? && subscription.active?

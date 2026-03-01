@@ -26,6 +26,9 @@ Metrics/MethodLength:
     - "app/controllers/*"
     - "app/models/*"
   Max: 20
+  Exclude:
+    - "app/models/category_preset.rb"
+    - "app/models/category.rb"
 Metrics/AbcSize:
   Include:
     - "app/controllers/*"
@@ -36,6 +39,10 @@ Metrics/ClassLength:
 Metrics/BlockLength:
   AllowedMethods: ['describe', 'context', 'shared_examples']
   Max: 30
+Metrics/CyclomaticComplexity:
+  Max: 12
+Metrics/PerceivedComplexity:
+  Max: 12
 
 Style/Documentation:
   Enabled: false

@@ -28,6 +28,8 @@ class InvestmentTransactionsController < ApplicationController
     @total_fees = @transactions.fees.sum(:amount)
   end
 
+  def show; end
+
   def new
     @transaction = @investment.investment_transactions.new
     @transaction.user = current_user

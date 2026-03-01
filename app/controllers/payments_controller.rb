@@ -8,6 +8,8 @@ class PaymentsController < ApplicationController
     @total_amount = @payments.sum(:amount)
   end
 
+  def show; end
+
   def new
     @payment = @category.payments.new
   end

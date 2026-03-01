@@ -31,21 +31,19 @@ class InvestmentTransaction < ApplicationRecord
     investment = self.investment
     current_value = investment.current_value
 
-    case transaction_type
-    when 'contribution'
-      new_value = current_value + amount
-    when 'withdrawal'
-      new_value = current_value - amount
-    when 'dividend', 'interest'
-      new_value = current_value + amount
-    when 'fee'
-      new_value = current_value - amount
-    end
+    new_value = case transaction_type
+                when 'contribution', 'dividend', 'interest'
+                  current_value + amount
+                when 'withdrawal', 'fee'
+                  current_value - amount
+                else
+                  current_value
+                end
 
     # Ensure value doesn't go below zero
     new_value = [new_value, 0].max
 
     # Update the investment's current value
-    investment.update_column(:current_value, new_value)
+    investment.update(current_value: new_value)
   end
 end

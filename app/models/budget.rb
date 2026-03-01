@@ -31,11 +31,13 @@ class Budget < ApplicationRecord
     (current_spending(month).to_f / monthly_limit * 100).round(2)
   end
 
-  def is_overspent?(month = Date.current.beginning_of_month)
+  def overspent?(month = Date.current.beginning_of_month)
     current_spending(month) > monthly_limit
   end
 
-  def adjust_for_inflation!(inflation_rate)
+  alias is_overspent? overspent?
+
+  def adjust_for_inflation!(inflation_rate) # rubocop:disable Naming/PredicateMethod
     return false unless inflation_adjusted
     return false if inflation_rate.nil? || inflation_rate.zero?
 

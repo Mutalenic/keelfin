@@ -111,30 +111,35 @@ class FinancialGoalsController < ApplicationController
   def generate_recommendations
     recommendations = []
 
-    if @financial_goal.goal_type == 'saving'
-      progress = @financial_goal.progress_percentage
-      days_left = @financial_goal.days_remaining
-
-      if progress < 25 && days_left < 30
-        savings_increase = (@financial_goal.daily_target * 1.5).round(2)
-        recommendations << "You're behind on your savings goal. " \
-                           "Consider increasing your daily savings by #{savings_increase} to catch up."
-      elsif progress < 50 && days_left < 60
-        daily = @financial_goal.daily_target
-        recommendations << "You're halfway to your target. " \
-                           "Try setting aside an extra #{daily} each week to stay on track."
-      end
-
-      # Add investment recommendation if saving a large amount
-      if @financial_goal.target_amount > 5000
-        recommendations << 'Consider investing part of your savings to earn interest and reach your goal faster.'
-      end
-    elsif @financial_goal.goal_type == 'debt_payment'
-      # Debt-specific recommendations
+    case @financial_goal.goal_type
+    when 'saving'
+      recommendations.concat(saving_recommendations)
+    when 'debt_payment'
       recommendations << 'Setting up automatic payments can help ensure ' \
                          'consistent progress on your debt repayment goal.'
     end
 
     recommendations
+  end
+
+  def saving_recommendations
+    recs = []
+    progress = @financial_goal.progress_percentage
+    days_left = @financial_goal.days_remaining
+
+    if progress < 25 && days_left < 30
+      savings_increase = (@financial_goal.daily_target * 1.5).round(2)
+      recs << "You're behind on your savings goal. " \
+              "Consider increasing your daily savings by #{savings_increase} to catch up."
+    elsif progress < 50 && days_left < 60
+      daily = @financial_goal.daily_target
+      recs << "You're halfway to your target. " \
+              "Try setting aside an extra #{daily} each week to stay on track."
+    end
+
+    recs << 'Consider investing part of your savings to earn interest and reach your goal faster.' \
+      if @financial_goal.target_amount > 5000
+
+    recs
   end
 end

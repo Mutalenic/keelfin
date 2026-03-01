@@ -78,10 +78,9 @@ class RecurringTransaction < ApplicationRecord
     when 'daily' then 1
     when 'weekly' then 7
     when 'biweekly' then 14
-    when 'monthly' then 30
     when 'quarterly' then 90
     when 'yearly' then 365
-    else 30 # default
+    else 30 # monthly, nil, or unknown
     end
   end
 
