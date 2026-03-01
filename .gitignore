@@ -34,7 +34,12 @@
 
 # Ignore cookie files with session data
 cookies*.txt
+cookiejar
 
-# Ignore test scripts and documentation
-tests/
-docs/
+# Ignore server logs and temporary analysis
+server.log
+managed_context/
+test_suite_analysis/
+
+# Ignore editor/IDE configurations
+.windsurf/
