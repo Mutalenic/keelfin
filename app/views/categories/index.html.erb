@@ -61,11 +61,11 @@
           <div class="flex justify-between items-center mb-4">
             <div>
               <p class="text-gray-500 text-sm">Total Spending</p>
-              <p class="text-xl font-bold">K<%= number_with_precision(category.total_amount, precision: 2) %></p>
+              <p class="text-xl font-bold">K<%= number_with_precision(@category_spending[category.id] || 0, precision: 2) %></p>
             </div>
             <div class="text-right">
               <p class="text-gray-500 text-sm">Transactions</p>
-              <p class="text-xl font-bold"><%= category.payments.count %></p>
+              <p class="text-xl font-bold"><%= @category_counts[category.id] || 0 %></p>
             </div>
           </div>
           

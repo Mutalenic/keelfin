@@ -1,17 +1,14 @@
 class PaymentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_category
   before_action :set_payment, only: %i[show edit update destroy]
   before_action :authorize_payment, only: %i[show edit update destroy]
-
-  rescue_from CanCan::AccessDenied do
-    redirect_to categories_path, alert: 'You are not authorized to perform this action.'
-  end
 
   def index
     @payments = @category.payments.order(created_at: :desc)
     @total_amount = @payments.sum(:amount)
   end
+
+  def show; end
 
   def new
     @payment = @category.payments.new
@@ -26,7 +23,7 @@ class PaymentsController < ApplicationController
     if @payment.save
       redirect_to category_payments_path(@category), notice: 'Payment was successfully added.'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -34,7 +31,7 @@ class PaymentsController < ApplicationController
     if @payment.update(payment_params)
       redirect_to category_payments_path(@category), notice: 'Payment was successfully updated.'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

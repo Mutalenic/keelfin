@@ -1,19 +1,19 @@
 class SeedEconomicDataJob < ApplicationJob
   queue_as :default
-  
+
   def perform
     # Seed 2026 economic indicators based on research
     seed_economic_indicators
     seed_bnnb_data
-    
-    Rails.logger.info "Economic data seeded successfully"
+
+    Rails.logger.info 'Economic data seeded successfully'
   rescue StandardError => e
     Rails.logger.error "Failed to seed economic data: #{e.message}"
     raise e
   end
-  
+
   private
-  
+
   def seed_economic_indicators
     # January 2026 data
     EconomicIndicator.find_or_create_by(date: Date.new(2026, 1, 1)) do |indicator|
@@ -21,7 +21,7 @@ class SeedEconomicDataJob < ApplicationJob
       indicator.usd_zmw_rate = 19.0
       indicator.source = 'Manual seed - 2026 forecast'
     end
-    
+
     # February 2026 data
     EconomicIndicator.find_or_create_by(date: Date.new(2026, 2, 1)) do |indicator|
       indicator.inflation_rate = 8.5
@@ -29,11 +29,11 @@ class SeedEconomicDataJob < ApplicationJob
       indicator.source = 'Manual seed - 2026 forecast'
     end
   end
-  
+
   def seed_bnnb_data
     # January 2026 JCTR BNNB data
     BnnbData.find_or_create_by(month: Date.new(2026, 1, 1).beginning_of_month, location: 'Lusaka') do |bnnb|
-      bnnb.total_basket = 11365.09
+      bnnb.total_basket = 11_365.09
       bnnb.food_basket = 4900.00
       bnnb.non_food_basket = 6465.09
       bnnb.item_breakdown = {
@@ -48,10 +48,10 @@ class SeedEconomicDataJob < ApplicationJob
         'electricity' => 300.00
       }
     end
-    
+
     # February 2026 JCTR BNNB data (slight increase due to inflation)
     BnnbData.find_or_create_by(month: Date.new(2026, 2, 1).beginning_of_month, location: 'Lusaka') do |bnnb|
-      bnnb.total_basket = 11500.00
+      bnnb.total_basket = 11_500.00
       bnnb.food_basket = 4950.00
       bnnb.non_food_basket = 6550.00
       bnnb.item_breakdown = {

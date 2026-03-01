@@ -133,7 +133,10 @@
   <%= render 'spending_charts' %>
   
   <!-- Monthly Spending Trend -->
-  <%= render 'monthly_trend_chart' %>
+  <% cache ["monthly-trend", current_user.id, Date.current.strftime('%Y-%m'),
+            current_user.payments.cache_key_with_version] do %>
+    <%= render 'monthly_trend_chart' %>
+  <% end %>
   
   <!-- Recent Transactions -->
   <div class="bg-white rounded-lg shadow p-6">
@@ -162,12 +165,14 @@
   <!-- Financial Goals & Investments -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <!-- Financial Goals -->
+    <% cache ["goals-widget", current_user.id,
+              current_user.financial_goals.cache_key_with_version] do %>
     <div class="bg-white rounded-lg shadow p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Financial Goals</h2>
         <%= link_to "View All", financial_goals_path, class: "text-blue-600 hover:text-blue-800" %>
       </div>
-      
+
       <% if @active_goals && @active_goals.any? %>
         <div class="space-y-4">
           <% @active_goals.each do |goal| %>
@@ -197,8 +202,11 @@
         </div>
       <% end %>
     </div>
-    
+    <% end %>
+
     <!-- Investments Summary -->
+    <% cache ["investments-widget", current_user.id,
+              current_user.investments.cache_key_with_version] do %>
     <div class="bg-white rounded-lg shadow p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Investment Portfolio</h2>
@@ -246,8 +254,9 @@
         </div>
       <% end %>
     </div>
+    <% end %>
   </div>
-  
+
   <!-- Upcoming Recurring Transactions -->
   <div class="bg-white rounded-lg shadow p-6 mb-6">
     <div class="flex justify-between items-center mb-4">

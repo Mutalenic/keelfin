@@ -1,36 +1,16 @@
 class CategoriesController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_category, only: %i[show edit update destroy]
   load_and_authorize_resource
 
   def index
     @user = current_user
-    @categories = current_user.categories.includes(:payments).ordered_by_name
-    
+    @categories = current_user.categories.ordered_by_name
+
+    # Aggregate spending and payment counts in two queries instead of N+1
+    @category_spending = current_user.payments.group(:category_id).sum(:amount)
+    @category_counts = current_user.payments.group(:category_id).count
+
     # Group categories by type for better organization
     @grouped_categories = @categories.group_by(&:category_type)
-  end
-
-  def new
-    @category = current_user.categories.new
-    @category_types = ['groceries', 'fixed', 'variable', 'discretionary']
-    @preset_categories = Category.preset_categories
-  end
-
-  def edit
-    @category_types = ['groceries', 'fixed', 'variable', 'discretionary']
-  end
-
-  def create
-    @category = current_user.categories.new(category_params)
-
-    if @category.save
-      redirect_to categories_path, notice: 'Category was successfully created.'
-    else
-      @category_types = ['groceries', 'fixed', 'variable', 'discretionary']
-      @preset_categories = Category.preset_categories
-      render :new, status: :unprocessable_entity
-    end
   end
 
   def show
@@ -40,12 +20,34 @@ class CategoriesController < ApplicationController
     @percentage_of_total = @category.percentage_of_total_spending
   end
 
+  def new
+    @category = current_user.categories.new
+    @category_types = Category::TYPES
+    @preset_categories = Category.preset_categories
+  end
+
+  def edit
+    @category_types = Category::TYPES
+  end
+
+  def create
+    @category = current_user.categories.new(category_params)
+
+    if @category.save
+      redirect_to categories_path, notice: 'Category was successfully created.'
+    else
+      @category_types = Category::TYPES
+      @preset_categories = Category.preset_categories
+      render :new, status: :unprocessable_content
+    end
+  end
+
   def update
     if @category.update(category_params)
       redirect_to category_path(@category), notice: 'Category was successfully updated.'
     else
-      @category_types = ['groceries', 'fixed', 'variable', 'discretionary']
-      render :edit, status: :unprocessable_entity
+      @category_types = Category::TYPES
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -56,13 +58,13 @@ class CategoriesController < ApplicationController
       redirect_to categories_path, alert: 'Category could not be deleted.'
     end
   end
-  
+
   def add_preset
     authorize! :create, Category
-    
+
     preset_name = params[:preset_name]
     preset = Category.preset_categories.find { |p| p[:name] == preset_name }
-    
+
     if preset.present?
       @category = current_user.categories.new(preset)
       if @category.save
@@ -76,12 +78,6 @@ class CategoriesController < ApplicationController
   end
 
   private
-
-  def set_category
-    @category = current_user.categories.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to categories_path, alert: 'Category not found.'
-  end
 
   def category_params
     params.require(:category).permit(:name, :icon, :description, :color, :icon_name, :category_type)

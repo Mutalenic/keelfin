@@ -1,28 +1,28 @@
 class RecurringTransaction < ApplicationRecord
   belongs_to :user
   belongs_to :category
-  
+
   validates :name, presence: true
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :frequency, presence: true, inclusion: { in: %w[daily weekly biweekly monthly quarterly yearly] }
   validates :start_date, presence: true
-  
+
   scope :active, -> { where(active: true) }
-  scope :due_today, -> { active.where('next_occurrence <= ?', Date.current) }
-  
+  scope :due_today, -> { active.where(next_occurrence: ..Date.current) }
+
   before_create :set_next_occurrence
-  
+
   def process_transaction
     return unless active? && next_occurrence <= Date.current
-    
+
     # Use a transaction with lock to prevent race conditions
     transaction do
       # Lock this record for update
       lock!
-      
+
       # Double-check conditions after acquiring lock
       return unless active? && next_occurrence <= Date.current
-      
+
       # Create the actual payment
       payment = Payment.create!(
         name: name,
@@ -33,10 +33,10 @@ class RecurringTransaction < ApplicationRecord
         is_essential: is_essential,
         notes: "Auto-generated from recurring transaction: #{name}"
       )
-      
+
       # Update the next occurrence date
       update_next_occurrence
-      
+
       # Return the created payment
       payment
     end
@@ -45,18 +45,18 @@ class RecurringTransaction < ApplicationRecord
     Rails.logger.warn "Race condition detected for recurring transaction #{id}"
     nil
   end
-  
+
   def update_next_occurrence
     self.last_occurrence = Date.current
     self.next_occurrence = calculate_next_occurrence
     save!
   end
-  
+
   def calculate_next_occurrence
     return nil unless active?
-    
+
     base_date = next_occurrence || start_date
-    
+
     case frequency
     when 'daily'
       base_date + 1.day
@@ -72,19 +72,18 @@ class RecurringTransaction < ApplicationRecord
       base_date + 1.year
     end
   end
-  
+
   def frequency_in_days
     case frequency
     when 'daily' then 1
     when 'weekly' then 7
     when 'biweekly' then 14
-    when 'monthly' then 30
     when 'quarterly' then 90
     when 'yearly' then 365
-    else 30 # default
+    else 30 # monthly, nil, or unknown
     end
   end
-  
+
   def estimated_monthly_impact
     case frequency
     when 'daily'
@@ -103,7 +102,7 @@ class RecurringTransaction < ApplicationRecord
       0
     end
   end
-  
+
   def human_readable_frequency
     case frequency
     when 'daily' then 'Every day'
@@ -115,9 +114,9 @@ class RecurringTransaction < ApplicationRecord
     else frequency.humanize
     end
   end
-  
+
   private
-  
+
   def set_next_occurrence
     self.next_occurrence ||= start_date
   end

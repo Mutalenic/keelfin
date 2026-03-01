@@ -18,8 +18,7 @@ Rails.application.routes.draw do
   
   get 'dashboard', to: 'dashboard#index'
   get 'coming_soon', to: 'coming_soon#index'
-  
-  resources :users, only: %i[index]
+
   resources :debts
   resources :budgets
   
