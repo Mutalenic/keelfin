@@ -47,3 +47,4 @@ test_suite_analysis/
 # Ignore deployment configuration and sensitive documentation
 DEPLOYMENT.md
 /docs
+/config/deploy/production.rb
