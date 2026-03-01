@@ -18,8 +18,9 @@ class RecurringTransactionsController < ApplicationController
   end
   
   def show
+    safe_name = ActiveRecord::Base.sanitize_sql_like(@recurring_transaction.name)
     @payment_history = Payment.where(user: current_user, category: @recurring_transaction.category)
-                             .where("name LIKE ?", "%#{@recurring_transaction.name}%")
+                             .where('name LIKE ?', "%#{safe_name}%")
                              .order(created_at: :desc)
                              .limit(10)
   end

@@ -72,14 +72,26 @@ class FinancialGoalsController < ApplicationController
   end
   
   def update_progress
-    if @financial_goal.update(current_amount: params[:current_amount])
+    new_amount = params[:current_amount].to_s.strip
+
+    unless new_amount.match?(/\A\d+(\.\d{1,2})?\z/)
+      return redirect_to financial_goal_path(@financial_goal), alert: 'Invalid amount format.'
+    end
+
+    new_amount = BigDecimal(new_amount)
+
+    if new_amount < 0
+      return redirect_to financial_goal_path(@financial_goal), alert: 'Amount cannot be negative.'
+    end
+
+    if @financial_goal.update(current_amount: new_amount)
       @financial_goal.check_completion
-      
+
       # Save progress history
       history = @financial_goal.progress_history || []
-      history << { date: Date.current.to_s, amount: @financial_goal.current_amount.to_f }
+      history << { date: Date.current.to_s, amount: new_amount.to_f }
       @financial_goal.update(progress_history: history)
-      
+
       redirect_to financial_goal_path(@financial_goal), notice: 'Progress updated successfully.'
     else
       redirect_to financial_goal_path(@financial_goal), alert: 'Failed to update progress.'
