@@ -1,24 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  before(:each) do
+  before do
     @user = User.create(name: 'John Doe', email: 'test@emal.com', password: 'password')
-    @category = Category.create(name: 'Test Category', icon: 'user.png', user_id: @user.id)
+    @category = described_class.create(name: 'Test Category', icon: 'user.png', user_id: @user.id)
   end
 
   describe 'Category validations' do
-    it 'should be valid' do
+    it 'is valid' do
       expect(@category).to be_valid
     end
 
-    it 'should not be valid without a name' do
+    it 'is not valid without a name' do
       @category.name = nil
-      expect(@category).to_not be_valid
+      expect(@category).not_to be_valid
     end
 
-    it 'should not be valid without an icon' do
+    it 'is not valid without an icon' do
       @category.icon = nil
-      expect(@category).to_not be_valid
+      expect(@category).not_to be_valid
     end
   end
 end

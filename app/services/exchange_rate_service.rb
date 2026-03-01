@@ -4,9 +4,9 @@ require 'openssl'
 
 class ExchangeRateService
   MAX_RETRIES = 3
-  BASE_DELAY  = 1
-  CACHE_KEY   = 'exchange_rate:usd_zmw'.freeze
-  CACHE_TTL   = 6.hours
+  BASE_DELAY = 1
+  CACHE_KEY = 'exchange_rate:usd_zmw'.freeze
+  CACHE_TTL = 6.hours
 
   # Public: returns cached USD→ZMW rate, fetching live only on cache miss.
   def self.fetch_latest_usd_zmw
@@ -61,7 +61,7 @@ class ExchangeRateService
   rescue JSON::ParserError => e
     Rails.logger.error "Exchange rate JSON parse error: #{e.message}"
     nil
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "Unexpected error fetching exchange rate: #{e.class} - #{e.message}"
     nil
   end

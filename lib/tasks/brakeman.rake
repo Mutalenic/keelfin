@@ -1,6 +1,6 @@
 namespace :security do
   desc 'Run Brakeman static security analysis'
-  task :brakeman do
+  task brakeman: :environment do
     require 'brakeman'
 
     result = Brakeman.run(

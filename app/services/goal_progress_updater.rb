@@ -2,7 +2,7 @@ class GoalProgressUpdater
   HISTORY_RETENTION_LIMIT = 365
 
   def initialize(goal, new_amount)
-    @goal       = goal
+    @goal = goal
     @new_amount = new_amount
   end
 

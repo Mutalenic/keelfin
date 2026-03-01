@@ -1,17 +1,17 @@
 class DashboardPresenter
   HIGH_CATEGORY_SPENDING_THRESHOLD = 40
-  UPCOMING_RECURRING_DAYS          = 7
-  DASHBOARD_GOALS_LIMIT            = 3
-  DASHBOARD_INVEST_LIMIT           = 3
-  RECENT_PAYMENTS_LIMIT            = 10
-  MONTHLY_TREND_MONTHS             = 6
+  UPCOMING_RECURRING_DAYS = 7
+  DASHBOARD_GOALS_LIMIT = 3
+  DASHBOARD_INVEST_LIMIT = 3
+  RECENT_PAYMENTS_LIMIT = 10
+  MONTHLY_TREND_MONTHS = 6
 
   attr_reader :user, :start_date, :end_date
 
   def initialize(user, start_date:, end_date:)
-    @user       = user
+    @user = user
     @start_date = start_date
-    @end_date   = end_date
+    @end_date = end_date
   end
 
   def date_range
@@ -55,10 +55,12 @@ class DashboardPresenter
   def goals_progress
     @goals_progress ||= begin
       total = user.financial_goals.count
-      return 0 if total.zero?
-
-      completed = user.financial_goals.completed.count
-      (completed.to_f / total * 100).round
+      if total.zero?
+        0
+      else
+        completed = user.financial_goals.completed.count
+        (completed.to_f / total * 100).round
+      end
     end
   end
 
@@ -75,22 +77,26 @@ class DashboardPresenter
   def investment_return
     @investment_return ||= begin
       total_initial = user.investments.sum(:initial_amount)
-      return { value: 0, percentage: 0 } if total_initial <= 0
-
-      total_current = user.investments.sum(:current_value)
-      return_value  = total_current - total_initial
-      { value: return_value, percentage: ((return_value / total_initial) * 100).round(2) }
+      if total_initial <= 0
+        { value: 0, percentage: 0 }
+      else
+        total_current = user.investments.sum(:current_value)
+        return_value = total_current - total_initial
+        { value: return_value, percentage: ((return_value / total_initial) * 100).round(2) }
+      end
     end
   end
 
   def portfolio_allocation
     @portfolio_allocation ||= begin
       grouped = user.investments.active.group(:investment_type).sum(:current_value)
-      total   = grouped.values.sum
-      return {} if total <= 0
-
-      grouped.transform_values do |value|
-        { total: value, percentage: ((value / total) * 100).round(1) }
+      total = grouped.values.sum
+      if total <= 0
+        {}
+      else
+        grouped.transform_values do |value|
+          { total: value, percentage: ((value / total) * 100).round(1) }
+        end
       end
     end
   end
@@ -99,9 +105,9 @@ class DashboardPresenter
 
   def upcoming_recurring
     @upcoming_recurring ||= user.recurring_transactions.active
-                                .where('next_occurrence <= ?', UPCOMING_RECURRING_DAYS.days.from_now)
-                                .order(next_occurrence: :asc)
-                                .limit(DASHBOARD_GOALS_LIMIT)
+      .where(next_occurrence: ..UPCOMING_RECURRING_DAYS.days.from_now)
+      .order(next_occurrence: :asc)
+      .limit(DASHBOARD_GOALS_LIMIT)
   end
 
   # --- Recent activity ---
@@ -127,15 +133,15 @@ class DashboardPresenter
   private
 
   def calculate_monthly_spending_trend
-    trend_end   = Date.current.end_of_month
+    trend_end = Date.current.end_of_month
     trend_start = (trend_end - (MONTHLY_TREND_MONTHS - 1).months).beginning_of_month
 
     monthly_totals = user.payments
-                         .where(created_at: trend_start..trend_end)
-                         .group("DATE_TRUNC('month', created_at)::date")
-                         .sum(:amount)
+      .where(created_at: trend_start..trend_end)
+      .group("DATE_TRUNC('month', created_at)::date")
+      .sum(:amount)
 
-    result        = { labels: [], values: [] }
+    result = { labels: [], values: [] }
     current_month = trend_start
 
     while current_month <= trend_end
@@ -150,7 +156,7 @@ class DashboardPresenter
   def generate_insights
     insights = []
 
-    if total_spending > 0
+    if total_spending.positive?
       highest = spending_by_category.max_by { |_, amount| amount }
       if highest
         name, amount = highest
@@ -161,11 +167,9 @@ class DashboardPresenter
       end
     end
 
-    if debt_analysis[:is_over_indebted]
-      insights << 'Consider debt consolidation to reduce your debt-to-income ratio.'
-    end
+    insights << 'Consider debt consolidation to reduce your debt-to-income ratio.' if debt_analysis[:is_over_indebted]
 
-    if projected_balance < 0
+    if projected_balance.negative?
       insights << "You're projected to overspend this month. Consider reducing non-essential expenses."
     end
 

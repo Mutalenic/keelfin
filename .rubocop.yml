@@ -80,3 +80,21 @@ Layout/EndOfLine:
 # App does not use Rails I18n locale files
 Rails/I18nLocaleTexts:
   Enabled: false
+
+# RSpec spec-file configuration
+RSpec/MultipleExpectations:
+  Max: 5
+RSpec/ExampleLength:
+  Max: 20
+RSpec/LetSetup:
+  Enabled: false
+RSpec/AnyInstance:
+  Enabled: false
+RSpec/ContextWording:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/InstanceVariable:
+  Enabled: false
+RSpec/NoExpectationExample:
+  Enabled: false

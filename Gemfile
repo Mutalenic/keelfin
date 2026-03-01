@@ -57,7 +57,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails'
   gem 'rubocop-rails', require: false
-  gem 'rubocop-rspec',  require: false
+  gem 'rubocop-rspec', require: false
 end
 
 group :development do
@@ -80,11 +80,19 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
+  gem 'database_cleaner-active_record'
+  gem 'factory_bot_rails'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'webmock'
-  gem 'database_cleaner-active_record'
-  gem 'factory_bot_rails'
+  # Capistrano deployment
+  gem 'bcrypt_pbkdf', '~> 1.1'
+  gem 'capistrano', '~> 3.17'
+  gem 'capistrano-bundler', '~> 2.0'
+  gem 'capistrano-passenger'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'ed25519', '~> 1.3'
 end
 
 gem 'cancancan'
@@ -92,13 +100,3 @@ gem 'cancancan'
 gem 'ffi'
 
 # Deployment
-group :development do
-  # Capistrano deployment
-  gem 'capistrano', '~> 3.17'
-  gem 'capistrano-rbenv'
-  gem 'capistrano-rails'
-  gem 'capistrano-passenger'
-  gem 'capistrano-bundler', '~> 2.0'
-  gem 'ed25519', '~> 1.3'
-  gem 'bcrypt_pbkdf', '~> 1.1'
-end
