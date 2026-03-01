@@ -1,13 +1,16 @@
 class Budget < ApplicationRecord
   belongs_to :user
   belongs_to :category
-  
+
+  attr_writer :preloaded_spending
+
   validates :monthly_limit, presence: true, numericality: { greater_than: 0 }
   validate :category_belongs_to_user
   validate :end_date_after_start_date
   validate :unique_category_budget
-  
+
   def current_spending(month = Date.current.beginning_of_month)
+    return @preloaded_spending if defined?(@preloaded_spending) && month == Date.current.beginning_of_month
     month_start = month.beginning_of_month
     month_end = month_start.end_of_month
     

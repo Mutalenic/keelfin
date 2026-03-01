@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_24_220000) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_01_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -114,6 +114,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_220000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_financial_goals_on_category_id"
+    t.index ["user_id", "completed", "target_date"], name: "index_financial_goals_on_user_completed_target_date"
     t.index ["user_id", "completed"], name: "index_financial_goals_on_user_id_and_completed"
     t.index ["user_id", "goal_type"], name: "index_financial_goals_on_user_id_and_goal_type"
     t.index ["user_id"], name: "index_financial_goals_on_user_id"
@@ -174,6 +175,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_220000) do
     t.index ["amount"], name: "index_payments_on_amount"
     t.index ["category_id"], name: "index_payments_on_category_id"
     t.index ["created_at"], name: "index_payments_on_created_at"
+    t.index ["user_id", "category_id", "created_at"], name: "index_payments_on_user_category_created_at"
     t.index ["user_id", "category_id"], name: "index_payments_on_user_id_and_category_id"
     t.index ["user_id", "created_at"], name: "index_payments_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_payments_on_user_id"
@@ -199,6 +201,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_24_220000) do
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_recurring_transactions_on_category_id"
     t.index ["next_occurrence"], name: "index_recurring_transactions_on_next_occurrence"
+    t.index ["user_id", "active", "next_occurrence"], name: "index_recurring_on_user_active_next_occurrence"
     t.index ["user_id", "active"], name: "index_recurring_transactions_on_user_id_and_active"
     t.index ["user_id"], name: "index_recurring_transactions_on_user_id"
   end

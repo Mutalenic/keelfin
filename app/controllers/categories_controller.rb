@@ -3,8 +3,12 @@ class CategoriesController < ApplicationController
 
   def index
     @user = current_user
-    @categories = current_user.categories.includes(:payments).ordered_by_name
-    
+    @categories = current_user.categories.ordered_by_name
+
+    # Aggregate spending and payment counts in two queries instead of N+1
+    @category_spending = current_user.payments.group(:category_id).sum(:amount)
+    @category_counts   = current_user.payments.group(:category_id).count
+
     # Group categories by type for better organization
     @grouped_categories = @categories.group_by(&:category_type)
   end

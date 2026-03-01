@@ -3,8 +3,17 @@ class BudgetsController < ApplicationController
   
   def index
     @budgets = current_user.budgets.includes(:category).order(created_at: :desc)
+
+    # Preload current-month spending in one query and inject it so Budget#current_spending
+    # skips per-row DB calls when rendering the index view.
+    month_range = Date.current.beginning_of_month..Date.current.end_of_month
+    actuals = current_user.payments
+                          .where(created_at: month_range)
+                          .group(:category_id).sum(:amount)
+    @budgets.each { |b| b.preloaded_spending = actuals[b.category_id] || 0 }
+
     @bnnb_comparison = BnnbComparisonService.new(current_user).compare
-    
+
     # Prepare data for budget comparison chart
     prepare_budget_comparison_data
   end

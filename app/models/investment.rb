@@ -10,14 +10,22 @@ class Investment < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :by_type, ->(type) { where(investment_type: type) }
   
+  # One grouped query; all per-type sums are memoized so subsequent calls are free.
+  def transaction_sums_by_type
+    @transaction_sums_by_type ||= investment_transactions
+                                    .group(:transaction_type)
+                                    .sum(:amount)
+                                    .transform_values { |v| v || 0 }
+  end
+
   def total_contributions
-    initial_amount + investment_transactions.where(transaction_type: 'contribution').sum(:amount)
+    initial_amount + (transaction_sums_by_type['contribution'] || 0)
   end
-  
+
   def total_withdrawals
-    investment_transactions.where(transaction_type: 'withdrawal').sum(:amount)
+    transaction_sums_by_type['withdrawal'] || 0
   end
-  
+
   def net_contributions
     total_contributions - total_withdrawals
   end
