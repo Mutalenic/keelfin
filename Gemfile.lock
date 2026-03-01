@@ -89,6 +89,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.19.0)
       msgpack (~> 1.2)
+    brakeman (8.0.4)
+      racc
     builder (3.3.0)
     cancancan (3.6.1)
     capistrano (3.20.0)
@@ -424,6 +426,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt_pbkdf (~> 1.1)
   bootsnap
+  brakeman
   cancancan
   capistrano (~> 3.17)
   capistrano-bundler (~> 2.0)

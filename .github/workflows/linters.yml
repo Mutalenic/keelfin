@@ -20,3 +20,15 @@ jobs:
           bundler-cache: true
       - name: Rubocop Report
         run: bundle exec rubocop --color
+
+  brakeman:
+    name: Brakeman
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: Brakeman Security Scan
+        run: bundle exec brakeman --no-pager --format text --exit-on-warn
