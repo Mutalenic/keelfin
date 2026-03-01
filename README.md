@@ -66,7 +66,7 @@ rubocop
 
 ## Author
 
-:woman: **Lynette Aluoch Acholah**
+:man: **Nicholas Mutale**
 
 - GitHub: [@mutalenic](https://github.com/mutalenic)
 - Twitter: [@nicomutale](https://twitter.com/nicomutale)
@@ -85,8 +85,7 @@ Give a ⭐️ if you like this project!
 ## Acknowledgments
 
 - Thanks [Gregoire Vella on Behance](https://www.behance.net/gregoirevella) for the original design idea.
-- Thanks to my morning session partners, coding partners and teammates.
-- Flaticon for the [icon](https://www.flaticon.com/free-icon/user_1053244) used in the application.
+
 
 ## 📝 License
 
