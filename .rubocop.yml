@@ -1,5 +1,10 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.3
   Exclude:
     - "db/**/*"
     - "bin/*" 
