@@ -43,3 +43,7 @@ test_suite_analysis/
 
 # Ignore editor/IDE configurations
 .windsurf/
+
+# Ignore deployment configuration and sensitive documentation
+DEPLOYMENT.md
+docs/
