@@ -180,7 +180,7 @@ RSpec.describe 'Bug Fixes Integration Tests', type: :integration do
 
       expect { ExchangeRateService.fetch_latest_usd_zmw }.not_to raise_error
 
-      expect(Rails.logger).to have_received(:error).with(/Exchange rate API timeout/)
+      expect(Rails.logger).to have_received(:error).with(/Exchange rate API timeout/).at_least(:once)
     end
 
     it 'catches JSON parse errors' do
@@ -202,7 +202,7 @@ RSpec.describe 'Bug Fixes Integration Tests', type: :integration do
 
       expect { ExchangeRateService.fetch_latest_usd_zmw }.not_to raise_error
 
-      expect(Rails.logger).to have_received(:error).with(/Exchange rate network error/)
+      expect(Rails.logger).to have_received(:error).with(/Exchange rate network error/).at_least(:once)
     end
   end
 end

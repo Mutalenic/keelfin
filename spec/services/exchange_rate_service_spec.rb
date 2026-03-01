@@ -50,7 +50,7 @@ RSpec.describe ExchangeRateService do
 
       described_class.fetch_latest_usd_zmw
 
-      expect(Rails.logger).to have_received(:error).with(/Exchange rate network error/)
+      expect(Rails.logger).to have_received(:error).with(/Exchange rate network error/).at_least(:once)
     end
   end
 

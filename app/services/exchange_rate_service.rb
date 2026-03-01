@@ -48,16 +48,12 @@ class ExchangeRateService
     return nil unless data.is_a?(Hash) && data['rates'].is_a?(Hash)
 
     data['rates']['ZMW']
-  rescue Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNREFUSED => e
-    Rails.logger.error "Exchange rate API error (attempt #{retries + 1}/#{MAX_RETRIES}): #{e.message}"
-
-    if retries < MAX_RETRIES - 1
-      sleep(BASE_DELAY * (2**retries))
-      fetch_from_api(retries + 1)
-    else
-      Rails.logger.error "Exchange rate API failed after #{MAX_RETRIES} attempts"
-      nil
-    end
+  rescue Net::OpenTimeout, Net::ReadTimeout => e
+    Rails.logger.error "Exchange rate API timeout: #{e.message}"
+    retry_fetch_from_api(retries)
+  rescue SocketError, Errno::ECONNREFUSED => e
+    Rails.logger.error "Exchange rate network error: #{e.message}"
+    retry_fetch_from_api(retries)
   rescue JSON::ParserError => e
     Rails.logger.error "Exchange rate JSON parse error: #{e.message}"
     nil
@@ -65,5 +61,16 @@ class ExchangeRateService
     Rails.logger.error "Unexpected error fetching exchange rate: #{e.class} - #{e.message}"
     nil
   end
-  private_class_method :fetch_from_api
+
+  def self.retry_fetch_from_api(retries)
+    if retries < MAX_RETRIES - 1
+      sleep(BASE_DELAY * (2**retries))
+      fetch_from_api(retries + 1)
+    else
+      Rails.logger.error "Exchange rate API failed after #{MAX_RETRIES} attempts"
+      nil
+    end
+  end
+
+  private_class_method :fetch_from_api, :retry_fetch_from_api
 end
