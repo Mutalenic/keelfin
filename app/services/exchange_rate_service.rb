@@ -51,7 +51,7 @@ class ExchangeRateService
   rescue Net::OpenTimeout, Net::ReadTimeout, SocketError, Errno::ECONNREFUSED => e
     Rails.logger.error "Exchange rate API error (attempt #{retries + 1}/#{MAX_RETRIES}): #{e.message}"
 
-    if retries < MAX_RETRIES
+    if retries < MAX_RETRIES - 1
       sleep(BASE_DELAY * (2**retries))
       fetch_from_api(retries + 1)
     else

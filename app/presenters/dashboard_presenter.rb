@@ -132,7 +132,7 @@ class DashboardPresenter
 
     monthly_totals = user.payments
                          .where(created_at: trend_start..trend_end)
-                         .group("DATE_TRUNC('month', created_at)")
+                         .group("DATE_TRUNC('month', created_at)::date")
                          .sum(:amount)
 
     result        = { labels: [], values: [] }

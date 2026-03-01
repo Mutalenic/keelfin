@@ -39,12 +39,10 @@ jobs:
           bundler-cache: true
 
       - name: Set up database
-        run: |
-          bundle exec rails db:schema:load
-          bundle exec rails db:seed
+        run: bundle exec rails db:schema:load
 
       - name: Run RSpec
-        run: bundle exec rspec --format progress --format RspecJunitFormatter --out tmp/rspec_results.xml
+        run: bundle exec rspec --format progress
 
       - name: Upload test results
         if: always()

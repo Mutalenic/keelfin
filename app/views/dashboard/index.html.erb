@@ -134,7 +134,7 @@
   
   <!-- Monthly Spending Trend -->
   <% cache ["monthly-trend", current_user.id, Date.current.strftime('%Y-%m'),
-            current_user.payments.maximum(:updated_at)] do %>
+            current_user.payments.cache_key_with_version] do %>
     <%= render 'monthly_trend_chart' %>
   <% end %>
   
@@ -166,7 +166,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <!-- Financial Goals -->
     <% cache ["goals-widget", current_user.id,
-              current_user.financial_goals.maximum(:updated_at)] do %>
+              current_user.financial_goals.cache_key_with_version] do %>
     <div class="bg-white rounded-lg shadow p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Financial Goals</h2>
@@ -206,7 +206,7 @@
 
     <!-- Investments Summary -->
     <% cache ["investments-widget", current_user.id,
-              current_user.investments.maximum(:updated_at)] do %>
+              current_user.investments.cache_key_with_version] do %>
     <div class="bg-white rounded-lg shadow p-6">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Investment Portfolio</h2>
