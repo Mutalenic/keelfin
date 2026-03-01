@@ -7,10 +7,17 @@ class CategoriesController < ApplicationController
 
     # Aggregate spending and payment counts in two queries instead of N+1
     @category_spending = current_user.payments.group(:category_id).sum(:amount)
-    @category_counts   = current_user.payments.group(:category_id).count
+    @category_counts = current_user.payments.group(:category_id).count
 
     # Group categories by type for better organization
     @grouped_categories = @categories.group_by(&:category_type)
+  end
+
+  def show
+    @payments = @category.payments.order(created_at: :desc).limit(10)
+    @total_amount = @category.total_amount
+    @monthly_average = @category.monthly_average
+    @percentage_of_total = @category.percentage_of_total_spending
   end
 
   def new
@@ -31,15 +38,8 @@ class CategoriesController < ApplicationController
     else
       @category_types = Category::TYPES
       @preset_categories = Category.preset_categories
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
-  end
-
-  def show
-    @payments = @category.payments.order(created_at: :desc).limit(10)
-    @total_amount = @category.total_amount
-    @monthly_average = @category.monthly_average
-    @percentage_of_total = @category.percentage_of_total_spending
   end
 
   def update
@@ -47,7 +47,7 @@ class CategoriesController < ApplicationController
       redirect_to category_path(@category), notice: 'Category was successfully updated.'
     else
       @category_types = Category::TYPES
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -58,13 +58,13 @@ class CategoriesController < ApplicationController
       redirect_to categories_path, alert: 'Category could not be deleted.'
     end
   end
-  
+
   def add_preset
     authorize! :create, Category
-    
+
     preset_name = params[:preset_name]
     preset = Category.preset_categories.find { |p| p[:name] == preset_name }
-    
+
     if preset.present?
       @category = current_user.categories.new(preset)
       if @category.save

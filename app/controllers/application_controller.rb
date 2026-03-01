@@ -4,16 +4,18 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # Global handler for unauthorized access
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from CanCan::AccessDenied do |_exception|
     respond_to do |format|
-      format.html { redirect_back fallback_location: root_path, alert: 'You are not authorized to perform this action.' }
+      format.html do
+        redirect_back_or_to(root_path, alert: 'You are not authorized to perform this action.')
+      end
       format.json { render json: { error: 'Unauthorized' }, status: :forbidden }
     end
   end
 
-  rescue_from ActiveRecord::RecordNotFound do |exception|
+  rescue_from ActiveRecord::RecordNotFound do |_exception|
     respond_to do |format|
-      format.html { redirect_back fallback_location: root_path, alert: 'Record not found.' }
+      format.html { redirect_back_or_to(root_path, alert: 'Record not found.') }
       format.json { render json: { error: 'Not found' }, status: :not_found }
     end
   end

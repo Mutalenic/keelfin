@@ -3,7 +3,7 @@ class Ability
 
   def initialize(user)
     # Guest users have no permissions
-    return unless user.present?
+    return if user.blank?
 
     # Regular users can manage their own resources
     can :manage, Category, user_id: user.id

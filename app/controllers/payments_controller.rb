@@ -21,7 +21,7 @@ class PaymentsController < ApplicationController
     if @payment.save
       redirect_to category_payments_path(@category), notice: 'Payment was successfully added.'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class PaymentsController < ApplicationController
     if @payment.update(payment_params)
       redirect_to category_payments_path(@category), notice: 'Payment was successfully updated.'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

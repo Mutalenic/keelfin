@@ -1,15 +1,15 @@
 class BudgetsController < ApplicationController
   load_and_authorize_resource
-  
+
   def index
     @budgets = current_user.budgets.includes(:category).order(created_at: :desc)
 
     # Preload current-month spending in one query and inject it so Budget#current_spending
     # skips per-row DB calls when rendering the index view.
-    month_range = Date.current.beginning_of_month..Date.current.end_of_month
+    month_range = Date.current.all_month
     actuals = current_user.payments
-                          .where(created_at: month_range)
-                          .group(:category_id).sum(:amount)
+      .where(created_at: month_range)
+      .group(:category_id).sum(:amount)
     @budgets.each { |b| b.preloaded_spending = actuals[b.category_id] || 0 }
 
     @bnnb_comparison = BnnbComparisonService.new(current_user).compare
@@ -17,68 +17,68 @@ class BudgetsController < ApplicationController
     # Prepare data for budget comparison chart
     prepare_budget_comparison_data
   end
-  
+
   def new
     @budget = current_user.budgets.new
     @categories = current_user.categories
   end
-  
+
+  def edit
+    @categories = current_user.categories
+  end
+
   def create
     @budget = current_user.budgets.new(budget_params)
     if @budget.save
       redirect_to budgets_path, notice: 'Budget created successfully.'
     else
       @categories = current_user.categories
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
-  
-  def edit
-    @categories = current_user.categories
-  end
-  
+
   def update
     if @budget.update(budget_params)
       redirect_to budgets_path, notice: 'Budget updated successfully.'
     else
       @categories = current_user.categories
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
-  
+
   def destroy
     @budget.destroy
     redirect_to budgets_path, notice: 'Budget deleted successfully.'
   end
-  
+
   private
-  
+
   def budget_params
     params.require(:budget).permit(:category_id, :monthly_limit, :start_date, :end_date, :inflation_adjusted)
   end
-  
+
   def prepare_budget_comparison_data
     # Get current month's budgets
     current_month_start = Date.current.beginning_of_month
     current_month_end = Date.current.end_of_month
-    
+
     # Get active budgets for the current month
     active_budgets = current_user.budgets.joins(:category)
-                                .where('(start_date <= ? AND (end_date IS NULL OR end_date >= ?))', 
-                                      current_month_end, current_month_start)
-    
+      .where('(start_date <= ? AND (end_date IS NULL OR end_date >= ?))',
+             current_month_end, current_month_start)
+
     # Prepare data for chart
     @budget_categories = []
     @budget_amounts = []
     @actual_amounts = []
-    
+
     # Fetch all actual spending for the active budget categories in one query
     actuals = current_user.payments
-                          .where(category_id: active_budgets.map(&:category_id))
-                          .where(created_at: current_month_start..current_month_end)
-                          .group(:category_id)
-                          .sum(:amount)
-    
+      .where(category_id: active_budgets.map(&:category_id))
+      .where(created_at: current_month_start..current_month_end)
+      .group(:category_id)
+      .sum(:amount)
+
     active_budgets.each do |budget|
       @budget_categories << budget.category.name
       @budget_amounts << budget.monthly_limit

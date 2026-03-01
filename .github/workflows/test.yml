@@ -2,7 +2,7 @@ name: RSpec Tests
 
 on:
   push:
-    branches: [main, "security/**", "feature/**"]
+    branches: [main]
   pull_request:
 
 jobs:

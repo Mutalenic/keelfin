@@ -1,22 +1,26 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-rspec
 
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3
+  SuggestExtensions: false
   Exclude:
     - "db/**/*"
-    - "bin/*" 
+    - "bin/*"
     - "config/**/*"
     - "Guardfile"
     - "Rakefile"
     - "node_modules/**/*"
+    - "vendor/**/*"
 
   DisplayCopNames: true
 
 Layout/LineLength:
   Max: 120
+  Exclude:
+    - "app/models/category_preset.rb"
 Metrics/MethodLength:
   Include:
     - "app/controllers/*"
@@ -30,7 +34,7 @@ Metrics/AbcSize:
 Metrics/ClassLength:
   Max: 150
 Metrics/BlockLength:
-  IgnoredMethods: ['describe']
+  AllowedMethods: ['describe', 'context', 'shared_examples']
   Max: 30
 
 Style/Documentation:
@@ -64,4 +68,8 @@ Style/HashTransformKeys:
 Style/HashTransformValues:
   Enabled: false
 Layout/EndOfLine:
+  Enabled: false
+
+# App does not use Rails I18n locale files
+Rails/I18nLocaleTexts:
   Enabled: false
