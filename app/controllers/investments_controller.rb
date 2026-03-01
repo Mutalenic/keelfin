@@ -1,5 +1,4 @@
 class InvestmentsController < ApplicationController
-  before_action :set_investment, only: [:show, :edit, :update, :destroy, :update_value]
   load_and_authorize_resource
   
   def index
@@ -86,12 +85,6 @@ class InvestmentsController < ApplicationController
   end
   
   private
-  
-  def set_investment
-    @investment = current_user.investments.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to investments_path, alert: 'Investment not found.'
-  end
   
   def investment_params
     params.require(:investment).permit(

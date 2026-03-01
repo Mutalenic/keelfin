@@ -1,5 +1,4 @@
 class DebtsController < ApplicationController
-  before_action :set_debt, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
   
   def index
@@ -40,13 +39,7 @@ class DebtsController < ApplicationController
   end
   
   private
-  
-  def set_debt
-    @debt = current_user.debts.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to debts_path, alert: 'Debt not found.'
-  end
-  
+
   def debt_params
     params.require(:debt).permit(:lender_name, :principal_amount, :interest_rate, 
                                   :monthly_payment, :term, :start_date, :end_date, :status)

@@ -1,5 +1,4 @@
 class FinancialGoalsController < ApplicationController
-  before_action :set_financial_goal, only: [:show, :edit, :update, :destroy, :update_progress]
   load_and_authorize_resource
   
   def index
@@ -79,14 +78,7 @@ class FinancialGoalsController < ApplicationController
       return redirect_to financial_goal_path(@financial_goal), alert: 'Amount cannot be negative.'
     end
 
-    if @financial_goal.update(current_amount: new_amount)
-      @financial_goal.check_completion
-
-      # Save progress history
-      history = @financial_goal.progress_history || []
-      history << { date: Date.current.to_s, amount: new_amount.to_f }
-      @financial_goal.update(progress_history: history)
-
+    if GoalProgressUpdater.new(@financial_goal, new_amount).call
       redirect_to financial_goal_path(@financial_goal), notice: 'Progress updated successfully.'
     else
       redirect_to financial_goal_path(@financial_goal), alert: 'Failed to update progress.'
@@ -94,12 +86,6 @@ class FinancialGoalsController < ApplicationController
   end
   
   private
-  
-  def set_financial_goal
-    @financial_goal = current_user.financial_goals.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to financial_goals_path, alert: 'Financial goal not found.'
-  end
   
   def financial_goal_params
     params.require(:financial_goal).permit(

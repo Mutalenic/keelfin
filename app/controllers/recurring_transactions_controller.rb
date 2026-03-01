@@ -1,5 +1,4 @@
 class RecurringTransactionsController < ApplicationController
-  before_action :set_recurring_transaction, only: [:show, :edit, :update, :destroy, :toggle_active]
   load_and_authorize_resource
   
   def index
@@ -77,12 +76,6 @@ class RecurringTransactionsController < ApplicationController
   end
   
   private
-  
-  def set_recurring_transaction
-    @recurring_transaction = current_user.recurring_transactions.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to recurring_transactions_path, alert: 'Recurring transaction not found.'
-  end
   
   def recurring_transaction_params
     params.require(:recurring_transaction).permit(

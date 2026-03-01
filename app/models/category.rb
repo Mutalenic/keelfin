@@ -3,6 +3,8 @@ class Category < ApplicationRecord
   has_many :payments, dependent: :destroy
   has_many :budgets, dependent: :destroy
 
+  TYPES = %w[fixed variable discretionary groceries].freeze
+
   # Validations
   validates :name, presence: true, length: { maximum: 50 }
   validates :name, uniqueness: { scope: :user_id, message: "already exists for this user" }

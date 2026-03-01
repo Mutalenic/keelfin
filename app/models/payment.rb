@@ -2,13 +2,12 @@ class Payment < ApplicationRecord
   belongs_to :user, class_name: 'User', foreign_key: 'user_id'
   belongs_to :category, class_name: 'Category', foreign_key: 'category_id'
 
+  PAYMENT_METHODS = %w[cash mtn_momo airtel_money bank].freeze
+
   validates :name, presence: true, length: { maximum: 50 }
   validates :amount, presence: true, numericality: { greater_than: 0, less_than: 1_000_000 }
   validates :user_id, presence: true
-  validates :payment_method, inclusion: { 
-    in: %w[cash mtn_momo airtel_money bank], 
-    allow_nil: true 
-  }
+  validates :payment_method, inclusion: { in: PAYMENT_METHODS, allow_nil: true }
   validate :category_belongs_to_user
   
   scope :recent, -> { order(created_at: :desc) }
