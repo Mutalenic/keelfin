@@ -1,11 +1,6 @@
 class RecurringTransactionsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_recurring_transaction, only: [:show, :edit, :update, :destroy, :toggle_active]
   load_and_authorize_resource
-  
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to recurring_transactions_path, alert: 'You are not authorized to perform this action.'
-  end
   
   def index
     @active_transactions = current_user.recurring_transactions.active.order(next_occurrence: :asc)

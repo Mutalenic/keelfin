@@ -6,8 +6,15 @@ class ApplicationController < ActionController::Base
   # Global handler for unauthorized access
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
-      format.html { redirect_to root_path, alert: 'You are not authorized to perform this action.' }
+      format.html { redirect_back fallback_location: root_path, alert: 'You are not authorized to perform this action.' }
       format.json { render json: { error: 'Unauthorized' }, status: :forbidden }
+    end
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    respond_to do |format|
+      format.html { redirect_back fallback_location: root_path, alert: 'Record not found.' }
+      format.json { render json: { error: 'Not found' }, status: :not_found }
     end
   end
 

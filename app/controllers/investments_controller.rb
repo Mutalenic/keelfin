@@ -1,11 +1,6 @@
 class InvestmentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_investment, only: [:show, :edit, :update, :destroy, :update_value]
   load_and_authorize_resource
-  
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to investments_path, alert: 'You are not authorized to perform this action.'
-  end
   
   def index
     @investments = current_user.investments.includes(:investment_transactions).order(created_at: :desc)

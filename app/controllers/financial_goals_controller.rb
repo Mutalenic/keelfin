@@ -1,11 +1,6 @@
 class FinancialGoalsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_financial_goal, only: [:show, :edit, :update, :destroy, :update_progress]
   load_and_authorize_resource
-  
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to financial_goals_path, alert: 'You are not authorized to perform this action.'
-  end
   
   def index
     @active_goals = current_user.financial_goals.active.order(target_date: :asc)

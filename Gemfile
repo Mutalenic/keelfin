@@ -67,6 +67,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # Use Puma as the app server
+  gem 'puma', '~> 6.0'
 end
 
 group :test do

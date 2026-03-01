@@ -1,6 +1,7 @@
 class DebtAnalysisService
   def initialize(user)
     @user = user
+    @active_debts = user.debts.active.to_a  # single query; all methods compute in memory
   end
   
   def analyze
@@ -17,11 +18,11 @@ class DebtAnalysisService
   private
   
   def total_debt
-    @user.debts.active.sum(:principal_amount)
+    @active_debts.sum(&:principal_amount)
   end
   
   def monthly_payments
-    @user.debts.active.sum(:monthly_payment)
+    @active_debts.sum { |d| d.monthly_payment || 0 }
   end
   
   def debt_to_income_ratio
@@ -37,18 +38,21 @@ class DebtAnalysisService
     
     [
       "Your debt payments (#{debt_to_income_ratio}%) exceed the safe 40% threshold.",
-      "Consider debt consolidation to reduce interest rates.",
-      "Prioritize high-interest debts first (avalanche method).",
-      "Seek financial counseling if stress is overwhelming."
+      'Consider debt consolidation to reduce interest rates.',
+      'Prioritize high-interest debts first (avalanche method).',
+      'Seek financial counseling if stress is overwhelming.'
     ]
   end
   
   def payoff_strategies
-    active_debts = @user.debts.active
-    
     {
-      avalanche: active_debts.where.not(interest_rate: nil).order(interest_rate: :desc).pluck(:lender_name, :interest_rate),
-      snowball: active_debts.order(principal_amount: :asc).pluck(:lender_name, :principal_amount)
+      avalanche: @active_debts
+                   .select(&:interest_rate)
+                   .sort_by { |d| -d.interest_rate }
+                   .map { |d| [d.lender_name, d.interest_rate] },
+      snowball:  @active_debts
+                   .sort_by(&:principal_amount)
+                   .map { |d| [d.lender_name, d.principal_amount] }
     }
   end
 end

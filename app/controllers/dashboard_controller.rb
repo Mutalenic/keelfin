@@ -1,6 +1,4 @@
 class DashboardController < ApplicationController
-  before_action :authenticate_user!
-  
   HIGH_CATEGORY_SPENDING_THRESHOLD = 40
   
   def index

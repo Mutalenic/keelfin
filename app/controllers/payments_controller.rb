@@ -1,12 +1,7 @@
 class PaymentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_category
   before_action :set_payment, only: %i[show edit update destroy]
   before_action :authorize_payment, only: %i[show edit update destroy]
-
-  rescue_from CanCan::AccessDenied do
-    redirect_to categories_path, alert: 'You are not authorized to perform this action.'
-  end
 
   def index
     @payments = @category.payments.order(created_at: :desc)
