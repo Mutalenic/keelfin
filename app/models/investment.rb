@@ -87,7 +87,7 @@ class Investment < ApplicationRecord
   def update_current_value(new_value)
     # Create a value history entry
     value_history = self.value_history || []
-    value_history << { date: Date.current.to_s, value: new_value.to_f }
+    value_history << { 'date' => Date.current.to_s, 'value' => new_value.to_f }
     
     # Implement retention policy: keep only last 365 days
     cutoff_date = 365.days.ago.to_date
