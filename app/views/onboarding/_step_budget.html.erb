@@ -1,0 +1,58 @@
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-2xl mb-4">
+      <i class="fa-solid fa-chart-pie text-amber-600 text-2xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-gray-900">Set your monthly budgets</h2>
+    <p class="mt-2 text-gray-600">
+      Allocate your K<%= number_with_precision(current_user.monthly_income, precision: 0, delimiter: ',') %> monthly income across your categories.
+    </p>
+  </div>
+
+  <%= form_tag onboarding_path, method: :post, class: "space-y-6" do %>
+    <%= hidden_field_tag :step, 'budget' %>
+
+    <% if current_user.categories.any? %>
+      <div class="space-y-4">
+        <% current_user.categories.each do |category| %>
+          <div class="flex items-center p-4 border border-gray-200 rounded-xl hover:border-gray-300 transition-colors">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-4" style="background-color: <%= category.color %>20;">
+              <i class="<%= category.icon_name || 'fa-solid fa-tag' %> text-sm" style="color: <%= category.color %>;"></i>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900"><%= category.name %></p>
+              <p class="text-xs text-gray-500"><%= category.category_type.titleize %></p>
+            </div>
+            <div class="relative w-36">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-400 text-sm font-medium">K</span>
+              </div>
+              <input type="number" name="budgets[<%= category.id %>]" step="10" min="0"
+                     placeholder="0"
+                     class="block w-full pl-8 pr-3 py-2.5 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm font-medium text-right" />
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <div class="flex items-start">
+          <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5 mr-3"></i>
+          <div>
+            <p class="text-sm font-medium text-amber-800">Budget tip</p>
+            <p class="text-xs text-amber-700 mt-1">A good rule of thumb: 50% needs, 30% wants, 20% savings. Don't worry about getting it perfect — you can adjust anytime.</p>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-8 text-gray-500">
+        <p>No categories found. Go back and select some categories first.</p>
+      </div>
+    <% end %>
+
+    <button type="submit" class="w-full flex items-center justify-center py-4 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all cursor-pointer">
+      Finish setup
+      <i class="fa-solid fa-check ml-2"></i>
+    </button>
+  <% end %>
+</div>

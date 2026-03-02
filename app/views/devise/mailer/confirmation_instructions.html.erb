@@ -1,5 +1,13 @@
-<p>Welcome <%= @email %>!</p>
+<h2>Welcome to Keelfin!</h2>
 
-<p>You can confirm your account email through the link below:</p>
+<p>Hi <%= @resource.name.present? ? @resource.name.split(' ').first : 'there' %>,</p>
 
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<p>Thanks for signing up! You're one step away from taking control of your financial future. Please confirm your email address to get started.</p>
+
+<p style="text-align: center;">
+  <a href="<%= confirmation_url(@resource, confirmation_token: @token) %>" class="btn">Confirm my email</a>
+</p>
+
+<div class="note">
+  <strong>What's next?</strong> Once confirmed, you'll set up your monthly income, choose your spending categories, and start tracking your finances like a pro.
+</div>

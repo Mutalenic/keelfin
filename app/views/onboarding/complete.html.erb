@@ -1,0 +1,32 @@
+<div class="min-h-screen bg-gray-50 flex items-center justify-center">
+  <div class="max-w-lg mx-auto px-4 py-12 text-center">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-10">
+      <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-full mb-6">
+        <i class="fa-solid fa-circle-check text-emerald-500 text-4xl"></i>
+      </div>
+
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">You're all set!</h2>
+      <p class="text-gray-600 mb-8">Your financial profile is ready. Start tracking your spending and work towards your goals.</p>
+
+      <div class="grid grid-cols-3 gap-4 mb-8">
+        <div class="bg-gray-50 rounded-xl p-4">
+          <p class="text-2xl font-bold text-brand-600">K<%= number_with_precision(current_user.monthly_income || 0, precision: 0, delimiter: ',') %></p>
+          <p class="text-xs text-gray-500 mt-1">Monthly Income</p>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4">
+          <p class="text-2xl font-bold text-emerald-600"><%= current_user.categories.count %></p>
+          <p class="text-xs text-gray-500 mt-1">Categories</p>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-4">
+          <p class="text-2xl font-bold text-amber-600"><%= current_user.budgets.count %></p>
+          <p class="text-xs text-gray-500 mt-1">Budgets</p>
+        </div>
+      </div>
+
+      <%= link_to dashboard_path, class: "w-full inline-flex items-center justify-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all" do %>
+        Go to Dashboard
+        <i class="fa-solid fa-arrow-right ml-2"></i>
+      <% end %>
+    </div>
+  </div>
+</div>

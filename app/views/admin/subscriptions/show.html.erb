@@ -1,0 +1,55 @@
+<% content_for(:page_title) { "Subscription: #{@subscription.user.name}" } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <div class="max-w-2xl">
+    <div class="mb-6">
+      <%= link_to admin_subscriptions_path, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" do %>
+        <i class="fa-solid fa-arrow-left mr-1"></i> Back to subscriptions
+      <% end %>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-semibold text-gray-900">Subscription Details</h2>
+        <%= link_to edit_admin_subscription_path(@subscription), class: "px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50" do %>
+          <i class="fa-solid fa-pen-to-square mr-1.5"></i> Edit
+        <% end %>
+      </div>
+
+      <dl class="space-y-4">
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">User</dt>
+          <dd class="text-sm font-medium text-gray-900"><%= link_to @subscription.user.name, admin_user_path(@subscription.user), class: "text-brand-600 hover:text-brand-500" %></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Plan</dt>
+          <dd><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
+            <%= case @subscription.plan_name
+                when 'premium' then 'bg-amber-100 text-amber-700'
+                when 'standard' then 'bg-blue-100 text-blue-700'
+                else 'bg-gray-100 text-gray-600' end %>"><%= @subscription.plan_name.capitalize %></span></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Status</dt>
+          <dd><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold
+            <%= case @subscription.status
+                when 'active' then 'bg-emerald-100 text-emerald-700'
+                when 'canceled' then 'bg-red-100 text-red-700'
+                else 'bg-gray-100 text-gray-600' end %>"><%= @subscription.status.capitalize %></span></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Amount</dt>
+          <dd class="text-sm font-medium text-gray-900">K<%= number_with_precision(@subscription.amount, precision: 2) %></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Start Date</dt>
+          <dd class="text-sm text-gray-900"><%= @subscription.start_date&.strftime('%B %d, %Y') || '—' %></dd>
+        </div>
+        <div class="flex justify-between py-3">
+          <dt class="text-sm text-gray-500">End Date</dt>
+          <dd class="text-sm text-gray-900"><%= @subscription.end_date&.strftime('%B %d, %Y') || '—' %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

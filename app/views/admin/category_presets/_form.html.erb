@@ -1,0 +1,43 @@
+<%= form_with(model: [:admin, preset], class: "space-y-5") do |f| %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div>
+      <%= f.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :name, class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+    </div>
+    <div>
+      <%= f.label :category_type, "Type", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.select :category_type, [['Fixed', 'fixed'], ['Variable', 'variable'], ['Discretionary', 'discretionary'], ['Groceries', 'groceries']], {}, class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_area :description, rows: 2, class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div>
+      <%= f.label :icon_name, "Icon Class", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.text_field :icon_name, placeholder: "fa-solid fa-house", class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+      <p class="text-xs text-gray-400 mt-1">Font Awesome class</p>
+    </div>
+    <div>
+      <%= f.label :color, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.color_field :color, class: "block w-full h-12 px-2 py-1 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer" %>
+    </div>
+    <div>
+      <%= f.label :display_order, "Display Order", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :display_order, min: 0, class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+    </div>
+  </div>
+
+  <div class="flex items-center">
+    <%= f.check_box :is_default, class: "h-4 w-4 text-brand-600 focus:ring-brand-500 border-gray-300 rounded" %>
+    <%= f.label :is_default, "Selected by default during onboarding", class: "ml-2 text-sm text-gray-700" %>
+  </div>
+
+  <div class="flex items-center space-x-3 pt-4">
+    <%= f.submit class: "px-6 py-3 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors cursor-pointer" %>
+    <%= link_to "Cancel", admin_category_presets_path, class: "px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors" %>
+  </div>
+<% end %>

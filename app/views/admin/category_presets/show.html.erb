@@ -1,0 +1,57 @@
+<% content_for(:page_title) { @preset.name } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <div class="max-w-2xl">
+    <div class="mb-6">
+      <%= link_to admin_category_presets_path, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" do %>
+        <i class="fa-solid fa-arrow-left mr-1"></i> Back to presets
+      <% end %>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background-color: <%= @preset.color %>20;">
+            <i class="<%= @preset.icon_name || 'fa-solid fa-tag' %> text-lg" style="color: <%= @preset.color %>;"></i>
+          </div>
+          <div class="ml-4">
+            <h2 class="text-lg font-semibold text-gray-900"><%= @preset.name %></h2>
+            <p class="text-sm text-gray-500"><%= @preset.category_type&.titleize %></p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <%= link_to edit_admin_category_preset_path(@preset), class: "px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50" do %>
+            <i class="fa-solid fa-pen-to-square mr-1.5"></i> Edit
+          <% end %>
+          <%= button_to admin_category_preset_path(@preset), method: :delete, class: "px-4 py-2 border border-red-200 rounded-xl text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100",
+              data: { turbo_confirm: "Delete #{@preset.name}?" } do %>
+            <i class="fa-solid fa-trash mr-1.5"></i> Delete
+          <% end %>
+        </div>
+      </div>
+
+      <dl class="space-y-4">
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Description</dt>
+          <dd class="text-sm text-gray-900"><%= @preset.description || '—' %></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Color</dt>
+          <dd class="flex items-center"><div class="w-5 h-5 rounded-md mr-2" style="background-color: <%= @preset.color %>;"></div><span class="text-sm text-gray-900"><%= @preset.color %></span></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Icon Class</dt>
+          <dd class="text-sm text-gray-900 font-mono"><%= @preset.icon_name %></dd>
+        </div>
+        <div class="flex justify-between py-3 border-b border-gray-100">
+          <dt class="text-sm text-gray-500">Display Order</dt>
+          <dd class="text-sm text-gray-900"><%= @preset.display_order %></dd>
+        </div>
+        <div class="flex justify-between py-3">
+          <dt class="text-sm text-gray-500">Default Selection</dt>
+          <dd class="text-sm"><%= @preset.is_default ? '<span class="text-emerald-600 font-medium">Yes</span>'.html_safe : '<span class="text-gray-500">No</span>'.html_safe %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

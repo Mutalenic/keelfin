@@ -1,0 +1,133 @@
+<% content_for(:page_title) { @user.name } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <!-- User Header -->
+  <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+      <div class="flex items-center">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center text-lg font-bold
+                    <%= @user.admin? ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-600' %>">
+          <%= @user.name.first(2).upcase %>
+        </div>
+        <div class="ml-4">
+          <div class="flex items-center space-x-2">
+            <h2 class="text-xl font-bold text-gray-900"><%= @user.name %></h2>
+            <% if @user.admin? %>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700">Admin</span>
+            <% end %>
+            <% if @user.confirmed_at %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">Verified</span>
+            <% else %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-700">Unverified</span>
+            <% end %>
+          </div>
+          <p class="text-sm text-gray-500"><%= @user.email %></p>
+          <p class="text-xs text-gray-400 mt-1">Joined <%= @user.created_at.strftime('%B %d, %Y') %></p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 mt-4 sm:mt-0">
+        <%= link_to edit_admin_user_path(@user), class: "px-4 py-2 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors" do %>
+          <i class="fa-solid fa-pen-to-square mr-1.5"></i> Edit
+        <% end %>
+        <%= button_to toggle_admin_admin_user_path(@user), method: :patch, class: "px-4 py-2 border rounded-xl text-sm font-medium transition-colors #{@user.admin? ? 'bg-red-50 border-red-200 text-red-700 hover:bg-red-100' : 'bg-brand-50 border-brand-200 text-brand-700 hover:bg-brand-100'}",
+            data: { turbo_confirm: "Are you sure you want to #{@user.admin? ? 'remove admin' : 'grant admin'} access?" } do %>
+          <i class="fa-solid fa-shield-halved mr-1.5"></i> <%= @user.admin? ? 'Remove Admin' : 'Make Admin' %>
+        <% end %>
+        <%= button_to impersonate_admin_user_path(@user), method: :patch, class: "px-4 py-2 bg-amber-50 border border-amber-200 rounded-xl text-sm font-medium text-amber-700 hover:bg-amber-100 transition-colors",
+            data: { turbo_confirm: "You will be logged in as #{@user.name}. Continue?" } do %>
+          <i class="fa-solid fa-user-secret mr-1.5"></i> Impersonate
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-2xl border border-gray-200 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900"><%= @user.monthly_income ? "K#{number_with_precision(@user.monthly_income, precision: 0, delimiter: ',')}" : '—' %></p>
+      <p class="text-xs text-gray-500 mt-1">Monthly Income</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-200 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900"><%= @categories.count %></p>
+      <p class="text-xs text-gray-500 mt-1">Categories</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-200 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900"><%= @payments.size %></p>
+      <p class="text-xs text-gray-500 mt-1">Transactions</p>
+    </div>
+    <div class="bg-white rounded-2xl border border-gray-200 p-4 text-center">
+      <p class="text-2xl font-bold text-gray-900"><%= @user.subscription&.plan_name&.capitalize || 'None' %></p>
+      <p class="text-xs text-gray-500 mt-1">Subscription</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Transactions -->
+    <div class="bg-white rounded-2xl border border-gray-200">
+      <div class="p-5 border-b border-gray-100">
+        <h3 class="text-base font-semibold text-gray-900">Recent Transactions</h3>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <% @payments.each do |payment| %>
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: <%= payment.category.color %>15;">
+                <i class="<%= payment.category.icon_name || 'fa-solid fa-tag' %> text-xs" style="color: <%= payment.category.color %>;"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900"><%= payment.name %></p>
+                <p class="text-xs text-gray-500"><%= payment.category.name %> &middot; <%= payment.created_at.strftime('%b %d') %></p>
+              </div>
+            </div>
+            <p class="text-sm font-semibold text-gray-900">K<%= number_with_precision(payment.amount, precision: 2) %></p>
+          </div>
+        <% end %>
+        <% if @payments.empty? %>
+          <div class="p-6 text-center text-sm text-gray-500">No transactions.</div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Financial Overview -->
+    <div class="space-y-6">
+      <!-- Budgets -->
+      <div class="bg-white rounded-2xl border border-gray-200">
+        <div class="p-5 border-b border-gray-100">
+          <h3 class="text-base font-semibold text-gray-900">Budgets (<%= @budgets.count %>)</h3>
+        </div>
+        <div class="divide-y divide-gray-100">
+          <% @budgets.each do |budget| %>
+            <div class="flex items-center justify-between p-4">
+              <p class="text-sm text-gray-700"><%= budget.category.name %></p>
+              <p class="text-sm font-semibold text-gray-900">K<%= number_with_precision(budget.monthly_limit, precision: 0, delimiter: ',') %></p>
+            </div>
+          <% end %>
+          <% if @budgets.empty? %>
+            <div class="p-4 text-center text-sm text-gray-500">No budgets.</div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Debts -->
+      <div class="bg-white rounded-2xl border border-gray-200">
+        <div class="p-5 border-b border-gray-100">
+          <h3 class="text-base font-semibold text-gray-900">Debts (<%= @debts.count %>)</h3>
+        </div>
+        <div class="divide-y divide-gray-100">
+          <% @debts.each do |debt| %>
+            <div class="flex items-center justify-between p-4">
+              <div>
+                <p class="text-sm font-medium text-gray-900"><%= debt.lender_name %></p>
+                <p class="text-xs text-gray-500"><%= debt.status.capitalize %></p>
+              </div>
+              <p class="text-sm font-semibold text-gray-900">K<%= number_with_precision(debt.principal_amount, precision: 0, delimiter: ',') %></p>
+            </div>
+          <% end %>
+          <% if @debts.empty? %>
+            <div class="p-4 text-center text-sm text-gray-500">No debts.</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

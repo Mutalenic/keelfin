@@ -1,0 +1,50 @@
+<% content_for(:page_title) { "BNNB Data" } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <div class="flex items-center justify-between mb-6">
+    <p class="text-sm text-gray-500">Manage Basic Needs and Nutrition Basket data for Zambia.</p>
+    <%= link_to new_admin_bnnb_data_path, class: "px-5 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors" do %>
+      <i class="fa-solid fa-plus mr-1.5"></i> New Entry
+    <% end %>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Month</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Location</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Basket</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Food</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Non-Food</th>
+            <th class="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @bnnb_datas.each do |data| %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-4 text-sm font-medium text-gray-900"><%= data.month&.strftime('%B %Y') %></td>
+              <td class="px-5 py-4 text-sm text-gray-700"><%= data.location %></td>
+              <td class="px-5 py-4 text-sm text-gray-700">K<%= number_with_precision(data.total_basket, precision: 2, delimiter: ',') %></td>
+              <td class="px-5 py-4 text-sm text-gray-700">K<%= number_with_precision(data.food_basket, precision: 2, delimiter: ',') %></td>
+              <td class="px-5 py-4 text-sm text-gray-700">K<%= number_with_precision(data.non_food_basket, precision: 2, delimiter: ',') %></td>
+              <td class="px-5 py-4 text-right space-x-2">
+                <%= link_to edit_admin_bnnb_data_path(data), class: "text-brand-600 hover:text-brand-800 text-sm font-medium" do %>
+                  Edit
+                <% end %>
+                <%= button_to admin_bnnb_data_path(data), method: :delete, class: "text-red-600 hover:text-red-800 text-sm font-medium",
+                    data: { turbo_confirm: "Delete this entry?" } do %>
+                  Delete
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% if @bnnb_datas.empty? %>
+            <tr><td colspan="6" class="px-5 py-8 text-center text-sm text-gray-500">No BNNB data yet.</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<% content_for(:page_title) { "Admin Dashboard" } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-2xl border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500">Total Users</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1"><%= @total_users %></p>
+        </div>
+        <div class="w-11 h-11 bg-brand-100 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-users text-brand-600"></i>
+        </div>
+      </div>
+      <p class="text-xs text-emerald-600 mt-3"><i class="fa-solid fa-arrow-up mr-1"></i><%= @new_users_this_month %> this month</p>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500">Active Subscriptions</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1"><%= @active_subscriptions %></p>
+        </div>
+        <div class="w-11 h-11 bg-emerald-100 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-crown text-emerald-600"></i>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 mt-3"><%= @premium_subscriptions %> premium &middot; <%= @standard_subscriptions %> standard</p>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500">Total Transactions</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1"><%= number_with_delimiter(@total_payments) %></p>
+        </div>
+        <div class="w-11 h-11 bg-amber-100 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-receipt text-amber-600"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-5">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500">Transaction Volume</p>
+          <p class="text-2xl font-bold text-gray-900 mt-1">K<%= number_with_precision(@total_payment_volume, precision: 0, delimiter: ',') %></p>
+        </div>
+        <div class="w-11 h-11 bg-purple-100 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-coins text-purple-600"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Recent Users -->
+    <div class="bg-white rounded-2xl border border-gray-200">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100">
+        <h2 class="text-base font-semibold text-gray-900">Recent Users</h2>
+        <%= link_to "View all", admin_users_path, class: "text-sm font-medium text-brand-600 hover:text-brand-500" %>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <% @recent_users.each do |user| %>
+          <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center">
+              <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold
+                          <%= user.admin? ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-600' %>">
+                <%= user.name.first(2).upcase %>
+              </div>
+              <div class="ml-3">
+                <%= link_to user.name, admin_user_path(user), class: "text-sm font-medium text-gray-900 hover:text-brand-600" %>
+                <p class="text-xs text-gray-500"><%= user.email %></p>
+              </div>
+            </div>
+            <div class="text-right">
+              <% if user.admin? %>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700">Admin</span>
+              <% end %>
+              <p class="text-xs text-gray-400 mt-0.5"><%= time_ago_in_words(user.created_at) %> ago</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="bg-white rounded-2xl border border-gray-200">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100">
+        <h2 class="text-base font-semibold text-gray-900">Recent Transactions</h2>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <% @recent_payments.each do |payment| %>
+          <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: <%= payment.category.color %>15;">
+                <i class="<%= payment.category.icon_name || 'fa-solid fa-tag' %> text-sm" style="color: <%= payment.category.color %>;"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-medium text-gray-900"><%= payment.name %></p>
+                <p class="text-xs text-gray-500"><%= payment.user.name %> &middot; <%= payment.category.name %></p>
+              </div>
+            </div>
+            <p class="text-sm font-semibold text-gray-900">K<%= number_with_precision(payment.amount, precision: 2) %></p>
+          </div>
+        <% end %>
+        <% if @recent_payments.empty? %>
+          <div class="p-6 text-center text-sm text-gray-500">No transactions yet.</div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
