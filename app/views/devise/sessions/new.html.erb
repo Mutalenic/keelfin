@@ -40,7 +40,7 @@
     <% end %>
 
     <div>
-      <%= f.submit "Sign in", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all cursor-pointer" %>
+      <%= f.submit "Sign in", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all cursor-pointer", style: "background-color:#4f46e5" %>
     </div>
   <% end %>
 
@@ -50,12 +50,12 @@
         <div class="w-full border-t border-gray-200"></div>
       </div>
       <div class="relative flex justify-center text-sm">
-        <span class="px-4 bg-white text-gray-500">New to Keelfin?</span>
+        <span class="px-4 bg-white/95 text-gray-500">New to Keelfin?</span>
       </div>
     </div>
 
     <div class="mt-6">
-      <%= link_to new_registration_path(resource_name), class: "w-full flex justify-center py-3 px-4 border-2 border-brand-600 rounded-xl text-sm font-semibold text-brand-600 bg-white hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all" do %>
+      <%= link_to new_registration_path(resource_name), class: "w-full flex justify-center py-3 px-4 border-2 border-brand-600 rounded-xl text-sm font-semibold text-brand-600 bg-white hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all", style: "border-color:#4f46e5;color:#4f46e5" do %>
         Create your free account
       <% end %>
     </div>

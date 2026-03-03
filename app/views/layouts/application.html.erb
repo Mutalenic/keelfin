@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full bg-gray-50">
+<html class="h-full bg-brand-950">
   <head>
     <title>Keelfin</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,8 +38,15 @@
     </style>
   </head>
 
-  <body class="h-full">
-    <div class="flex h-full">
+  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="h-full w-full opacity-30"
+           style="background-image: radial-gradient(circle at 25% 25%, rgba(99,102,241,0.15) 0, transparent 45%),
+                                  radial-gradient(circle at 75% 10%, rgba(14,165,233,0.12) 0, transparent 35%),
+                                  radial-gradient(circle at 15% 75%, rgba(249,115,22,0.18) 0, transparent 40%);"></div>
+    </div>
+
+    <div class="relative flex min-h-screen">
       <!-- Mobile sidebar toggle (hidden checkbox trick) -->
       <input type="checkbox" id="sidebar-toggle" class="hidden" data-sidebar-toggle />
 
@@ -47,37 +54,37 @@
       <label for="sidebar-toggle" class="sidebar-overlay hidden fixed inset-0 bg-gray-900/50 z-30 lg:hidden"></label>
 
       <!-- Sidebar -->
-      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out">
+      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 bg-white/10 border-r border-white/20 backdrop-blur-2xl shadow-[0_20px_60px_rgba(15,23,42,0.35)] transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out">
         <div class="flex flex-col h-full">
           <!-- Logo -->
-          <div class="flex items-center justify-between h-16 px-5 border-b border-gray-100">
+          <div class="flex items-center justify-between h-16 px-5 border-b border-white/10 bg-white/5">
             <%= link_to root_path, class: 'flex items-center space-x-2.5' do %>
-              <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+              <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl flex items-center justify-center shadow-inner shadow-brand-900/30">
                 <i class="fa-solid fa-wallet text-white text-sm"></i>
               </div>
-              <span class="text-lg font-bold text-gray-900 tracking-tight">Keelfin</span>
+              <span class="text-lg font-bold text-white tracking-tight">Keelfin</span>
             <% end %>
-            <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-gray-100 cursor-pointer">
-              <i class="fa-solid fa-xmark text-gray-500"></i>
+            <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-white/10 cursor-pointer text-white/70">
+              <i class="fa-solid fa-xmark"></i>
             </label>
           </div>
 
           <!-- Navigation -->
-          <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Overview</p>
+          <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto text-white/80">
+            <p class="px-3 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Overview</p>
             <%= sidebar_link 'Dashboard', dashboard_path, 'fa-solid fa-grid-2', 'dashboard' %>
 
-            <p class="px-3 pt-5 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Money</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Money</p>
             <%= sidebar_link 'Categories', categories_path, 'fa-solid fa-tags', 'categories' %>
             <%= sidebar_link 'Budgets', budgets_path, 'fa-solid fa-chart-pie', 'budgets' %>
             <%= sidebar_link 'Recurring', recurring_transactions_path, 'fa-solid fa-repeat', 'recurring_transactions' %>
 
-            <p class="px-3 pt-5 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Wealth</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Wealth</p>
             <%= sidebar_link 'Debts', debts_path, 'fa-solid fa-credit-card', 'debts' %>
             <%= sidebar_link 'Goals', financial_goals_path, 'fa-solid fa-bullseye', 'financial_goals' %>
             <%= sidebar_link 'Investments', investments_path, 'fa-solid fa-chart-line', 'investments' %>
 
-            <p class="px-3 pt-5 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Account</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Account</p>
             <%= sidebar_link 'Subscription', subscription_path, 'fa-solid fa-crown', 'subscriptions' %>
             <% if current_user&.admin? %>
               <%= sidebar_link 'Admin', admin_root_path, 'fa-solid fa-shield-halved', 'admin' %>
@@ -85,20 +92,20 @@
           </nav>
 
           <!-- User Footer -->
-          <div class="border-t border-gray-100 p-4">
+          <div class="border-t border-white/10 p-4 bg-white/5">
             <div class="flex items-center">
-              <div class="w-9 h-9 bg-brand-100 rounded-full flex items-center justify-center">
-                <span class="text-sm font-bold text-brand-700"><%= current_user&.name&.first(2)&.upcase %></span>
+              <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
+                <span class="text-sm font-bold text-white"><%= current_user&.name&.first(2)&.upcase %></span>
               </div>
               <div class="ml-3 flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 truncate"><%= current_user&.name %></p>
-                <p class="text-xs text-gray-500 truncate"><%= current_user&.email %></p>
+                <p class="text-sm font-medium text-white truncate"><%= current_user&.name %></p>
+                <p class="text-xs text-white/60 truncate"><%= current_user&.email %></p>
               </div>
               <div class="flex items-center space-x-1">
-                <%= link_to edit_user_registration_path, class: 'p-1.5 rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors', title: 'Settings' do %>
+                <%= link_to edit_user_registration_path, class: 'p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors', title: 'Settings' do %>
                   <i class="fa-solid fa-gear text-sm"></i>
                 <% end %>
-                <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: 'p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors', title: 'Sign out' do %>
+                <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: 'p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors', title: 'Sign out' do %>
                   <i class="fa-solid fa-right-from-bracket text-sm"></i>
                 <% end %>
               </div>
@@ -110,24 +117,24 @@
       <!-- Main Content -->
       <div class="flex-1 flex flex-col min-w-0">
         <!-- Top Bar -->
-        <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-gray-200">
+        <header class="sticky top-0 z-20 bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-[0_20px_60px_rgba(15,23,42,0.25)]">
           <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center">
-              <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-gray-100 cursor-pointer mr-3">
-                <i class="fa-solid fa-bars text-gray-600"></i>
+              <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-white/10 cursor-pointer mr-3 text-white/70">
+                <i class="fa-solid fa-bars"></i>
               </label>
-              <h1 class="text-lg font-semibold text-gray-900"><%= yield(:page_title) if content_for?(:page_title) %></h1>
+              <h1 class="text-lg font-semibold text-white"><%= yield(:page_title) if content_for?(:page_title) %></h1>
             </div>
             <div class="flex items-center space-x-3">
               <% if current_user && !current_user.confirmed_at %>
-                <div class="hidden sm:flex items-center bg-amber-50 text-amber-700 px-3 py-1.5 rounded-lg text-xs font-medium">
+                <div class="hidden sm:flex items-center bg-amber-400/20 text-amber-100 px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-200/20">
                   <i class="fa-solid fa-envelope mr-1.5"></i>
                   Please verify your email
                 </div>
               <% end %>
               <% if current_user&.premium? %>
-                <span class="hidden sm:flex items-center bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-800 px-3 py-1.5 rounded-lg text-xs font-semibold">
-                  <i class="fa-solid fa-crown mr-1.5 text-amber-500"></i> Premium
+                <span class="hidden sm:flex items-center bg-gradient-to-r from-amber-400/30 to-yellow-300/30 text-amber-100 px-3 py-1.5 rounded-lg text-xs font-semibold border border-amber-200/20">
+                  <i class="fa-solid fa-crown mr-1.5 text-amber-200"></i> Premium
                 </span>
               <% end %>
             </div>
@@ -154,7 +161,11 @@
 
         <!-- Page Content -->
         <main class="flex-1 overflow-y-auto">
-          <%= yield %>
+          <div class="px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white/95 border border-white/40 backdrop-blur-xl rounded-3xl shadow-xl">
+              <%= yield %>
+            </div>
+          </div>
         </main>
       </div>
     </div>

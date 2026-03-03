@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full bg-gray-50">
+<html class="h-full bg-brand-950">
   <head>
     <title>Keelfin – Your Financial Companion</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -37,10 +37,19 @@
     <%= javascript_include_tag "application" %>
   </head>
 
-  <body class="h-full">
-    <div class="min-h-full flex">
+  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
+        style="background-image: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 70%, #4338ca 100%);">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="h-full w-full opacity-30"
+           style="background-image: radial-gradient(circle at 25% 25%, rgba(99,102,241,0.2) 0, transparent 45%),
+                                  radial-gradient(circle at 70% 15%, rgba(14,165,233,0.15) 0, transparent 35%),
+                                  radial-gradient(circle at 20% 80%, rgba(249,115,22,0.2) 0, transparent 40%);"></div>
+    </div>
+
+    <div class="relative min-h-full flex">
       <!-- Left Panel: Branding -->
-      <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 relative overflow-hidden">
+      <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900/90 backdrop-blur-lg relative overflow-hidden border-r border-white/10 shadow-2xl"
+           style="background-image: linear-gradient(140deg, rgba(99,102,241,0.95) 0%, rgba(67,56,202,0.92) 50%, rgba(30,27,75,0.9) 100%);">
         <div class="absolute inset-0 opacity-10">
           <svg class="w-full h-full" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
             <circle cx="400" cy="400" r="300" fill="none" stroke="white" stroke-width="0.5"/>
@@ -136,7 +145,9 @@
             </div>
           <% end %>
 
-          <%= yield %>
+          <div class="bg-white/95 border border-white/40 backdrop-blur-xl rounded-3xl shadow-2xl px-6 py-8">
+            <%= yield %>
+          </div>
         </div>
       </div>
     </div>
