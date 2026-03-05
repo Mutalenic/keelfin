@@ -5,3 +5,10 @@ db/schema.rb linguist-generated
 
 # Mark any vendored files as having been vendored.
 vendor/* linguist-vendored
+
+# Exclude public assets from language stats.
+public/* linguist-vendored
+
+# Ensure Ruby and ERB are always detected.
+*.rb linguist-detectable=true
+*.erb linguist-detectable=true

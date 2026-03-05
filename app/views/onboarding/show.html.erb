@@ -1,0 +1,52 @@
+<div class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-30 pointer-events-none"
+       style="background-image: radial-gradient(circle at 25% 25%, rgba(99,102,241,0.2) 0, transparent 45%),
+                              radial-gradient(circle at 65% 10%, rgba(14,165,233,0.15) 0, transparent 35%),
+                              radial-gradient(circle at 20% 75%, rgba(249,115,22,0.18) 0, transparent 40%);"></div>
+
+  <div class="relative max-w-3xl mx-auto px-4 py-12">
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-8">
+      <!-- Progress Steps -->
+      <div class="mb-10">
+        <div class="flex items-center justify-center space-x-4">
+          <% steps = [[:income, 'Income'], [:categories, 'Categories'], [:budget, 'Budget']] %>
+          <% steps.each_with_index do |(step_key, step_label), index| %>
+            <% active = step_key == @step %>
+            <% completed = steps.index { |s| s[0] == @step }.to_i > index %>
+            <div class="flex items-center">
+              <div class="flex items-center justify-center w-9 h-9 rounded-full text-sm font-bold
+                <%= if completed
+                      'bg-emerald-500 text-white'
+                    elsif active
+                      'bg-brand-600 text-white ring-4 ring-brand-100'
+                    else
+                      'bg-gray-200 text-gray-500'
+                    end %>">
+                <% if completed %>
+                  <i class="fa-solid fa-check text-sm"></i>
+                <% else %>
+                  <%= index + 1 %>
+                <% end %>
+              </div>
+              <span class="ml-2 text-sm font-medium <%= active ? 'text-brand-700' : 'text-gray-500' %>"><%= step_label %></span>
+            </div>
+            <% unless index == steps.length - 1 %>
+              <div class="w-16 h-0.5 <%= completed ? 'bg-emerald-500' : 'bg-gray-200' %>"></div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <% case @step %>
+      <% when :income %>
+        <%= render 'onboarding/step_income' %>
+      <% when :categories %>
+        <%= render 'onboarding/step_categories' %>
+      <% when :budget %>
+        <%= render 'onboarding/step_budget' %>
+      <% when :complete %>
+        <script>window.location.href = '<%= onboarding_complete_path %>';</script>
+      <% end %>
+    </div>
+  </div>
+</div>

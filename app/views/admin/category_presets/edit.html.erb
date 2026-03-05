@@ -1,0 +1,16 @@
+<% content_for(:page_title) { "Edit: #{@preset.name}" } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <div class="max-w-2xl">
+    <div class="mb-6">
+      <%= link_to admin_category_presets_path, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" do %>
+        <i class="fa-solid fa-arrow-left mr-1"></i> Back to presets
+      <% end %>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-6">Edit Category Preset</h2>
+      <%= render 'form', preset: @preset %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+<% content_for(:page_title) { "Users" } %>
+
+<div class="p-4 sm:p-6 lg:p-8">
+  <!-- Search & Filters -->
+  <div class="bg-white rounded-2xl border border-gray-200 p-4 mb-6">
+    <%= form_tag admin_users_path, method: :get, class: "flex flex-col sm:flex-row items-center gap-3" do %>
+      <div class="relative flex-1 w-full">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+        </div>
+        <input type="text" name="q" value="<%= params[:q] %>" placeholder="Search by name or email..."
+               class="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" />
+      </div>
+      <select name="role" class="border border-gray-300 rounded-xl text-sm py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <option value="">All Roles</option>
+        <option value="default" <%= 'selected' if params[:role] == 'default' %>>Default</option>
+        <option value="admin" <%= 'selected' if params[:role] == 'admin' %>>Admin</option>
+      </select>
+      <button type="submit" class="px-5 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors">
+        Search
+      </button>
+    <% end %>
+  </div>
+
+  <!-- Users Table -->
+  <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Subscription</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Income</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Joined</th>
+            <th class="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @users.each do |user| %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-5 py-4">
+                <div class="flex items-center">
+                  <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold
+                              <%= user.admin? ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-600' %>">
+                    <%= user.name.first(2).upcase %>
+                  </div>
+                  <div class="ml-3">
+                    <p class="text-sm font-medium text-gray-900"><%= user.name %></p>
+                    <p class="text-xs text-gray-500"><%= user.email %></p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-5 py-4">
+                <% if user.admin? %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-brand-100 text-brand-700">Admin</span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600">Default</span>
+                <% end %>
+              </td>
+              <td class="px-5 py-4">
+                <% if user.subscription.present? %>
+                  <span class="text-sm font-medium capitalize
+                    <%= case user.subscription.plan_name
+                        when 'premium' then 'text-amber-700'
+                        when 'standard' then 'text-blue-700'
+                        else 'text-gray-500'
+                        end %>"><%= user.subscription.plan_name %></span>
+                <% else %>
+                  <span class="text-xs text-gray-400">None</span>
+                <% end %>
+              </td>
+              <td class="px-5 py-4 text-sm text-gray-700">
+                <%= user.monthly_income ? "K#{number_with_precision(user.monthly_income, precision: 0, delimiter: ',')}" : '—' %>
+              </td>
+              <td class="px-5 py-4 text-sm text-gray-500"><%= user.created_at.strftime('%b %d, %Y') %></td>
+              <td class="px-5 py-4 text-right">
+                <%= link_to admin_user_path(user), class: "text-brand-600 hover:text-brand-800 text-sm font-medium" do %>
+                  View <i class="fa-solid fa-arrow-right ml-1 text-xs"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

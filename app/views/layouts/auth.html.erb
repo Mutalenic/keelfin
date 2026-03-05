@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="h-full bg-brand-950">
+  <head>
+    <title>Keelfin – Your Financial Companion</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#eef2ff',
+                100: '#e0e7ff',
+                200: '#c7d2fe',
+                300: '#a5b4fc',
+                400: '#818cf8',
+                500: '#6366f1',
+                600: '#4f46e5',
+                700: '#4338ca',
+                800: '#3730a3',
+                900: '#312e81',
+                950: '#1e1b4b',
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
+    <%= javascript_include_tag "application" %>
+  </head>
+
+  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
+        style="background-image: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #312e81 70%, #4338ca 100%);">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="h-full w-full opacity-30"
+           style="background-image: radial-gradient(circle at 25% 25%, rgba(99,102,241,0.2) 0, transparent 45%),
+                                  radial-gradient(circle at 70% 15%, rgba(14,165,233,0.15) 0, transparent 35%),
+                                  radial-gradient(circle at 20% 80%, rgba(249,115,22,0.2) 0, transparent 40%);"></div>
+    </div>
+
+    <div class="relative min-h-full flex">
+      <!-- Left Panel: Branding -->
+      <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900/90 backdrop-blur-lg relative overflow-hidden border-r border-white/10 shadow-2xl"
+           style="background-image: linear-gradient(140deg, rgba(99,102,241,0.95) 0%, rgba(67,56,202,0.92) 50%, rgba(30,27,75,0.9) 100%);">
+        <div class="absolute inset-0 opacity-10">
+          <svg class="w-full h-full" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="400" cy="400" r="300" fill="none" stroke="white" stroke-width="0.5"/>
+            <circle cx="400" cy="400" r="200" fill="none" stroke="white" stroke-width="0.5"/>
+            <circle cx="400" cy="400" r="100" fill="none" stroke="white" stroke-width="0.5"/>
+            <line x1="100" y1="400" x2="700" y2="400" stroke="white" stroke-width="0.3"/>
+            <line x1="400" y1="100" x2="400" y2="700" stroke="white" stroke-width="0.3"/>
+          </svg>
+        </div>
+        <div class="relative z-10 flex flex-col justify-between p-12 text-white w-full">
+          <div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-wallet text-white text-lg"></i>
+              </div>
+              <span class="text-2xl font-bold tracking-tight">Keelfin</span>
+            </div>
+          </div>
+
+          <div class="space-y-8">
+            <h1 class="text-4xl font-bold leading-tight">
+              Take control of<br/>your financial future
+            </h1>
+            <p class="text-lg text-brand-200 leading-relaxed max-w-md">
+              Budget smarter, track spending, manage debts, and grow your investments — all in one place.
+            </p>
+
+            <div class="space-y-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                  <i class="fa-solid fa-chart-pie text-brand-200 text-sm"></i>
+                </div>
+                <span class="text-brand-100">Smart budgeting with real-time insights</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                  <i class="fa-solid fa-shield-halved text-brand-200 text-sm"></i>
+                </div>
+                <span class="text-brand-100">Debt management and financial health alerts</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                  <i class="fa-solid fa-bullseye text-brand-200 text-sm"></i>
+                </div>
+                <span class="text-brand-100">Goal tracking with milestone celebrations</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                  <i class="fa-solid fa-chart-line text-brand-200 text-sm"></i>
+                </div>
+                <span class="text-brand-100">Investment portfolio tracking</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center space-x-4">
+              <div class="flex -space-x-2">
+                <div class="w-8 h-8 rounded-full bg-brand-400 border-2 border-brand-700 flex items-center justify-center text-xs font-bold">NM</div>
+                <div class="w-8 h-8 rounded-full bg-emerald-400 border-2 border-brand-700 flex items-center justify-center text-xs font-bold text-emerald-900">JK</div>
+                <div class="w-8 h-8 rounded-full bg-amber-400 border-2 border-brand-700 flex items-center justify-center text-xs font-bold text-amber-900">CM</div>
+              </div>
+              <span class="text-sm text-brand-200">Trusted by Zambian families</span>
+            </div>
+            <p class="text-xs text-brand-300">&copy; <%= Date.current.year %> Keelfin. Built for Zambia.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Auth Content -->
+      <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+        <div class="mx-auto w-full max-w-sm lg:max-w-md">
+          <!-- Mobile Logo -->
+          <div class="lg:hidden mb-8 text-center">
+            <div class="inline-flex items-center space-x-3">
+              <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-wallet text-white text-lg"></i>
+              </div>
+              <span class="text-2xl font-bold text-gray-900 tracking-tight">Keelfin</span>
+            </div>
+          </div>
+
+          <% if notice.present? %>
+            <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
+              <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5 mr-3 flex-shrink-0"></i>
+              <span><%= notice %></span>
+            </div>
+          <% end %>
+          <% if alert.present? %>
+            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
+              <i class="fa-solid fa-circle-exclamation text-red-500 mt-0.5 mr-3 flex-shrink-0"></i>
+              <span><%= alert %></span>
+            </div>
+          <% end %>
+
+          <div class="bg-white/95 border border-white/40 backdrop-blur-xl rounded-3xl shadow-2xl px-6 py-8">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

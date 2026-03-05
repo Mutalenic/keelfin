@@ -8,11 +8,21 @@ Rails.application.routes.draw do
       post :cancel
     end
   end
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations',
+    passwords: 'users/passwords',
+    confirmations: 'users/confirmations'
+  }
 
   devise_scope :user do
-    delete '/users/sign_out' => 'devise/sessions#destroy'
+    delete '/users/sign_out' => 'users/sessions#destroy'
   end
+
+  # Onboarding
+  get 'onboarding', to: 'onboarding#show'
+  post 'onboarding', to: 'onboarding#update'
+  get 'onboarding/complete', to: 'onboarding#complete', as: :onboarding_complete
   
   root to: "dashboard#index"
   
@@ -49,5 +59,20 @@ Rails.application.routes.draw do
     collection do
       post :add_preset
     end
+  end
+
+  # Admin CMS
+  namespace :admin do
+    root to: 'dashboard#index'
+    resources :users, only: [:index, :show, :edit, :update] do
+      member do
+        patch :toggle_admin
+        patch :impersonate
+      end
+    end
+    resources :subscriptions, only: [:index, :show, :edit, :update]
+    resources :category_presets
+    resources :economic_indicators
+    resources :bnnb_datas, path: 'bnnb-data'
   end
 end

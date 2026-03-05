@@ -1,0 +1,61 @@
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-4">
+      <i class="fa-solid fa-tags text-emerald-600 text-2xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-gray-900">Choose your spending categories</h2>
+    <p class="mt-2 text-gray-600">Select the categories that match your spending habits. You can always add more later.</p>
+  </div>
+
+  <%= form_tag onboarding_path, method: :post, class: "space-y-6" do %>
+    <%= hidden_field_tag :step, 'categories' %>
+
+    <% if @category_presets.any? %>
+      <% grouped = @category_presets.group_by(&:category_type) %>
+
+      <% type_labels = { 'fixed' => ['Fixed Expenses', 'fa-house', 'blue'], 'variable' => ['Variable Expenses', 'fa-arrows-left-right', 'amber'], 'discretionary' => ['Discretionary', 'fa-gamepad', 'purple'], 'groceries' => ['Groceries', 'fa-basket-shopping', 'green'] } %>
+
+      <% grouped.each do |type, presets| %>
+        <% label, icon, color = type_labels[type] || [type.titleize, 'fa-tag', 'gray'] %>
+        <div>
+          <div class="flex items-center mb-3">
+            <div class="w-7 h-7 bg-<%= color %>-100 rounded-lg flex items-center justify-center mr-2">
+              <i class="fa-solid <%= icon %> text-<%= color %>-600 text-xs"></i>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wider"><%= label %></h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <% presets.each do |preset| %>
+              <label class="relative cursor-pointer">
+                <input type="checkbox" name="preset_ids[]" value="<%= preset.id %>"
+                       class="peer sr-only" <%= 'checked' if preset.is_default %> />
+                <div class="flex items-center p-3 border-2 border-gray-200 rounded-xl transition-all
+                            peer-checked:border-brand-500 peer-checked:bg-brand-50 hover:border-gray-300">
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3" style="background-color: <%= preset.color %>20;">
+                    <i class="<%= preset.icon_name || 'fa-solid fa-tag' %> text-sm" style="color: <%= preset.color %>;"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate"><%= preset.name %></p>
+                  </div>
+                  <div class="ml-2 w-5 h-5 border-2 border-gray-300 rounded-md flex items-center justify-center
+                              peer-checked:bg-brand-600 peer-checked:border-brand-600 transition-all">
+                  </div>
+                </div>
+              </label>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center py-8 text-gray-500">
+        <i class="fa-solid fa-folder-open text-3xl mb-3"></i>
+        <p>No category presets available. You can create categories manually from the dashboard.</p>
+      </div>
+    <% end %>
+
+    <button type="submit" class="w-full flex items-center justify-center py-4 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all cursor-pointer">
+      Continue
+      <i class="fa-solid fa-arrow-right ml-2"></i>
+    </button>
+  <% end %>
+</div>
