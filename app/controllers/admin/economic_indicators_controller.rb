@@ -1,6 +1,6 @@
 module Admin
   class EconomicIndicatorsController < BaseController
-    before_action :set_indicator, only: [:show, :edit, :update, :destroy]
+    before_action :set_indicator, only: %i[show edit update destroy]
 
     def index
       @indicators = EconomicIndicator.order(date: :desc)
@@ -12,6 +12,8 @@ module Admin
       @indicator = EconomicIndicator.new
     end
 
+    def edit; end
+
     def create
       @indicator = EconomicIndicator.new(indicator_params)
       if @indicator.save
@@ -20,8 +22,6 @@ module Admin
         render :new
       end
     end
-
-    def edit; end
 
     def update
       if @indicator.update(indicator_params)

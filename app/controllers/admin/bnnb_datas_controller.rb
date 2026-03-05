@@ -1,6 +1,6 @@
 module Admin
   class BnnbDatasController < BaseController
-    before_action :set_bnnb_data, only: [:show, :edit, :update, :destroy]
+    before_action :set_bnnb_data, only: %i[show edit update destroy]
 
     def index
       @bnnb_datas = BnnbData.order(month: :desc)
@@ -12,6 +12,8 @@ module Admin
       @bnnb_data = BnnbData.new
     end
 
+    def edit; end
+
     def create
       @bnnb_data = BnnbData.new(bnnb_data_params)
       if @bnnb_data.save
@@ -20,8 +22,6 @@ module Admin
         render :new
       end
     end
-
-    def edit; end
 
     def update
       if @bnnb_data.update(bnnb_data_params)

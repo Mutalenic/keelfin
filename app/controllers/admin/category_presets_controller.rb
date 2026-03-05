@@ -1,6 +1,6 @@
 module Admin
   class CategoryPresetsController < BaseController
-    before_action :set_preset, only: [:show, :edit, :update, :destroy]
+    before_action :set_preset, only: %i[show edit update destroy]
 
     def index
       @presets = CategoryPreset.ordered
@@ -13,6 +13,8 @@ module Admin
       @preset = CategoryPreset.new
     end
 
+    def edit; end
+
     def create
       @preset = CategoryPreset.new(preset_params)
       if @preset.save
@@ -21,8 +23,6 @@ module Admin
         render :new
       end
     end
-
-    def edit; end
 
     def update
       if @preset.update(preset_params)
@@ -44,7 +44,8 @@ module Admin
     end
 
     def preset_params
-      params.require(:category_preset).permit(:name, :icon, :icon_name, :color, :category_type, :description, :is_default, :display_order)
+      params.require(:category_preset).permit(:name, :icon, :icon_name, :color, :category_type, :description,
+                                              :is_default, :display_order)
     end
   end
 end

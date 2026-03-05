@@ -1,6 +1,6 @@
 module Admin
   class SubscriptionsController < BaseController
-    before_action :set_subscription, only: [:show, :edit, :update]
+    before_action :set_subscription, only: %i[show edit update]
 
     def index
       @subscriptions = Subscription.includes(:user).order(created_at: :desc)

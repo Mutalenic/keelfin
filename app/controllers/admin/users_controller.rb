@@ -1,10 +1,13 @@
 module Admin
   class UsersController < BaseController
-    before_action :set_user, only: [:show, :edit, :update, :toggle_admin, :impersonate]
+    before_action :set_user, only: %i[show edit update toggle_admin impersonate]
 
     def index
       @users = User.order(created_at: :desc)
-      @users = @users.where('name ILIKE ? OR email ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%") if params[:q].present?
+      if params[:q].present?
+        @users = @users.where('name ILIKE ? OR email ILIKE ?', "%#{params[:q]}%",
+                              "%#{params[:q]}%")
+      end
       @users = @users.where(role: params[:role]) if params[:role].present?
     end
 
@@ -45,6 +48,7 @@ module Admin
     end
 
     def user_params
+      # :role is intentionally permitted here — admin-only action (BaseController enforces admin auth)
       params.require(:user).permit(:name, :email, :monthly_income, :phone_number, :role, :currency)
     end
   end
