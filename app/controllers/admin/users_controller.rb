@@ -48,8 +48,7 @@ module Admin
     end
 
     def user_params
-      # :role is intentionally permitted here — admin-only action (BaseController enforces admin auth)
-      params.require(:user).permit(:name, :email, :monthly_income, :phone_number, :role, :currency)
+      params.require(:user).permit(:name, :email, :monthly_income, :phone_number, :currency)
     end
   end
 end
