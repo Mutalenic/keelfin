@@ -10,7 +10,7 @@ namespace :passenger do
         execute "#{rbenv_prefix} bundle exec passenger stop --port 3000 || true"
         sleep 2
         execute "#{rbenv_prefix} bundle exec passenger start " \
-                "--port 3000 --environment production --daemonize"
+                '--port 3000 --environment production --daemonize'
       end
     end
   end
