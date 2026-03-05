@@ -3,11 +3,12 @@
 # Passenger as an nginx module but NOT for Passenger standalone.
 namespace :passenger do
   desc 'Restart Passenger standalone server'
-  task :restart do
+  task :standalone_restart do
     on roles(:app) do
       rbenv_prefix = fetch(:rbenv_prefix)
-      within release_path do
+      within current_path do
         execute "#{rbenv_prefix} bundle exec passenger stop --port 3000 || true"
+        sleep 2
         execute "#{rbenv_prefix} bundle exec passenger start " \
                 "--port 3000 --environment production --daemonize"
       end
@@ -15,9 +16,4 @@ namespace :passenger do
   end
 end
 
-# Override the default passenger:restart hook so Capistrano calls ours instead.
-Capistrano::DSL.stages.each do |stage|
-  after "#{stage}", 'passenger:restart'
-end
-
-after 'deploy:publishing', 'passenger:restart'
+after 'deploy:finishing', 'passenger:standalone_restart'
