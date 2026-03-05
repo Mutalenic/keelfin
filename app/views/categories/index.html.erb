@@ -1,103 +1,129 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between align-center p-5">
-    <li>
-      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
-    </li>
-    <li>
-      <h1 class="text-xl uppercase">Categories</h1>
-    </li>
-    <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Categories" } %>
 
-<div class="container mx-auto px-4 py-6">
-  <!-- Header with stats -->
-  <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-    <div class="flex flex-col md:flex-row justify-between items-center">
+<% total_categories = @categories&.size.to_i %>
+<% total_spend = (@category_spending&.values || []).compact.sum %>
+<% top_category = @categories.max_by { |category| (@category_spending[category.id] || 0) } if @categories.present? %>
+
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(130deg, #1e1b4b 0%, #4338ca 55%, #6366f1 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">Your Categories</h2>
-        <p class="text-gray-600">Manage your spending categories</p>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Money map</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Spending categories</h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          Curate categories that mirror Zambian life — fuel, boarding fees, data bundles, and tithe — so every transaction has a home.
+        </p>
       </div>
-      <div class="mt-4 md:mt-0">
-        <%= link_to "Add New Category", new_category_path, class: "bg-[#3778c2] hover:bg-[#2c5d99] text-white font-bold py-2 px-4 rounded-lg flex items-center" %>
+      <div class="flex items-center gap-3">
+        <%= link_to new_category_path, class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-brand-700 shadow-lg shadow-white/20" do %>
+          <i class="fa-solid fa-plus mr-2"></i>
+          Add category
+        <% end %>
+        <%= link_to new_category_payment_path(Category.first || :back), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-receipt mr-2"></i>
+          Quick payment
+        <% end %>
       </div>
     </div>
   </div>
 
-  <!-- Category type tabs -->
-  <div class="mb-6 bg-white rounded-lg shadow-md overflow-hidden">
-    <div class="flex overflow-x-auto">
-      <button class="px-6 py-3 bg-[#3778c2] text-white font-semibold">All</button>
-      <button class="px-6 py-3 hover:bg-gray-100">Groceries</button>
-      <button class="px-6 py-3 hover:bg-gray-100">Fixed</button>
-      <button class="px-6 py-3 hover:bg-gray-100">Variable</button>
-      <button class="px-6 py-3 hover:bg-gray-100">Discretionary</button>
+  <!-- Summary cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(99,102,241,0.9) 0%, rgba(59,130,246,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Categories</p>
+      <p class="text-3xl font-semibold mt-3"><%= total_categories %></p>
+      <p class="text-xs text-white/60 mt-1">active across budgets</p>
+    </div>
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(16,185,129,0.95) 0%, rgba(5,150,105,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">YTD spend</p>
+      <p class="text-3xl font-semibold mt-3">K<%= number_with_precision(total_spend, precision: 2) %></p>
+      <p class="text-xs text-white/60 mt-1">captured in Keelfin</p>
+    </div>
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(251,191,36,0.95) 0%, rgba(249,115,22,0.9) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Top category</p>
+      <p class="text-3xl font-semibold mt-3"><%= top_category&.name || 'N/A' %></p>
+      <p class="text-xs text-white/60 mt-1">highest spend driver</p>
+    </div>
+  </div>
+
+  <!-- Category type chips -->
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-4">
+    <div class="flex flex-wrap gap-3">
+      <% %w[All Groceries Fixed Variable Discretionary Essentials Luxury].each_with_index do |label, index| %>
+        <button class="px-4 py-2 rounded-2xl text-sm font-semibold <%= index.zero? ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">
+          <%= label %>
+        </button>
+      <% end %>
     </div>
   </div>
 
   <!-- Categories grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @categories.each do |category| %>
-      <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow" style="border-top: 4px solid <%= category.color || '#3778c2' %>">
+      <% color = category.color.presence || '#6366f1' %>
+      <div class="rounded-3xl border border-white/30 backdrop-blur-2xl bg-white/95 shadow-xl hover:shadow-2xl transition" style="--accent-color:<%= color %>;">
         <div class="p-6">
           <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white mr-4" style="background-color: <%= category.color || '#3778c2' %>">
-              <i class="<%= category.icon_name.present? ? category.icon_name : 'fa-solid fa-tag' %> text-xl"></i>
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-white mr-4" style="background-color: <%= color %>;">
+              <i class="<%= category.icon_name.presence || 'fa-solid fa-tag' %> text-xl"></i>
             </div>
             <div>
-              <h3 class="text-xl font-bold"><%= category.name %></h3>
-              <span class="text-xs font-semibold inline-block py-1 px-2 rounded-full text-gray-600 bg-gray-200">
-                <%= category.category_type&.capitalize || "Uncategorized" %>
+              <h3 class="text-xl font-bold text-gray-900"><%= category.name %></h3>
+              <span class="text-xs font-semibold inline-block py-1 px-2 rounded-full text-gray-600 bg-gray-100">
+                <%= category.category_type&.capitalize || 'Uncategorized' %>
               </span>
             </div>
           </div>
-          
+
           <% if category.description.present? %>
             <p class="text-gray-600 text-sm mb-4 line-clamp-2"><%= category.description %></p>
           <% end %>
-          
+
           <div class="flex justify-between items-center mb-4">
             <div>
-              <p class="text-gray-500 text-sm">Total Spending</p>
-              <p class="text-xl font-bold">K<%= number_with_precision(@category_spending[category.id] || 0, precision: 2) %></p>
+              <p class="text-gray-500 text-sm">Total spend</p>
+              <p class="text-xl font-bold text-gray-900">K<%= number_with_precision(@category_spending[category.id] || 0, precision: 2) %></p>
             </div>
             <div class="text-right">
               <p class="text-gray-500 text-sm">Transactions</p>
-              <p class="text-xl font-bold"><%= @category_counts[category.id] || 0 %></p>
+              <p class="text-xl font-bold text-gray-900"><%= @category_counts[category.id] || 0 %></p>
             </div>
           </div>
-          
-          <div class="flex justify-between mt-4">
-            <%= link_to "View Details", category_path(category), class: "text-[#3778c2] hover:text-[#2c5d99] font-semibold" %>
-            <%= link_to "Add Payment", new_category_payment_path(category), class: "text-green-600 hover:text-green-800 font-semibold" %>
+
+          <div class="flex justify-between mt-4 text-sm font-semibold">
+            <%= link_to "View details", category_path(category), class: "text-brand-600 hover:text-brand-500" %>
+            <%= link_to "Add payment", new_category_payment_path(category), class: "text-emerald-600 hover:text-emerald-500" %>
           </div>
         </div>
-        
-        <div class="bg-gray-50 px-6 py-3 flex justify-between">
+
+        <div class="px-6 py-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
           <div class="flex space-x-2">
-            <%= link_to edit_category_path(category), class: "text-gray-600 hover:text-gray-900" do %>
+            <%= link_to edit_category_path(category), class: 'p-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600' do %>
               <i class="fa-solid fa-pencil"></i>
             <% end %>
-            <%= button_to category_path(category), method: :delete, data: { turbo_confirm: 'Are you sure? This will delete all payments in this category.' }, class: "text-red-500 hover:text-red-700 bg-transparent border-0 p-0" do %>
+            <%= button_to category_path(category), method: :delete, data: { turbo_confirm: 'Delete this category and its payments?' }, class: 'p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 border-0' do %>
               <i class="fa-solid fa-trash"></i>
             <% end %>
           </div>
-          <small class="text-gray-500">Created <%= time_ago_in_words(category.created_at) %> ago</small>
+          <span>Created <%= time_ago_in_words(category.created_at) %> ago</span>
         </div>
       </div>
     <% end %>
   </div>
-  
+
   <% if @categories.empty? %>
-    <div class="bg-white rounded-lg shadow-md p-12 text-center">
-      <div class="text-gray-400 mb-4">
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-12 text-center">
+      <div class="text-gray-300 mb-4">
         <i class="fa-solid fa-folder-open text-5xl"></i>
       </div>
-      <h3 class="text-xl font-bold text-gray-700 mb-2">No Categories Yet</h3>
-      <p class="text-gray-600 mb-6">Create categories to organize your spending and track your budget</p>
-      <%= link_to "Create Your First Category", new_category_path, class: "bg-[#3778c2] hover:bg-[#2c5d99] text-white font-bold py-2 px-6 rounded-lg" %>
+      <h3 class="text-xl font-bold text-gray-900 mb-2">No categories yet</h3>
+      <p class="text-gray-600 mb-6">Create categories to organise your spending and track your budgets.</p>
+      <%= link_to "Create your first category", new_category_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold shadow hover:bg-brand-500" %>
     </div>
   <% end %>
 </div>
