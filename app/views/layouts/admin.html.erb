@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full bg-gray-50">
+<html class="h-full bg-brand-950">
   <head>
     <title>Keelfin Admin</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -33,40 +33,50 @@
     </style>
   </head>
 
-  <body class="h-full">
-    <div class="flex h-full">
+  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="h-full w-full opacity-30"
+           style="background-image: radial-gradient(circle at 25% 25%, rgba(99,102,241,0.15) 0, transparent 45%),
+                                  radial-gradient(circle at 75% 10%, rgba(14,165,233,0.12) 0, transparent 35%),
+                                  radial-gradient(circle at 15% 75%, rgba(249,115,22,0.18) 0, transparent 40%);"></div>
+    </div>
+
+    <div class="relative flex min-h-screen">
+      <!-- Mobile sidebar toggle (hidden checkbox trick) -->
       <input type="checkbox" id="sidebar-toggle" class="hidden" data-sidebar-toggle />
+
+      <!-- Mobile overlay -->
       <label for="sidebar-toggle" class="sidebar-overlay hidden fixed inset-0 bg-gray-900/50 z-30 lg:hidden"></label>
 
-      <!-- Admin Sidebar -->
-      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out">
+      <!-- Sidebar -->
+      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 bg-white/10 border-r border-white/20 backdrop-blur-2xl shadow-[0_20px_60px_rgba(15,23,42,0.35)] transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out">
         <div class="flex flex-col h-full">
           <!-- Logo -->
-          <div class="flex items-center justify-between h-16 px-5 border-b border-gray-800">
+          <div class="flex items-center justify-between h-16 px-5 border-b border-white/10 bg-white/5">
             <%= link_to admin_root_path, class: 'flex items-center space-x-2.5' do %>
-              <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
+              <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl flex items-center justify-center shadow-inner shadow-brand-900/30">
                 <i class="fa-solid fa-shield-halved text-white text-sm"></i>
               </div>
               <div>
-                <span class="text-base font-bold text-white tracking-tight">Keelfin</span>
+                <span class="text-lg font-bold text-white tracking-tight">Keelfin</span>
                 <span class="text-[10px] font-semibold text-brand-400 uppercase tracking-widest ml-1">Admin</span>
               </div>
             <% end %>
-            <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-gray-800 cursor-pointer">
-              <i class="fa-solid fa-xmark text-gray-400"></i>
+            <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-white/10 cursor-pointer text-white/70">
+              <i class="fa-solid fa-xmark"></i>
             </label>
           </div>
 
           <!-- Navigation -->
-          <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            <p class="px-3 text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-2">Overview</p>
+          <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto text-white/80">
+            <p class="px-3 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Overview</p>
             <%= admin_sidebar_link 'Dashboard', admin_root_path, 'fa-solid fa-grid-2', 'dashboard' %>
 
-            <p class="px-3 pt-5 text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-2">Management</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Management</p>
             <%= admin_sidebar_link 'Users', admin_users_path, 'fa-solid fa-users', 'users' %>
             <%= admin_sidebar_link 'Subscriptions', admin_subscriptions_path, 'fa-solid fa-crown', 'subscriptions' %>
 
-            <p class="px-3 pt-5 text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-2">Content</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Content</p>
             <%= admin_sidebar_link 'Category Presets', admin_category_presets_path, 'fa-solid fa-tags', 'category_presets' %>
             <%= admin_sidebar_link 'Economic Data', admin_economic_indicators_path, 'fa-solid fa-chart-column', 'economic_indicators' %>
             <%= admin_sidebar_link 'BNNB Data', admin_bnnb_datas_path, 'fa-solid fa-basket-shopping', 'bnnb_datas' %>
@@ -80,14 +90,14 @@
           </nav>
 
           <!-- Admin User Footer -->
-          <div class="border-t border-gray-800 p-4">
+          <div class="border-t border-white/10 p-4 bg-white/5">
             <div class="flex items-center">
-              <div class="w-9 h-9 bg-brand-600 rounded-full flex items-center justify-center">
-                <span class="text-xs font-bold text-white"><%= current_user&.name&.first(2)&.upcase %></span>
+              <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
+                <span class="text-sm font-bold text-white"><%= current_user&.name&.first(2)&.upcase %></span>
               </div>
               <div class="ml-3 flex-1 min-w-0">
                 <p class="text-sm font-medium text-white truncate"><%= current_user&.name %></p>
-                <p class="text-xs text-gray-500 truncate">Administrator</p>
+                <p class="text-xs text-white/60 truncate">Administrator</p>
               </div>
             </div>
           </div>
@@ -96,13 +106,14 @@
 
       <!-- Main Content -->
       <div class="flex-1 flex flex-col min-w-0">
-        <header class="sticky top-0 z-20 bg-white border-b border-gray-200">
+        <!-- Top Bar -->
+        <header class="sticky top-0 z-20 bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-[0_20px_60px_rgba(15,23,42,0.25)]">
           <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center">
-              <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-gray-100 cursor-pointer mr-3">
-                <i class="fa-solid fa-bars text-gray-600"></i>
+              <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-white/10 cursor-pointer mr-3 text-white/70">
+                <i class="fa-solid fa-bars"></i>
               </label>
-              <h1 class="text-lg font-semibold text-gray-900"><%= yield(:page_title) if content_for?(:page_title) %></h1>
+              <h1 class="text-lg font-semibold text-white"><%= yield(:page_title) if content_for?(:page_title) %></h1>
             </div>
             <div class="flex items-center space-x-3">
               <span class="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
@@ -112,9 +123,10 @@
           </div>
         </header>
 
+        <!-- Flash Messages -->
         <% if notice.present? %>
           <div class="mx-4 sm:mx-6 lg:mx-8 mt-4">
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
+            <div class="bg-emerald-50/90 border border-emerald-200/90 text-emerald-700 rounded-xl px-4 py-3 text-sm flex items-start backdrop-blur-sm" role="alert">
               <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5 mr-3 flex-shrink-0"></i>
               <span><%= notice %></span>
             </div>
@@ -122,15 +134,20 @@
         <% end %>
         <% if alert.present? %>
           <div class="mx-4 sm:mx-6 lg:mx-8 mt-4">
-            <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
+            <div class="bg-red-50/90 border border-red-200/90 text-red-700 rounded-xl px-4 py-3 text-sm flex items-start backdrop-blur-sm" role="alert">
               <i class="fa-solid fa-circle-exclamation text-red-500 mt-0.5 mr-3 flex-shrink-0"></i>
               <span><%= alert %></span>
             </div>
           </div>
         <% end %>
 
+        <!-- Page Content -->
         <main class="flex-1 overflow-y-auto">
-          <%= yield %>
+          <div class="px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white/95 border border-white/40 backdrop-blur-xl rounded-3xl shadow-xl">
+              <%= yield %>
+            </div>
+          </div>
         </main>
       </div>
     </div>
