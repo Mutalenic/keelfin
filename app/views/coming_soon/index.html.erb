@@ -1,68 +1,99 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between p-5">
-    <li>
-      <%= link_to '', :back, class: "text-xl fa-solid fa-arrow-left" %>
-    </li>
-    <li>
-      <h1 class="text-xl text-center uppercase">Coming Soon</h1>
-    </li>
-    <li>
-      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
-    </li>
-  </ul>
-</nav>
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div class="bg-white/10 border border-white/20 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-[0_25px_70px_rgba(15,23,42,0.35)]">
+    <div class="flex flex-wrap items-start justify-between gap-6">
+      <div>
+        <p class="text-sm uppercase tracking-[0.2em] text-white/60">Feature development</p>
+        <h1 class="mt-2 text-3xl sm:text-4xl font-semibold text-white tracking-tight">Coming soon</h1>
+        <p class="mt-3 text-sm sm:text-base text-white/70 max-w-2xl">
+          We're building the next big thing for your financial journey. Stay tuned for exciting updates.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <%= link_to :back, class: "inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-semibold border border-white/30 text-white/80 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back
+        <% end %>
+        <%= link_to root_path, class: "inline-flex items-center px-4 py-2.5 rounded-2xl text-sm font-semibold border border-white/30 text-white/80 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-home mr-2"></i>
+          Dashboard
+        <% end %>
+      </div>
+    </div>
+  </div>
 
-<div class="container mx-auto px-4 py-8">
+  <!-- Main Content -->
   <div class="max-w-2xl mx-auto">
-    <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-      <div class="mb-6">
-        <i class="fa-solid fa-rocket text-6xl text-blue-500"></i>
+    <div class="rounded-3xl border border-white/15 bg-white/95 backdrop-blur-xl shadow-2xl p-8 text-center">
+      <div class="mb-8">
+        <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <i class="fa-solid fa-rocket text-3xl text-white"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Coming Soon!</h1>
       </div>
       
-      <h1 class="text-3xl font-bold text-gray-800 mb-4">Coming Soon!</h1>
-      
       <% if @premium_only %>
-        <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
-          <div class="flex items-center justify-center mb-3">
-            <i class="fa-solid fa-crown text-purple-600 text-3xl mr-2"></i>
-            <h2 class="text-xl font-bold text-purple-800">Premium Feature</h2>
+        <div class="rounded-3xl border border-amber-200/50 bg-gradient-to-r from-amber-50/80 to-orange-50/80 backdrop-blur-md shadow-xl p-8 mb-8">
+          <div class="flex items-center justify-center mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center mr-3">
+              <i class="fa-solid fa-crown text-amber-600 text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-amber-900">Premium Feature</h2>
           </div>
-          <p class="text-gray-700 mb-4">
+          <p class="text-gray-700 mb-6 text-lg">
             <%= @feature_name %> is available exclusively to Premium subscribers.
           </p>
-          <%= link_to "Upgrade to Premium", plans_subscription_path, class: "inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg" %>
+          <%= link_to "Upgrade to Premium", plans_subscription_path, class: "inline-flex items-center px-8 py-4 rounded-2xl text-lg font-semibold bg-amber-600 text-white shadow-lg hover:bg-amber-500 transition" %>
         </div>
       <% else %>
-        <p class="text-gray-600 text-lg mb-6">
+        <p class="text-gray-600 text-xl mb-8">
           <%= @feature_name %> is currently under development and will be available soon.
         </p>
         
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-          <h3 class="font-semibold text-gray-800 mb-3">What to expect:</h3>
-          <ul class="text-left text-gray-700 space-y-2">
+        <div class="rounded-3xl border border-cyan-200/50 bg-gradient-to-r from-brand-500/10 to-cyan-400/10 backdrop-blur-xl shadow-xl p-8 mb-8">
+          <h3 class="text-xl font-semibold text-white mb-6">What to expect:</h3>
+          <ul class="text-left space-y-4">
             <li class="flex items-start">
-              <i class="fa-solid fa-check text-green-500 mr-2 mt-1"></i>
-              <span>Enhanced functionality and user experience</span>
+              <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0">
+                <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
+              </div>
+              <span class="text-white/90">Enhanced functionality and user experience</span>
             </li>
             <li class="flex items-start">
-              <i class="fa-solid fa-check text-green-500 mr-2 mt-1"></i>
-              <span>Seamless integration with existing features</span>
+              <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0">
+                <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
+              </div>
+              <span class="text-white/90">Seamless integration with existing features</span>
             </li>
             <li class="flex items-start">
-              <i class="fa-solid fa-check text-green-500 mr-2 mt-1"></i>
-              <span>Regular updates and improvements</span>
+              <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-4 mt-0.5 flex-shrink-0">
+                <i class="fa-solid fa-check text-emerald-600 text-xs"></i>
+              </div>
+              <span class="text-white/90">Regular updates and improvements</span>
             </li>
           </ul>
         </div>
       <% end %>
       
-      <div class="mt-8">
-        <p class="text-sm text-gray-500 mb-4">In the meantime, explore our other features:</p>
-        <div class="flex flex-wrap justify-center gap-3">
-          <%= link_to "Dashboard", root_path, class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg" %>
-          <%= link_to "Categories", categories_path, class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg" %>
-          <%= link_to "Budgets", budgets_path, class: "bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg" %>
-          <%= link_to "Debts", debts_path, class: "bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg" %>
+      <div class="mt-12">
+        <p class="text-sm text-gray-500 mb-6">In the meantime, explore our other features:</p>
+        <div class="grid grid-cols-2 gap-4">
+          <%= link_to root_path, class: "inline-flex items-center justify-center px-6 py-4 rounded-2xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition" do %>
+            <i class="fa-solid fa-chart-line mr-2"></i>
+            Dashboard
+          <% end %>
+          <%= link_to categories_path, class: "inline-flex items-center justify-center px-6 py-4 rounded-2xl text-sm font-semibold bg-emerald-600 text-white shadow hover:bg-emerald-500 transition" do %>
+            <i class="fa-solid fa-tag mr-2"></i>
+            Categories
+          <% end %>
+          <%= link_to budgets_path, class: "inline-flex items-center justify-center px-6 py-4 rounded-2xl text-sm font-semibold bg-violet-600 text-white shadow hover:bg-violet-500 transition" do %>
+            <i class="fa-solid fa-piggy-bank mr-2"></i>
+            Budgets
+          <% end %>
+          <%= link_to debts_path, class: "inline-flex items-center justify-center px-6 py-4 rounded-2xl text-sm font-semibold bg-rose-600 text-white shadow hover:bg-rose-500 transition" do %>
+            <i class="fa-solid fa-credit-card mr-2"></i>
+            Debts
+          <% end %>
         </div>
       </div>
     </div>

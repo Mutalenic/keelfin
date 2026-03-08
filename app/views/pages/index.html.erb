@@ -1,27 +1,54 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  </nav>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800">
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="h-full w-full opacity-30"
+         style="background-image: radial-gradient(circle at 25% 25%, rgba(99,102,241,0.15) 0, transparent 45%),
+                                radial-gradient(circle at 75% 10%, rgba(14,165,233,0.12) 0, transparent 35%),
+                                radial-gradient(circle at 15% 75%, rgba(249,115,22,0.18) 0, transparent 40%);"></div>
+  </div>
 
-<div class="h-screen flex justify-center items-center align-tems-center bg-gray">
-<div class="py-10">
-<h class="w-full p-4 rounded-2xl text-3xl italic font-bold  text-center ">DigiBudget</h>
-<% if user_signed_in? %>
- <div class="py-8">  
-      <h1 class="text-2xl text-center italic font-bold text-[#3671b9]">Welcome</h1>
-    </div><br />
-<button class="w-full bg-[#3671b9] rounded-xl p-3 text-white font-bold hover:bg-[#4cbb17] text-center uppercase" onclick="location.href='/categories'">Categories</button><br /><br />
-<%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "w-full bg-[#3671b9] rounded-2xl p-3 text-white font-bold hover:bg-[#B1365B] text-center uppercase" %>
-<% else %>
-<div class="flex justify-center">
-<div class="w-full">
-<div class="flex flex-col space-y-5 w-80 py-10">
-      <%= link_to 'Log in', new_user_session_path, class: "w-full bg-[#3671b9] rounded-3xl p-3 text-white font-bold transition duration-200 hover:bg-[#003087] text-center" %>
-    <div class="flex items-center justify-center border-t-[1px] border-t-slate-300 w-full relative">
-      <div class="-mt-1 font-bod bg-white px-5 absolute">Or</div>
+  <div class="relative z-10 w-full max-w-md mx-auto px-6">
+    <div class="bg-white/10 border border-white/20 backdrop-blur-2xl rounded-3xl p-8 shadow-[0_25px_70px_rgba(15,23,42,0.35)]">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">Keelfin</h1>
+        <p class="text-white/70">Smart Financial Management for Zambia</p>
+      </div>
+
+      <% if user_signed_in? %>
+        <div class="space-y-6">
+          <div class="text-center">
+            <h2 class="text-2xl font-semibold text-white mb-2">Welcome back!</h2>
+            <p class="text-white/70">Ready to manage your finances?</p>
+          </div>
+          
+          <%= link_to categories_path, class: "w-full inline-flex items-center justify-center px-6 py-4 rounded-2xl text-lg font-semibold bg-white text-brand-700 shadow-lg hover:bg-white/90 transition" do %>
+            <i class="fa-solid fa-tag mr-2"></i>
+            Manage Categories
+          <% end %>
+          
+          <div class="text-center">
+            <%= button_to 'Log out', destroy_user_session_path, method: :delete, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium border border-white/30 text-white/80 hover:bg-white/10 transition" %>
+          </div>
+        </div>
+      <% else %>
+        <div class="space-y-6">
+          <div class="text-center mb-8">
+            <p class="text-white/70">Get started with your financial journey</p>
+          </div>
+          
+          <%= link_to 'Log in', new_user_session_path, class: "w-full inline-flex items-center justify-center px-6 py-4 rounded-2xl text-lg font-semibold bg-white text-brand-700 shadow-lg hover:bg-white/90 transition" %>
+          
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-white/30"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-4 bg-transparent text-white/60">Or</span>
+            </div>
+          </div>
+          
+          <%= link_to 'Sign Up', new_user_registration_path, class: "w-full inline-flex items-center justify-center px-6 py-4 rounded-2xl text-lg font-semibold border-2 border-white/40 text-white hover:bg-white/10 transition" %>
+        </div>
+      <% end %>
     </div>
-      <%= link_to 'Sign Up', new_user_registration_path, class: "w-full border-blue-900 hover:border-[#003087] hover:border-[2px] border-[1px] rounded-3xl p-3 text-[#0070ba] font-bold transition duration-200 text-center" %>
-    </div>
-<% end %>
+  </div>
 </div>
-</div>
-
-
