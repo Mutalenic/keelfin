@@ -32,19 +32,14 @@
 
         <div class="mb-4">
           <%= form.label :name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Name' %>
+          <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fc6] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Name' %>
         </div>
 
         <div class="mb-4">
           <%= form.label :description, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= form.text_area :description, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Description', rows: 3 %>
+          <%= form.text_area :description, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fc6] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Description', rows: 3 %>
         </div>
 
-        <div class="mb-4">
-          <%= form.label :icon, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= form.text_field :icon, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Icon Name' %>
-        </div>
-        
         <div class="mb-4">
           <%= form.label :icon_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
           <%= form.select :icon_name, 

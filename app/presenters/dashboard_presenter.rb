@@ -71,7 +71,7 @@ class DashboardPresenter
   end
 
   def total_invested
-    @total_invested ||= investments.sum(:current_value)
+    @total_invested ||= user.investments.active.sum(:current_value)
   end
 
   def investment_return

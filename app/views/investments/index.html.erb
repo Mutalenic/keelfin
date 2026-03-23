@@ -63,7 +63,7 @@
     
     <script>
       // Make portfolio allocation data available to the charts.js script
-      const portfolioAllocationData = <%= raw @portfolio_allocation.to_json %>;
+      const portfolioAllocationData = <%= json_escape(@portfolio_allocation.to_json) %>;
     </script>
     
     <div id="allocation-table" class="hidden">

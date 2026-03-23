@@ -43,6 +43,13 @@
         </div>
       </div>
 
+      <!-- Date -->
+      <div>
+        <%= f.label :created_at, "Transaction Date", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= f.date_field :created_at, value: @payment.created_at&.to_date || Date.current, class: 'w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+        <p class="mt-1 text-xs text-gray-500">Set the date the payment was actually made.</p>
+      </div>
+
       <!-- Payment Method -->
       <div>
         <%= f.label :payment_method, "Payment Method", class: "block text-gray-700 text-sm font-bold mb-2" %>

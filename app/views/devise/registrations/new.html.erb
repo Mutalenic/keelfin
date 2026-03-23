@@ -58,8 +58,8 @@
 
     <p class="text-xs text-center text-gray-500">
       By signing up, you agree to our
-      <a href="#" class="text-brand-600 hover:text-brand-500">Terms of Service</a> and
-      <a href="#" class="text-brand-600 hover:text-brand-500">Privacy Policy</a>
+      <%= link_to "Terms of Service", coming_soon_path(feature: 'terms-of-service'), class: "text-brand-600 hover:text-brand-500" %> and
+      <%= link_to "Privacy Policy", coming_soon_path(feature: 'privacy-policy'), class: "text-brand-600 hover:text-brand-500" %>
     </p>
   <% end %>
 

@@ -60,7 +60,7 @@
     
     <div class="mt-6">
       <p class="text-sm text-gray-600 mb-2">Debt-to-Income Ratio</p>
-      <p class="text-2xl font-bold <%= @debt.debt_to_income_ratio > 30 ? 'text-red-600' : 'text-green-600' %>">
+      <p class="text-2xl font-bold <%= @debt.debt_to_income_ratio > 40 ? 'text-red-600' : 'text-green-600' %>">
         <%= number_with_precision(@debt.debt_to_income_ratio, precision: 2) %>%
       </p>
     </div>

@@ -96,6 +96,7 @@ group :test do
 end
 
 gem 'cancancan'
+gem 'pagy', '~> 9.0'
 
 gem 'ffi'
 

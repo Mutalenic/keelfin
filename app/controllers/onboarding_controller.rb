@@ -3,6 +3,8 @@ class OnboardingController < ApplicationController
 
   def show
     @step = determine_step
+    return redirect_to onboarding_complete_path if @step == :complete
+
     @category_presets = CategoryPreset.ordered if @step == :categories
   end
 

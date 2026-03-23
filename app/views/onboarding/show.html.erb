@@ -44,8 +44,6 @@
         <%= render 'onboarding/step_categories' %>
       <% when :budget %>
         <%= render 'onboarding/step_budget' %>
-      <% when :complete %>
-        <script>window.location.href = '<%= onboarding_complete_path %>';</script>
       <% end %>
     </div>
   </div>

@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
   def format_currency(amount)
     return 'K0.00' if amount.nil?
 
