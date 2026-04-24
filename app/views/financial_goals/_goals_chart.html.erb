@@ -48,21 +48,22 @@
                   <div class="text-sm font-medium text-brand-100">K<%= number_with_precision(goal.target_amount, precision: 2) %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
+                  <% pct = goal.progress_percentage %>
                   <div class="flex items-center">
                     <div class="w-full bg-brand-800 rounded-full h-2.5 mr-2 w-24">
-                      <div class="bg-brand-400 h-2.5 rounded-full" style="width: <%= goal.progress_percentage %>"></div>
+                      <div class="bg-brand-400 h-2.5 rounded-full" style="width: <%= pct %>"></div>
                     </div>
-                    <span class="text-sm font-medium text-brand-200"><%= goal.progress_percentage %>%</span>
+                    <span class="text-sm font-medium text-brand-200"><%= pct %>&#37;</span>
                   </div>
                 </td>
               </tr>
-            <% end %}
+            <% end -%>
           </tbody>
         </table>
       </div>
     <% else %>
       <p class="text-brand-400 text-center py-4">No active goals available</p>
-    <% end %}
+    <% end %>
   </div>
 </div>
 
@@ -77,19 +78,15 @@
       chartButton.addEventListener('click', function() {
         chartDiv.classList.remove('hidden');
         tableDiv.classList.add('hidden');
-        chartButton.classList.remove('bg-brand-800', 'text-brand-300', 'border-brand-700/50');
-        chartButton.classList.add('bg-brand-600', 'text-white', 'border-brand-500');
-        tableButton.classList.remove('bg-brand-600', 'text-white', 'border-brand-500');
-        tableButton.classList.add('bg-brand-800', 'text-brand-300', 'border-brand-700/50');
+        chartButton.className = chartButton.className.replace('bg-brand-800','bg-brand-600').replace('text-brand-300','text-white');
+        tableButton.className = tableButton.className.replace('bg-brand-600','bg-brand-800').replace('text-white','text-brand-300');
       });
 
       tableButton.addEventListener('click', function() {
         chartDiv.classList.add('hidden');
         tableDiv.classList.remove('hidden');
-        chartButton.classList.remove('bg-brand-600', 'text-white', 'border-brand-500');
-        chartButton.classList.add('bg-brand-800', 'text-brand-300', 'border-brand-700/50');
-        tableButton.classList.remove('bg-brand-800', 'text-brand-300', 'border-brand-700/50');
-        tableButton.classList.add('bg-brand-600', 'text-white', 'border-brand-500');
+        tableButton.className = tableButton.className.replace('bg-brand-800','bg-brand-600').replace('text-brand-300','text-white');
+        chartButton.className = chartButton.className.replace('bg-brand-600','bg-brand-800').replace('text-white','text-brand-300');
       });
     }
   });
