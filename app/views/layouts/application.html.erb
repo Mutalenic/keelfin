@@ -48,10 +48,14 @@
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
       [data-sidebar-toggle]:checked ~ .sidebar-panel { transform: translateX(0); }
+      html, body { background-color: #022c22 !important; }
+      main { background-color: #022c22 !important; }
+      /* Ensure inputs/selects/textareas in dark forms stay dark */
+      input, select, textarea { color-scheme: dark; }
     </style>
   </head>
 
-  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800">
+  <body class="min-h-screen" style="background: linear-gradient(135deg, #022c22 0%, #064e3b 55%, #065f46 100%); color: #d1fae5;">
     <div class="absolute inset-0 pointer-events-none">
       <div class="h-full w-full opacity-30"
            style="background-image: radial-gradient(circle at 25% 25%, rgba(16,185,129,0.15) 0, transparent 45%),
@@ -184,7 +188,7 @@
         <% end %>
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-y-auto bg-brand-950">
+        <main class="flex-1 overflow-y-auto" style="background-color: #022c22;">
           <div class="px-4 sm:px-6 lg:px-8 py-6">
             <%= yield %>
           </div>
@@ -194,8 +198,8 @@
 
     <!-- Global Add Transaction Modal -->
     <div id="global-add-transaction" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
-      <div class="relative bg-brand-900 border border-brand-700/50 rounded-3xl shadow-2xl p-6 w-full max-w-md">
+      <div class="absolute inset-0 backdrop-blur-sm" style="background:rgba(0,0,0,0.65)" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
+      <div class="relative rounded-3xl shadow-2xl p-6 w-full max-w-md" style="background:#064e3b; border:1px solid rgba(52,211,153,0.2);">
         <div class="flex items-center justify-between mb-5">
           <h2 class="text-lg font-semibold text-brand-100">Add Transaction</h2>
           <button onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="p-2 rounded-xl hover:bg-brand-800 text-brand-400 hover:text-brand-200 transition">
