@@ -18,14 +18,14 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <%= link_to new_category_path, class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-brand-700 shadow-lg shadow-white/20" do %>
+        <a href="<%= new_category_path %>" class="inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-brand-700 shadow-lg shadow-white/20">
           <i class="fa-solid fa-plus mr-2"></i>
           Add category
-        <% end %>
-        <%= link_to new_category_payment_path(Category.first || :back), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+        </a>
+        <a href="<%= new_category_payment_path(Category.first || :back) %>" class="inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition">
           <i class="fa-solid fa-receipt mr-2"></i>
           Quick payment
-        <% end %>
+        </a>
       </div>
     </div>
   </div>
@@ -55,15 +55,15 @@
   <!-- Category type chips -->
   <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-4">
     <div class="flex flex-wrap gap-3">
-      <% %w[All Groceries Fixed Variable Discretionary Essentials Luxury].each_with_index do |label, index| %>
-        <% if index.zero? %>
-        <button class="px-4 py-2 rounded-2xl text-sm font-semibold bg-brand-600 text-white">
+      <% chip_index = 0 %>
+      <% %w[All Groceries Fixed Variable Discretionary Essentials Luxury].each do |label| %>
+        <% if chip_index == 0 %>
+        <button class="px-4 py-2 rounded-2xl text-sm font-semibold bg-brand-600 text-white"><%= label %></button>
         <% else %>
-        <button class="px-4 py-2 rounded-2xl text-sm font-semibold bg-brand-800 text-brand-300 hover:bg-brand-700 border border-brand-700/50">
+        <button class="px-4 py-2 rounded-2xl text-sm font-semibold bg-brand-800 text-brand-300 hover:bg-brand-700"><%= label %></button>
         <% end %>
-          <%= label %>
-        </button>
-      <% end %}
+        <% chip_index += 1 %>
+      <% end %>
     </div>
   </div>
 
@@ -108,12 +108,16 @@
 
         <div class="px-6 py-3 border-t border-brand-700/30 flex items-center justify-between text-xs text-brand-400">
           <div class="flex space-x-2">
-            <%= link_to edit_category_path(category), class: 'p-2 rounded-lg bg-brand-800 hover:bg-brand-700 text-brand-300' do %>
+            <a href="<%= edit_category_path(category) %>" class="p-2 rounded-lg bg-brand-800 hover:bg-brand-700 text-brand-300">
               <i class="fa-solid fa-pencil"></i>
-            <% end %>
-            <%= button_to category_path(category), method: :delete, data: { turbo_confirm: "Delete this category and its payments?" }, class: "p-2 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 border-0" do %>
-              <i class="fa-solid fa-trash"></i>
-            <% end %>
+            </a>
+            <form action="<%= category_path(category) %>" method="post" data-turbo-confirm="Delete this category?" style="display:inline">
+              <%= hidden_field_tag :_method, :delete %>
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <button type="submit" class="p-2 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 border-0">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </form>
           </div>
           <span>Created <%= time_ago_in_words(category.created_at) %> ago</span>
         </div>
@@ -130,5 +134,5 @@
       <p class="text-brand-300 mb-6">Create categories to organise your spending and track your budgets.</p>
       <%= link_to "Create your first category", new_category_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold shadow hover:bg-brand-500" %>
     </div>
-  <% end %}
+  <% end %>
 </div>
