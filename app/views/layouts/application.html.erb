@@ -58,12 +58,12 @@
         <div class="flex flex-col h-full">
           <!-- Logo -->
           <div class="flex items-center justify-between h-16 px-5 border-b border-brand-700/30 bg-brand-800/60">
-            <%= link_to root_path, class: 'flex items-center space-x-2.5' do %>
+            <a href="<%= root_path %>" class="flex items-center space-x-2.5">
               <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl flex items-center justify-center shadow-inner shadow-brand-900/30">
                 <i class="fa-solid fa-wallet text-white text-sm"></i>
               </div>
               <span class="text-lg font-bold text-white tracking-tight">Keelfin</span>
-            <% end %>
+            </a>
             <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-white/10 cursor-pointer text-white/70">
               <i class="fa-solid fa-xmark"></i>
             </label>
@@ -113,12 +113,12 @@
                 <p class="text-xs text-white/60 truncate"><%= current_user&.email %></p>
               </div>
               <div class="flex items-center space-x-1">
-                <%= link_to edit_user_registration_path, class: "p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors", title: "Settings" do %>
+                <a href="<%= edit_user_registration_path %>" class="p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors" title="Settings">
                   <i class="fa-solid fa-gear text-sm"></i>
-                <% end %>
-                <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors", title: "Sign out" do %>
+                </a>
+                <a href="<%= destroy_user_session_path %>" data-turbo-method="delete" class="p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors" title="Sign out">
                   <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                <% end %>
+                </a>
               </div>
             </div>
           </div>
@@ -171,7 +171,7 @@
         <% end %>
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-y-auto">
+        <main class="flex-1 overflow-y-auto bg-brand-950">
           <div class="px-4 sm:px-6 lg:px-8 py-6">
             <%= yield %>
           </div>
@@ -189,44 +189,57 @@
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-        <%= form_with url: global_payments_path, method: :post, class: "space-y-4" do |f| %>
+        <form action="<%= global_payments_path %>" method="post" class="space-y-4" accept-charset="UTF-8">
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <div class="grid grid-cols-2 gap-3">
             <div class="col-span-2">
               <label class="block text-xs text-brand-400 mb-1">Name / Description</label>
-              <%= f.text_field :name, name: "payment[name]", placeholder: "e.g. Groceries at Shoprite", class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+              <input type="text" name="payment[name]" placeholder="e.g. Groceries at Shoprite" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
             </div>
             <div>
               <label class="block text-xs text-brand-400 mb-1">Amount (ZMW)</label>
-              <%= f.number_field :amount, name: "payment[amount]", step: 0.01, min: 0.01, placeholder: "0.00", class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+              <input type="number" name="payment[amount]" step="0.01" min="0.01" placeholder="0.00" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
             </div>
             <div>
               <label class="block text-xs text-brand-400 mb-1">Date</label>
-              <%= f.date_field :created_at, name: "payment[created_at]", value: Date.current, class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+              <input type="date" name="payment[created_at]" value="<%= Date.current %>" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
             </div>
             <div class="col-span-2">
               <label class="block text-xs text-brand-400 mb-1">Category</label>
               <% if current_user&.categories&.any? %>
-                <%= f.select :category_id, options_for_select(current_user.categories.order(:name).map { |c| [c.name, c.id] }), { prompt: "Select a category" }, { name: "payment[category_id]", class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" } %>
+                <select name="payment[category_id]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <option value="">Select a category</option>
+                  <% current_user.categories.order(:name).each do |c| %>
+                    <option value="<%= c.id %>"><%= c.name %></option>
+                  <% end %>
+                </select>
               <% else %>
                 <p class="text-sm text-brand-400">No categories yet. <a href="<%= categories_path %>" class="text-brand-300 underline">Add one first</a>.</p>
               <% end %>
             </div>
             <div>
               <label class="block text-xs text-brand-400 mb-1">Payment Method</label>
-              <%= f.select :payment_method, options_for_select([["Cash", "cash"], ["Airtel Money", "airtel_money"], ["MTN MoMo", "mtn_momo"], ["Bank Transfer", "bank_transfer"], ["Card", "card"], ["Other", "other"]], "cash"), {}, { name: "payment[payment_method]", class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" } %>
+              <select name="payment[payment_method]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <% [["Cash","cash"],["Airtel Money","airtel_money"],["MTN MoMo","mtn_momo"],["Bank Transfer","bank_transfer"],["Card","card"],["Other","other"]].each do |label, val| %>
+                  <option value="<%= val %>" <%= "selected" if val == "cash" %>><%= label %></option>
+                <% end %>
+              </select>
             </div>
             <div>
               <label class="block text-xs text-brand-400 mb-1">Essential?</label>
-              <%= f.select :is_essential, options_for_select([["Yes — essential", "1"], ["No — discretionary", "0"]], "1"), {}, { name: "payment[is_essential]", class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" } %>
+              <select name="payment[is_essential]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <option value="1" selected>Yes — essential</option>
+                <option value="0">No — discretionary</option>
+              </select>
             </div>
           </div>
           <div class="flex gap-3 pt-1">
-            <%= f.submit "Add Transaction", class: "flex-1 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer" %>
+            <button type="submit" class="flex-1 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer">Add Transaction</button>
             <button type="button" onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="px-5 py-3 rounded-2xl text-sm font-semibold border border-brand-600/40 text-brand-300 hover:bg-brand-800 transition">
               Cancel
             </button>
           </div>
-        <% end %>
+        </form>
       </div>
     </div>
   </body>
