@@ -28,9 +28,9 @@
           extend: {
             colors: {
               brand: {
-                50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7',
-                400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857',
-                800: '#065f46', 900: '#064e3b', 950: '#022c22',
+                50:  '#e6edf3', 100: '#cae8ff', 200: '#7ee787', 300: '#56d364',
+                400: '#3fb950', 500: '#2ea043', 600: '#238636', 700: '#30363d',
+                800: '#21262d', 900: '#161b22', 950: '#0d1117',
               }
             }
           }
@@ -48,19 +48,45 @@
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
       [data-sidebar-toggle]:checked ~ .sidebar-panel { transform: translateX(0); }
-      html, body { background-color: #022c22 !important; }
-      main { background-color: #022c22 !important; }
-      /* Ensure inputs/selects/textareas in dark forms stay dark */
-      input, select, textarea { color-scheme: dark; }
+      html, body { background-color: #0d1117 !important; }
+      main { background-color: #0d1117 !important; }
+      /* ── Global dark-theme form overrides ─────────────────────────── */
+      input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
+      select, textarea {
+        background-color: #21262d !important;
+        border: 1px solid #30363d !important;
+        color: #e6edf3 !important;
+        color-scheme: dark;
+        border-radius: 0.75rem;
+      }
+      input::placeholder, textarea::placeholder { color: #6e7681 !important; }
+      label { color: #cae8ff !important; }
+      input:focus, select:focus, textarea:focus {
+        outline: none !important;
+        border-color: #238636 !important;
+        box-shadow: 0 0 0 3px rgba(35,134,54,0.25) !important;
+      }
+      /* Cancel / secondary buttons that use gray */
+      .btn-cancel, a.btn-cancel {
+        background-color: #21262d !important;
+        color: #8b949e !important;
+        border: 1px solid #30363d !important;
+      }
+      /* White card overrides */
+      .card-form {
+        background-color: #161b22 !important;
+        border: 1px solid #30363d !important;
+        color: #e6edf3 !important;
+      }
     </style>
   </head>
 
-  <body class="min-h-screen" style="background: linear-gradient(135deg, #022c22 0%, #064e3b 55%, #065f46 100%); color: #d1fae5;">
+  <body class="min-h-screen" style="background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #21262d 100%); color: #e6edf3;">
     <div class="absolute inset-0 pointer-events-none">
-      <div class="h-full w-full opacity-30"
-           style="background-image: radial-gradient(circle at 25% 25%, rgba(16,185,129,0.15) 0, transparent 45%),
-                                  radial-gradient(circle at 75% 10%, rgba(5,150,105,0.12) 0, transparent 35%),
-                                  radial-gradient(circle at 15% 75%, rgba(245,158,11,0.10) 0, transparent 40%);"></div>
+      <div class="h-full w-full opacity-40"
+           style="background-image: radial-gradient(circle at 20% 20%, rgba(46,160,67,0.12) 0, transparent 45%),
+                                  radial-gradient(circle at 80% 10%, rgba(35,134,54,0.08) 0, transparent 40%),
+                                  radial-gradient(circle at 10% 80%, rgba(56,189,248,0.06) 0, transparent 40%);"></div>
     </div>
 
     <div class="relative flex min-h-screen">
@@ -71,10 +97,10 @@
       <label for="sidebar-toggle" class="sidebar-overlay hidden fixed inset-0 bg-gray-900/50 z-30 lg:hidden"></label>
 
       <!-- Sidebar -->
-      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 bg-brand-900/80 border-r border-brand-700/40 backdrop-blur-2xl shadow-[0_20px_60px_rgba(2,44,34,0.40)] transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out">
+      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 backdrop-blur-2xl transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out" style="background:#161b22; border-right:1px solid #30363d; box-shadow:4px 0 24px rgba(0,0,0,0.4);">
         <div class="flex flex-col h-full">
           <!-- Logo -->
-          <div class="flex items-center justify-between h-16 px-5 border-b border-brand-700/30 bg-brand-800/60">
+          <div class="flex items-center justify-between h-16 px-5" style="border-bottom:1px solid #30363d; background:#0d1117;">
             <a href="<%= root_path %>" class="flex items-center space-x-2.5">
               <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl flex items-center justify-center shadow-inner shadow-brand-900/30">
                 <i class="fa-solid fa-wallet text-white text-sm"></i>
@@ -120,7 +146,7 @@
           </nav>
 
           <!-- User Footer -->
-          <div class="border-t border-brand-700/30 p-4 bg-brand-800/40">
+          <div class="p-4" style="border-top:1px solid #30363d; background:#0d1117;">
             <div class="flex items-center">
               <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
                 <span class="text-sm font-bold text-white"><%= current_user&.name&.first(2)&.upcase %></span>
@@ -145,7 +171,7 @@
       <!-- Main Content -->
       <div class="flex-1 flex flex-col min-w-0">
         <!-- Top Bar -->
-        <header class="sticky top-0 z-20 bg-brand-900/70 backdrop-blur-2xl border-b border-brand-700/40 shadow-[0_20px_60px_rgba(2,44,34,0.30)]">
+        <header class="sticky top-0 z-20 backdrop-blur-2xl" style="background:rgba(13,17,23,0.85); border-bottom:1px solid #30363d; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
           <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center">
               <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-white/10 cursor-pointer mr-3 text-white/70">
@@ -188,7 +214,7 @@
         <% end %>
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-y-auto" style="background-color: #022c22;">
+        <main class="flex-1 overflow-y-auto" style="background-color: #0d1117;">
           <div class="px-4 sm:px-6 lg:px-8 py-6">
             <%= yield %>
           </div>
@@ -198,8 +224,8 @@
 
     <!-- Global Add Transaction Modal -->
     <div id="global-add-transaction" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 backdrop-blur-sm" style="background:rgba(0,0,0,0.65)" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
-      <div class="relative rounded-3xl shadow-2xl p-6 w-full max-w-md" style="background:#064e3b; border:1px solid rgba(52,211,153,0.2);">
+      <div class="absolute inset-0 backdrop-blur-sm" style="background:rgba(0,0,0,0.70)" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
+      <div class="relative rounded-2xl shadow-2xl p-6 w-full max-w-md" style="background:#161b22; border:1px solid #30363d;">
         <div class="flex items-center justify-between mb-5">
           <h2 class="text-lg font-semibold text-brand-100">Add Transaction</h2>
           <button onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="p-2 rounded-xl hover:bg-brand-800 text-brand-400 hover:text-brand-200 transition">
