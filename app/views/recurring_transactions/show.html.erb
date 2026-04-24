@@ -13,7 +13,11 @@
           <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-white/20 text-white">
             <%= @recurring_transaction.category.name %>
           </span>
-          <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold <%= @recurring_transaction.is_essential ? 'bg-emerald-400/30 text-white' : 'bg-amber-400/30 text-white' %>">
+          <% if @recurring_transaction.is_essential %>
+          <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-emerald-400/30 text-white">
+          <% else %>
+          <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-amber-400/30 text-white">
+          <% end %>
             <%= @recurring_transaction.is_essential ? 'Essential' : 'Non-essential' %>
           </span>
           <% if @recurring_transaction.payment_method.present? %>

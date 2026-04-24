@@ -56,7 +56,11 @@
   <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-4">
     <div class="flex flex-wrap gap-3">
       <% %w[All Groceries Fixed Variable Discretionary Essentials Luxury].each_with_index do |label, index| %>
-        <button class="px-4 py-2 rounded-2xl text-sm font-semibold <%= index.zero? ? 'bg-brand-600 text-white' : 'bg-brand-800 text-brand-300 hover:bg-brand-700 border border-brand-700/50' %>">
+        <% if index.zero? %>
+        <button class="px-4 py-2 rounded-2xl text-sm font-semibold bg-brand-600 text-white">
+        <% else %>
+        <button class="px-4 py-2 rounded-2xl text-sm font-semibold bg-brand-800 text-brand-300 hover:bg-brand-700 border border-brand-700/50">
+        <% end %>
           <%= label %>
         </button>
       <% end %}
@@ -107,7 +111,7 @@
             <%= link_to edit_category_path(category), class: 'p-2 rounded-lg bg-brand-800 hover:bg-brand-700 text-brand-300' do %>
               <i class="fa-solid fa-pencil"></i>
             <% end %>
-            <%= button_to category_path(category), method: :delete, data: { turbo_confirm: 'Delete this category and its payments?' }, class: 'p-2 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 border-0' do %>
+            <%= button_to category_path(category), method: :delete, data: { turbo_confirm: "Delete this category and its payments?" }, class: "p-2 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 border-0" do %>
               <i class="fa-solid fa-trash"></i>
             <% end %>
           </div>

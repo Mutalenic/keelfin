@@ -113,10 +113,10 @@
                 <p class="text-xs text-white/60 truncate"><%= current_user&.email %></p>
               </div>
               <div class="flex items-center space-x-1">
-                <%= link_to edit_user_registration_path, class: 'p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors', title: 'Settings' do %>
+                <%= link_to edit_user_registration_path, class: "p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors", title: "Settings" do %>
                   <i class="fa-solid fa-gear text-sm"></i>
                 <% end %>
-                <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: 'p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors', title: 'Sign out' do %>
+                <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, class: "p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors", title: "Sign out" do %>
                   <i class="fa-solid fa-right-from-bracket text-sm"></i>
                 <% end %>
               </div>

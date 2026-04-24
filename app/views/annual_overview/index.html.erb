@@ -64,8 +64,12 @@
         <tbody class="divide-y divide-brand-700/20">
           <% @monthly_data.each do |data| %>
             <% is_future = data[:month] > Date.current.end_of_month %>
-            <% balance_color = data[:balance] >= 0 ? 'text-emerald-400' : 'text-red-400' %>
-            <tr class="<%= data[:is_current] ? 'bg-brand-700/20 border-l-2 border-l-brand-400' : 'hover:bg-brand-800/30' %> transition-colors">
+            <% balance_color = data[:balance] >= 0 ? "text-emerald-400" : "text-red-400" %>
+            <% if data[:is_current] %>
+            <tr class="bg-brand-700/20 border-l-2 border-l-brand-400 transition-colors">
+            <% else %>
+            <tr class="hover:bg-brand-800/30 transition-colors">
+            <% end %>
               <td class="px-4 py-3 whitespace-nowrap">
                 <div class="flex items-center gap-2">
                   <% if data[:is_current] %>
@@ -98,7 +102,11 @@
                 <% total_budget = data[:budget_limits].values.sum.to_f %>
                 <% if total_budget > 0 && !is_future %>
                   <% diff = total_budget - data[:spending] %>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium <%= diff >= 0 ? 'bg-emerald-900/40 text-emerald-400' : 'bg-red-900/40 text-red-400' %>">
+                  <% if diff >= 0 %>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-emerald-900/40 text-emerald-400">
+                  <% else %>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium bg-red-900/40 text-red-400">
+                  <% end %>
                     <%= diff >= 0 ? '▼' : '▲' %> K<%= number_with_precision(diff.abs, precision: 0, delimiter: ',') %>
                   </span>
                 <% else %>
