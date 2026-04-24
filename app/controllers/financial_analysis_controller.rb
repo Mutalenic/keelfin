@@ -46,6 +46,6 @@ class FinancialAnalysisController < ApplicationController
     @savings_rate = @income > 0 ? [(((@income - @this_month_spending) / @income) * 100).round(1), 0].max : 0
 
     @debt_analysis = DebtAnalysisService.new(current_user).analyze
-    @active_goals = current_user.financial_goals.where(status: 'active')
+    @active_goals = current_user.financial_goals.where(completed: false)
   end
 end
