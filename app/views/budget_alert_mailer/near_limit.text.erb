@@ -1,0 +1,24 @@
+Budget Alert — Keelfin
+======================
+
+Hi <%= @user.name.split(' ').first %>,
+
+Here's a budget update for this month:
+
+<% if @overspent.any? %>
+EXCEEDED:
+<% @overspent.each do |b| %>
+  - <%= b[:name] %>: spent K<%= number_with_precision(b[:spent], precision: 2) %> of K<%= number_with_precision(b[:limit], precision: 2) %> (<%= b[:pct].round %>%)
+<% end %>
+<% end %>
+
+<% if @near_limit.any? %>
+APPROACHING LIMIT:
+<% @near_limit.each do |b| %>
+  - <%= b[:name] %>: spent K<%= number_with_precision(b[:spent], precision: 2) %> of K<%= number_with_precision(b[:limit], precision: 2) %> (<%= b[:pct].round %>%)
+<% end %>
+<% end %>
+
+Manage your budgets: <%= budgets_url %>
+
+— Keelfin

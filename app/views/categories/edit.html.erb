@@ -1,85 +1,101 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between p-5">
-    <li>
-      <%= link_to '', category_path(@category), class: "text-xl fa-solid fa-arrow-left" %>
-    </li>
-    <li>
-      <h1 class="text-xl text-center uppercase">Edit Category</h1>
-    </li>
-    <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Edit Category" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="min-h-screen flex justify-center items-center mt-4">
-  <div class="p-10 border-[1px] -mt-10 border-slate-200 flex flex-col items-center space-y-3 rounded-lg shadow-md w-full max-w-md">
-    <h2 class="text-2xl font-bold mb-4 text-gray-800">Edit <%= @category.name %></h2>
-    
-    <%= form_with(model: @category, url: category_path(@category), method: :patch, class: "w-full") do |form| %>
-      <% if @category.errors.any? %>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          <h2><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h2>
-          <ul>
-            <% @category.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(130deg, <%= @category.color || '#4f46e5' %> 0%, #4338ca 55%, #1e1b4b 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Money map</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Edit <%= @category.name %></h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          Update your category details and preferences.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to category_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back to category
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+      <%= form_with(model: @category, url: category_path(@category), method: :patch, class: "space-y-5") do |form| %>
+        <% if @category.errors.any? %>
+          <div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-4">
+            <h2 class="text-red-800 font-semibold mb-2"><%= pluralize(@category.errors.count, "error") %> prohibited this from being saved:</h2>
+            <ul class="text-red-700 list-disc list-inside text-sm">
+              <% @category.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div>
+          <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.text_field :name, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter category name' %>
+        </div>
+
+        <div>
+          <%= form.label :description, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.text_area :description, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter category description', rows: 3 %>
+        </div>
+
+        <div>
+          <%= form.label :icon, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.text_field :icon, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter icon name' %>
+        </div>
+
+        <div>
+          <%= form.label :icon_name, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.select :icon_name,
+            [
+              ['Apple', 'fa-apple-whole'],
+              ['Home', 'fa-home'],
+              ['Car', 'fa-car'],
+              ['Shopping', 'fa-shopping-cart'],
+              ['Food', 'fa-utensils'],
+              ['Health', 'fa-hospital'],
+              ['Education', 'fa-graduation-cap'],
+              ['Entertainment', 'fa-film'],
+              ['Bills', 'fa-file-invoice-dollar'],
+              ['Savings', 'fa-piggy-bank']
+            ],
+            { include_blank: 'Select an icon' },
+            { class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" }
+          %>
+        </div>
+
+        <div>
+          <%= form.label :color, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.color_field :color, class: "w-full h-12 p-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+        </div>
+
+        <div>
+          <%= form.label :category_type, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.select :category_type,
+            @category_types.map { |type| [type.capitalize, type] },
+            { include_blank: 'Select a type' },
+            { class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" }
+          %>
+        </div>
+
+        <div>
+          <%= form.label :bnnb_mapping, "JCTR BNNB Basket Key (optional)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.text_field :bnnb_mapping, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g. transport, rent, mealie_meal" %>
+          <p class="mt-1 text-xs text-gray-500">Maps this category to a JCTR BNNB item for benchmark comparisons. Leave blank to skip.</p>
+        </div>
+
+        <div class="flex items-center gap-4 pt-2">
+          <%= form.submit 'Update Category', class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition cursor-pointer" %>
+          <%= link_to "Cancel", category_path(@category), class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition" %>
         </div>
       <% end %>
-
-      <div class="mb-4">
-        <%= form.label :name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.text_field :name, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Name' %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :description, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.text_area :description, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Category Description', rows: 3 %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :icon, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.text_field :icon, class: "p-3 border-[1px] border-slate-500 hover:border-[#5a4fcg] hover:border-[2px] rounded-sm w-full focus:outline-none", placeholder: 'Enter Icon Name' %>
-      </div>
-      
-      <div class="mb-4">
-        <%= form.label :icon_name, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.select :icon_name, 
-          [
-            ['Apple', 'fa-apple-whole'],
-            ['Home', 'fa-home'],
-            ['Car', 'fa-car'],
-            ['Shopping', 'fa-shopping-cart'],
-            ['Food', 'fa-utensils'],
-            ['Health', 'fa-hospital'],
-            ['Education', 'fa-graduation-cap'],
-            ['Entertainment', 'fa-film'],
-            ['Bills', 'fa-file-invoice-dollar'],
-            ['Savings', 'fa-piggy-bank']
-          ],
-          { include_blank: 'Select an icon' },
-          { class: "p-3 border-[1px] border-slate-500 rounded-sm w-full focus:outline-none" }
-        %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :color, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.color_field :color, class: "p-1 border-[1px] border-slate-500 rounded-sm w-full focus:outline-none h-10" %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :category_type, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.select :category_type, 
-          @category_types.map { |type| [type.capitalize, type] },
-          { include_blank: 'Select a type' },
-          { class: "p-3 border-[1px] border-slate-500 rounded-sm w-full focus:outline-none" }
-        %>
-      </div>
-
-      <div class="py-3">
-        <%= form.submit 'Update Category', class: "w-full bg-[#3778c2] hover:bg-[#2c5d99] rounded-lg p-3 text-white font-bold text-center focus:outline-none" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>

@@ -1,2 +1,26 @@
-<h1>Subscriptions#index</h1>
-<p>Find me in app/views/subscriptions/index.html.erb</p>
+<% content_for(:page_title) { "Subscription" } %>
+<% content_for(:skip_card_wrapper, true) %>
+
+<div class="space-y-8 max-w-3xl mx-auto">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10 text-center"
+       style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 55%, #1e1b4b 100%);">
+    <div class="mb-6">
+      <i class="fa-solid fa-crown text-6xl text-white/90"></i>
+    </div>
+    <h1 class="text-3xl font-bold mb-4">Your Subscription</h1>
+    <p class="text-white/80 max-w-lg mx-auto">
+      Manage your Keelfin subscription and billing details.
+    </p>
+  </div>
+
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8 text-center">
+    <p class="text-gray-600 mb-6">
+      View your current subscription details and manage your plan.
+    </p>
+    <%= link_to subscription_path, class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition" do %>
+      <i class="fa-solid fa-eye mr-2"></i>
+      View Subscription Details
+    <% end %>
+  </div>
+</div>

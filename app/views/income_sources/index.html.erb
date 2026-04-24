@@ -1,0 +1,90 @@
+<% content_for :page_title, "Income Sources" %>
+
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(2,44,34,0.45)] border border-brand-400/20"
+       style="background: linear-gradient(135deg, #059669 0%, #047857 55%, #022c22 100%);">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-2">Finance</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Income Sources</h1>
+        <p class="mt-1 text-sm text-white/70">Track all your income streams to get an accurate financial picture.</p>
+      </div>
+      <%= link_to new_income_source_path, class: "inline-flex items-center px-5 py-2.5 rounded-2xl text-sm font-semibold bg-white/20 text-white border border-white/30 hover:bg-white/30 transition" do %>
+        <i class="fa-solid fa-plus mr-2"></i> Add Income Source
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Summary Card -->
+  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-wide text-brand-400 mb-1">Total Monthly Income</p>
+        <p class="text-3xl font-bold text-brand-100">K<%= number_with_precision(@total_monthly, precision: 2, delimiter: ',') %></p>
+        <p class="text-xs text-brand-400 mt-1"><%= @income_sources.active.count %> active source<%= @income_sources.active.count == 1 ? '' : 's' %></p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide text-brand-400 mb-1">Annual Equivalent</p>
+        <p class="text-3xl font-bold text-brand-100">K<%= number_with_precision(@total_monthly * 12, precision: 2, delimiter: ',') %></p>
+        <p class="text-xs text-brand-400 mt-1">Projected yearly total</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide text-brand-400 mb-1">Weekly Equivalent</p>
+        <p class="text-3xl font-bold text-brand-100">K<%= number_with_precision(@total_monthly / 4.33, precision: 2, delimiter: ',') %></p>
+        <p class="text-xs text-brand-400 mt-1">Average per week</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Income Sources List -->
+  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <% if @income_sources.any? %>
+      <div class="space-y-3">
+        <% @income_sources.each do |source| %>
+          <div class="flex items-center justify-between p-4 rounded-2xl border border-brand-700/30 hover:bg-brand-800/50 transition-colors <%= source.active ? '' : 'opacity-50' %>">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-brand-700/60">
+                <i class="fa-solid fa-money-bill-wave text-brand-300"></i>
+              </div>
+              <div>
+                <p class="font-semibold text-brand-100"><%= source.name %></p>
+                <p class="text-sm text-brand-400"><%= source.frequency_label %> • K<%= number_with_precision(source.amount, precision: 2, delimiter: ',') %></p>
+                <% if source.notes.present? %>
+                  <p class="text-xs text-brand-500 mt-0.5"><%= source.notes %></p>
+                <% end %>
+              </div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="text-right">
+                <p class="font-bold text-brand-100">K<%= number_with_precision(source.monthly_equivalent, precision: 2, delimiter: ',') %>/mo</p>
+                <% unless source.active? %>
+                  <span class="text-xs text-brand-500 bg-brand-800 px-2 py-0.5 rounded-full">Inactive</span>
+                <% end %>
+              </div>
+              <div class="flex gap-2">
+                <%= link_to edit_income_source_path(source), class: "p-2 rounded-xl hover:bg-brand-700/50 text-brand-400 hover:text-brand-200 transition" do %>
+                  <i class="fa-solid fa-pen text-sm"></i>
+                <% end %>
+                <%= link_to income_source_path(source), data: { turbo_method: :delete, turbo_confirm: "Remove #{source.name}?" }, class: "p-2 rounded-xl hover:bg-red-900/40 text-brand-400 hover:text-red-300 transition" do %>
+                  <i class="fa-solid fa-trash text-sm"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-12">
+        <div class="w-16 h-16 rounded-2xl bg-brand-800/60 flex items-center justify-center mx-auto mb-4">
+          <i class="fa-solid fa-money-bill-wave text-brand-400 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-brand-100 mb-2">No income sources yet</h3>
+        <p class="text-brand-400 mb-6 max-w-sm mx-auto">Add your salary, business income, side hustles, and allowances to get an accurate financial picture.</p>
+        <%= link_to new_income_source_path, class: "inline-flex items-center px-6 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition" do %>
+          <i class="fa-solid fa-plus mr-2"></i> Add Your First Income Source
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

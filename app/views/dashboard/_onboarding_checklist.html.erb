@@ -1,0 +1,54 @@
+<% 
+  steps = [
+    { label: "Set income sources", done: current_user.income_sources.any? || current_user.monthly_income.present?, link: income_sources_path, icon: "fa-money-bill-wave" },
+    { label: "Add categories", done: current_user.categories.count >= 3, link: categories_path, icon: "fa-tags" },
+    { label: "Set opening balance", done: current_user.balance_as_of.present?, link: edit_user_registration_path, icon: "fa-wallet" },
+    { label: "Add first transaction", done: current_user.payments.any?, link: "#", link_action: "open-modal", icon: "fa-receipt" },
+    { label: "Create a budget", done: current_user.budgets.any?, link: new_budget_path, icon: "fa-chart-pie" },
+    { label: "Set a financial goal", done: current_user.financial_goals.any?, link: new_financial_goal_path, icon: "fa-bullseye" },
+  ]
+  completed = steps.count { |s| s[:done] }
+  all_done = completed == steps.size
+%>
+
+<% unless all_done %>
+  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-lg font-semibold text-brand-100">Getting Started</h2>
+        <p class="text-xs text-brand-400 mt-0.5"><%= completed %> of <%= steps.size %> steps complete</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-32 bg-brand-800 rounded-full h-2">
+          <div class="bg-brand-400 h-2 rounded-full transition-all" style="width: <%= (completed.to_f / steps.size * 100).round %>%"></div>
+        </div>
+        <span class="text-sm font-bold text-brand-300"><%= (completed.to_f / steps.size * 100).round %>%</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <% steps.each do |step| %>
+        <% if step[:done] %>
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-900/20 border border-emerald-700/30">
+            <div class="w-8 h-8 rounded-full bg-emerald-600/30 flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-check text-emerald-400 text-xs"></i>
+            </div>
+            <span class="text-sm text-brand-400 line-through"><%= step[:label] %></span>
+          </div>
+        <% else %>
+          <% target = step[:link_action] == "open-modal" ? "#" : step[:link] %>
+          <% onclick = step[:link_action] == "open-modal" ? "document.getElementById('global-add-transaction').classList.remove('hidden'); return false;" : nil %>
+          <%= link_to target, onclick: onclick, class: "flex items-center gap-3 p-3 rounded-xl bg-brand-800/50 border border-brand-700/30 hover:bg-brand-700/40 hover:border-brand-600/40 transition group" do %>
+            <div class="w-8 h-8 rounded-full bg-brand-700/60 flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid <%= step[:icon] %> text-brand-400 text-xs group-hover:text-brand-200 transition"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="text-sm text-brand-200 font-medium"><%= step[:label] %></span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-brand-500 text-xs group-hover:text-brand-300 transition"></i>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_02_160000) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_24_110722) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_160000) do
     t.string "color", default: "#3778c2"
     t.string "icon_name"
     t.string "category_type", default: "variable"
+    t.string "bnnb_mapping"
     t.index ["name", "user_id"], name: "index_categories_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
@@ -67,6 +68,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_160000) do
     t.datetime "updated_at", null: false
     t.index ["category_type"], name: "index_category_presets_on_category_type"
     t.index ["name"], name: "index_category_presets_on_name", unique: true
+  end
+
+  create_table "debt_payments", force: :cascade do |t|
+    t.bigint "debt_id", null: false
+    t.decimal "amount", precision: 12, scale: 2, null: false
+    t.date "paid_on", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["debt_id", "paid_on"], name: "index_debt_payments_on_debt_id_and_paid_on"
+    t.index ["debt_id"], name: "index_debt_payments_on_debt_id"
   end
 
   create_table "debts", force: :cascade do |t|
@@ -119,6 +131,20 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_160000) do
     t.index ["user_id", "completed"], name: "index_financial_goals_on_user_id_and_completed"
     t.index ["user_id", "goal_type"], name: "index_financial_goals_on_user_id_and_goal_type"
     t.index ["user_id"], name: "index_financial_goals_on_user_id"
+  end
+
+  create_table "income_sources", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
+    t.string "frequency", default: "monthly", null: false
+    t.boolean "active", default: true, null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["frequency"], name: "index_income_sources_on_frequency"
+    t.index ["user_id", "active"], name: "index_income_sources_on_user_id_and_active"
+    t.index ["user_id"], name: "index_income_sources_on_user_id"
   end
 
   create_table "investment_transactions", force: :cascade do |t|
@@ -242,6 +268,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_160000) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.decimal "opening_balance", precision: 12, scale: 2, default: "0.0"
+    t.date "balance_as_of"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["phone_number"], name: "index_users_on_phone_number"
@@ -251,9 +279,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_160000) do
   add_foreign_key "budgets", "categories"
   add_foreign_key "budgets", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "debt_payments", "debts"
   add_foreign_key "debts", "users"
   add_foreign_key "financial_goals", "categories"
   add_foreign_key "financial_goals", "users"
+  add_foreign_key "income_sources", "users"
   add_foreign_key "investment_transactions", "investments"
   add_foreign_key "investment_transactions", "users"
   add_foreign_key "investments", "users"

@@ -1,33 +1,48 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between align-center p-5">
-    <li>
-      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
-    </li>
-    <li>
-      <h1 class="text-xl uppercase">Financial Goals</h1>
-    </li>
-    <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Financial Goals" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="container mx-auto px-4 py-6">
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, #10b981 0%, #059669 55%, #1e1b4b 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Wealth building</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Financial Goals</h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          Track your progress and achieve your financial milestones.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to new_financial_goal_path, class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-emerald-700 shadow-lg shadow-white/20" do %>
+          <i class="fa-solid fa-plus mr-2"></i>
+          New Goal
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <!-- Goals Summary -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-      <h3 class="text-sm text-gray-600 mb-2">Active Goals</h3>
-      <p class="text-3xl font-bold"><%= @active_goals.count %></p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(16,185,129,0.9) 0%, rgba(5,150,105,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Active Goals</p>
+      <p class="text-3xl font-semibold mt-3"><%= @active_goals.count %></p>
+      <p class="text-xs text-white/60 mt-1">goals in progress</p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-      <h3 class="text-sm text-gray-600 mb-2">Completion Rate</h3>
-      <p class="text-3xl font-bold"><%= @completion_rate %>%</p>
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(20,184,166,0.95) 0%, rgba(13,148,136,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Completion Rate</p>
+      <p class="text-3xl font-semibold mt-3"><%= @completion_rate %>%</p>
+      <p class="text-xs text-white/60 mt-1">goals achieved</p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
-      <h3 class="text-sm text-gray-600 mb-2">Total Saved</h3>
-      <p class="text-3xl font-bold">K<%= number_with_precision(@total_saved, precision: 2) %></p>
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(139,92,246,0.95) 0%, rgba(124,58,237,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Total Saved</p>
+      <p class="text-3xl font-semibold mt-3">K<%= number_with_precision(@total_saved, precision: 2) %></p>
+      <p class="text-xs text-white/60 mt-1">towards your goals</p>
     </div>
   </div>
   
@@ -35,10 +50,16 @@
   <%= render 'goals_chart' if @active_goals.any? %>
 
   <!-- Active Goals -->
-  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">Active Goals</h2>
-      <%= link_to "New Goal", new_financial_goal_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900">Active Goals</h2>
+        <p class="text-sm text-gray-500">Goals you're currently working towards.</p>
+      </div>
+      <%= link_to new_financial_goal_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white shadow hover:bg-emerald-500 transition" do %>
+        <i class="fa-solid fa-plus mr-2"></i>
+        New Goal
+      <% end %>
     </div>
     
     <% if @active_goals.any? %>
@@ -75,24 +96,24 @@
             </div>
             
             <div class="mt-4 flex justify-end space-x-2">
-              <%= link_to "Update Progress", edit_financial_goal_path(goal), class: "text-blue-600 hover:text-blue-800" %>
-              <%= link_to "Details", financial_goal_path(goal), class: "text-purple-600 hover:text-purple-800" %>
+              <%= link_to "Update Progress", edit_financial_goal_path(goal), class: "text-sm px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100" %>
+              <%= link_to "Details", financial_goal_path(goal), class: "text-sm px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" %>
             </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <div class="text-center py-8 bg-gray-50 rounded-lg">
-        <p class="text-gray-500 mb-4">You don't have any active financial goals yet.</p>
-        <%= link_to "Create Your First Goal", new_financial_goal_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+      <div class="text-center py-12 bg-gray-50/80 rounded-2xl border border-dashed border-gray-200">
+        <p class="text-gray-600 mb-4">You don't have any active financial goals yet.</p>
+        <%= link_to "Create Your First Goal", new_financial_goal_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-500" %>
       </div>
     <% end %>
   </div>
 
   <!-- Completed Goals -->
   <% if @completed_goals.any? %>
-    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-      <h2 class="text-xl font-semibold mb-6">Completed Goals</h2>
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Completed Goals</h2>
       
       <div class="space-y-4">
         <% @completed_goals.each do |goal| %>
@@ -115,8 +136,8 @@
 
   <!-- Overdue Goals -->
   <% if @overdue_goals.any? %>
-    <div class="bg-white rounded-lg shadow-lg p-6 mb-8 border-l-4 border-red-500">
-      <h2 class="text-xl font-semibold mb-6">Overdue Goals</h2>
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8 border-l-4 border-red-500">
+      <h2 class="text-xl font-semibold text-gray-900 mb-6">Overdue Goals</h2>
       
       <div class="space-y-4">
         <% @overdue_goals.each do |goal| %>
@@ -133,21 +154,12 @@
             </div>
             
             <div class="mt-4 flex justify-end space-x-2">
-              <%= link_to "Update Progress", edit_financial_goal_path(goal), class: "text-blue-600 hover:text-blue-800" %>
-              <%= link_to "Extend Deadline", edit_financial_goal_path(goal), class: "text-red-600 hover:text-red-800" %>
+              <%= link_to "Update Progress", edit_financial_goal_path(goal), class: "text-sm px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100" %>
+              <%= link_to "Extend Deadline", edit_financial_goal_path(goal), class: "text-sm px-3 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100" %>
             </div>
           </div>
         <% end %>
       </div>
     </div>
   <% end %>
-</div>
-
-<!-- Quick Actions -->
-<div class="fixed bottom-6 right-6">
-  <div class="flex flex-col space-y-2">
-    <%= link_to new_financial_goal_path, class: "bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700" do %>
-      <i class="fa-solid fa-plus"></i>
-    <% end %>
-  </div>
 </div>

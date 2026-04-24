@@ -1,0 +1,187 @@
+<% content_for(:page_title) { "Financial Analysis" } %>
+<% content_for(:skip_card_wrapper, true) %>
+
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #0369a1 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Deep Dive</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Financial Analysis</h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          A 6-month picture of your income, spending, savings rate, and budget performance.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to export_all_payments_path, class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-slate-800 shadow-lg" do %>
+          <i class="fa-solid fa-file-csv mr-2"></i>
+          Export All CSV
+        <% end %>
+        <%= link_to annual_overview_path, class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-calendar mr-2"></i>
+          Annual View
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Monthly Income</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@income, precision: 0, delimiter: ',') %></p>
+    </div>
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(239,68,68,0.8) 0%, rgba(185,28,28,0.75) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">This Month Spending</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@this_month_spending, precision: 0, delimiter: ',') %></p>
+    </div>
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(16,185,129,0.95) 0%, rgba(5,150,105,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Savings Rate</p>
+      <p class="text-2xl font-semibold mt-3 <%= @savings_rate < 10 ? 'text-red-300' : '' %>"><%= @savings_rate %>%</p>
+      <p class="text-xs text-white/50 mt-1">Target: ≥ 20%</p>
+    </div>
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(139,92,246,0.9) 0%, rgba(109,40,217,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">6-Month Avg Spend</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@avg_monthly_spending, precision: 0, delimiter: ',') %></p>
+    </div>
+  </div>
+
+  <!-- 6-Month Spending Trend (bar chart via inline data) -->
+  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <h2 class="text-lg font-semibold text-brand-100 mb-5">6-Month Spending Trend</h2>
+    <% max_spend = @monthly_data.map { |d| d[:spending] }.max.to_f %>
+    <% max_spend = 1 if max_spend == 0 %>
+    <div class="flex items-end gap-3 h-40">
+      <% @monthly_data.each do |d| %>
+        <% pct = (d[:spending] / max_spend * 100).round %>
+        <div class="flex-1 flex flex-col items-center gap-2">
+          <span class="text-xs text-brand-400">K<%= number_with_precision(d[:spending], precision: 0, delimiter: ',') %></span>
+          <div class="w-full rounded-t-lg bg-brand-500/70 hover:bg-brand-400/80 transition"
+               style="height: <%= [pct, 4].max %>%; min-height: 4px;"
+               title="<%= d[:month].strftime('%B %Y') %>: K<%= number_with_precision(d[:spending], precision: 2) %>">
+          </div>
+          <span class="text-xs text-brand-500 text-center leading-tight"><%= d[:month].strftime('%b') %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Top Categories This Month -->
+    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <h2 class="text-lg font-semibold text-brand-100 mb-5">Top Spend Categories — <%= Date.current.strftime('%B') %></h2>
+      <% if @top_categories.any? %>
+        <% total_cat = @top_categories.values.sum.to_f %>
+        <% total_cat = 1 if total_cat == 0 %>
+        <div class="space-y-3">
+          <% @top_categories.each do |name, amount| %>
+            <% pct = (amount / total_cat * 100).round(1) %>
+            <div>
+              <div class="flex items-center justify-between mb-1 text-sm">
+                <span class="text-brand-200 font-medium truncate"><%= name %></span>
+                <span class="text-brand-400 ml-2 flex-shrink-0">K<%= number_with_precision(amount, precision: 0, delimiter: ',') %> · <%= pct %>%</span>
+              </div>
+              <div class="w-full bg-brand-800 rounded-full h-2">
+                <div class="bg-brand-500 h-2 rounded-full" style="width: <%= pct %>%"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-brand-400 text-sm">No transactions recorded this month yet.</p>
+      <% end %>
+    </div>
+
+    <!-- Budget Performance -->
+    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <h2 class="text-lg font-semibold text-brand-100 mb-5">Budget Performance — <%= Date.current.strftime('%B') %></h2>
+      <% if @budget_performance.any? %>
+        <div class="space-y-3">
+          <% @budget_performance.each do |b| %>
+            <div>
+              <div class="flex items-center justify-between mb-1 text-sm">
+                <span class="text-brand-200 font-medium truncate"><%= b[:name] %></span>
+                <span class="<%= b[:pct] >= 100 ? 'text-red-400' : b[:pct] >= 80 ? 'text-amber-400' : 'text-emerald-400' %> ml-2 flex-shrink-0 font-semibold">
+                  <%= b[:pct] %>%
+                </span>
+              </div>
+              <div class="w-full bg-brand-800 rounded-full h-2">
+                <div class="h-2 rounded-full transition-all <%= b[:pct] >= 100 ? 'bg-red-500' : b[:pct] >= 80 ? 'bg-amber-400' : 'bg-emerald-500' %>"
+                     style="width: <%= [b[:pct], 100].min %>%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-brand-500 mt-0.5">
+                <span>K<%= number_with_precision(b[:spent], precision: 0, delimiter: ',') %> spent</span>
+                <span>K<%= number_with_precision(b[:limit], precision: 0, delimiter: ',') %> limit</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-brand-400 text-sm">No budgets set up yet. <%= link_to 'Create a budget', new_budget_path, class: 'text-brand-300 underline' %>.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Debt + Goals summary -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Debt Snapshot -->
+    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-brand-100">Debt Snapshot</h2>
+        <%= link_to debts_path, class: "text-xs text-brand-400 hover:text-brand-200 underline" do %>View all<% end %>
+      </div>
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="bg-brand-800/60 rounded-xl p-3">
+          <p class="text-xs text-brand-500 uppercase tracking-wide">Total Debt</p>
+          <p class="text-lg font-bold text-red-400 mt-1">K<%= number_with_precision(@debt_analysis[:total_debt], precision: 0, delimiter: ',') %></p>
+        </div>
+        <div class="bg-brand-800/60 rounded-xl p-3">
+          <p class="text-xs text-brand-500 uppercase tracking-wide">Monthly</p>
+          <p class="text-lg font-bold text-brand-200 mt-1">K<%= number_with_precision(@debt_analysis[:monthly_payments], precision: 0, delimiter: ',') %></p>
+        </div>
+        <div class="bg-brand-800/60 rounded-xl p-3">
+          <p class="text-xs text-brand-500 uppercase tracking-wide">DTI Ratio</p>
+          <p class="text-lg font-bold <%= @debt_analysis[:is_over_indebted] ? 'text-red-400' : 'text-emerald-400' %> mt-1"><%= @debt_analysis[:debt_to_income] %>%</p>
+        </div>
+      </div>
+      <% if @debt_analysis[:is_over_indebted] %>
+        <p class="text-xs text-red-400 mt-3"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Debt-to-income ratio exceeds the safe 40% threshold.</p>
+      <% end %>
+    </div>
+
+    <!-- Goals Snapshot -->
+    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-brand-100">Active Goals</h2>
+        <%= link_to financial_goals_path, class: "text-xs text-brand-400 hover:text-brand-200 underline" do %>View all<% end %>
+      </div>
+      <% if @active_goals.any? %>
+        <div class="space-y-3">
+          <% @active_goals.limit(4).each do |goal| %>
+            <% pct = goal.target_amount > 0 ? [(goal.current_amount.to_f / goal.target_amount * 100).round(1), 100].min : 0 %>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="text-brand-200 font-medium truncate"><%= goal.name %></span>
+                <span class="text-brand-400 ml-2 flex-shrink-0"><%= pct %>%</span>
+              </div>
+              <div class="w-full bg-brand-800 rounded-full h-2">
+                <div class="bg-emerald-500 h-2 rounded-full" style="width: <%= pct %>%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-brand-500 mt-0.5">
+                <span>K<%= number_with_precision(goal.current_amount, precision: 0, delimiter: ',') %></span>
+                <span>K<%= number_with_precision(goal.target_amount, precision: 0, delimiter: ',') %> goal</span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-brand-400 text-sm">No active goals. <%= link_to 'Set a goal', new_financial_goal_path, class: 'text-brand-300 underline' %>.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

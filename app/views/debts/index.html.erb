@@ -1,4 +1,5 @@
 <% content_for(:page_title) { "Debts" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
 <div class="space-y-8">
   <!-- Hero -->
@@ -69,34 +70,7 @@
     </div>
   <% end %>
 
-  <% if @analysis[:payoff_strategies][:avalanche].any? || @analysis[:payoff_strategies][:snowball].any? %>
-    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
-      <div class="flex items-center gap-3 mb-4">
-        <i class="fa-solid fa-chart-line text-brand-600"></i>
-        <h2 class="text-xl font-semibold text-gray-900">Suggested payoff strategies</h2>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="font-semibold text-gray-900 mb-2">Avalanche (highest interest first)</h3>
-          <p class="text-sm text-gray-500 mb-3">Minimise interest by attacking the most expensive debt first.</p>
-          <div class="space-y-1 text-sm text-gray-700">
-            <% @analysis[:payoff_strategies][:avalanche].each do |lender, rate| %>
-              <div class="flex justify-between"><span><%= lender %></span><span><%= number_with_precision(rate, precision: 1) %>%</span></div>
-            <% end %>
-          </div>
-        </div>
-        <div>
-          <h3 class="font-semibold text-gray-900 mb-2">Snowball (smallest balance)</h3>
-          <p class="text-sm text-gray-500 mb-3">Create momentum by clearing the smallest debts first.</p>
-          <div class="space-y-1 text-sm text-gray-700">
-            <% @analysis[:payoff_strategies][:snowball].each do |lender, amount| %>
-              <div class="flex justify-between"><span><%= lender %></span><span>K<%= number_with_precision(amount, precision: 2) %></span></div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  <%= render 'payoff_strategy' %>
 
   <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex items-center justify-between mb-4">

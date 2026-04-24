@@ -1,51 +1,67 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between align-center p-5">
-    <li>
-      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
-    </li>
-    <li>
-      <h1 class="text-xl uppercase">Investment Portfolio</h1>
-    </li>
-    <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Investment Portfolio" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="container mx-auto px-4 py-6">
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 55%, #1e1b4b 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Investments</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Portfolio</h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          Track your investments and monitor your returns.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to new_investment_path, class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-cyan-700 shadow-lg shadow-white/20" do %>
+          <i class="fa-solid fa-plus mr-2"></i>
+          New Investment
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <!-- Portfolio Summary -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(6,182,212,0.9) 0%, rgba(8,145,178,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Portfolio Value</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@total_invested, precision: 2) %></p>
+    </div>
       <h3 class="text-sm text-gray-600 mb-2">Total Portfolio Value</h3>
       <p class="text-3xl font-bold">K<%= number_with_precision(@total_invested, precision: 2) %></p>
     </div>
     
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-      <h3 class="text-sm text-gray-600 mb-2">Total Return</h3>
-      <p class="text-3xl font-bold <%= @total_return >= 0 ? 'text-green-600' : 'text-red-600' %>">
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(16,185,129,0.95) 0%, rgba(5,150,105,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Total Return</p>
+      <p class="text-2xl font-semibold mt-3 <%= @total_return >= 0 ? 'text-white' : 'text-red-200' %>">
         <%= @total_return >= 0 ? '+' : '' %>K<%= number_with_precision(@total_return, precision: 2) %>
       </p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
-      <h3 class="text-sm text-gray-600 mb-2">Return Percentage</h3>
-      <p class="text-3xl font-bold <%= @return_percentage >= 0 ? 'text-green-600' : 'text-red-600' %>">
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(139,92,246,0.95) 0%, rgba(124,58,237,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Return %</p>
+      <p class="text-2xl font-semibold mt-3 <%= @return_percentage >= 0 ? 'text-white' : 'text-red-200' %>">
         <%= @return_percentage >= 0 ? '+' : '' %><%= number_with_precision(@return_percentage, precision: 2) %>%
       </p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
-      <h3 class="text-sm text-gray-600 mb-2">Active Investments</h3>
-      <p class="text-3xl font-bold"><%= @investments.active.count %></p>
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(251,191,36,0.95) 0%, rgba(245,158,11,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Active</p>
+      <p class="text-2xl font-semibold mt-3"><%= @investments.active.count %></p>
     </div>
   </div>
 
   <!-- Portfolio Allocation -->
-  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Portfolio Allocation</h2>
       <div class="flex space-x-2">
-        <button id="view-as-chart" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200">
+        <button id="view-as-chart" class="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-xl hover:bg-cyan-200">
           <i class="fa-solid fa-chart-pie mr-1"></i> Chart
         </button>
         <button id="view-as-table" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
@@ -106,10 +122,16 @@
   </div>
 
   <!-- Investments List -->
-  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">Your Investments</h2>
-      <%= link_to "Add New Investment", new_investment_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900">Your Investments</h2>
+        <p class="text-sm text-gray-500">All your active and inactive investments.</p>
+      </div>
+      <%= link_to new_investment_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-cyan-600 text-white shadow hover:bg-cyan-500 transition" do %>
+        <i class="fa-solid fa-plus mr-2"></i>
+        New Investment
+      <% end %>
     </div>
     
     <% if @investments.any? %>
@@ -169,11 +191,11 @@
                   <% end %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div class="flex space-x-2 justify-end">
-                    <%= link_to "View", investment_path(investment), class: "text-blue-600 hover:text-blue-900" %>
-                    <%= link_to "Edit", edit_investment_path(investment), class: "text-indigo-600 hover:text-indigo-900" %>
-                    <%= link_to "Transactions", investment_investment_transactions_path(investment), class: "text-green-600 hover:text-green-900" %>
-                  </div>
+                  <div class="flex items-center justify-end gap-2 text-xs font-semibold">
+                  <%= link_to "View", investment_path(investment), class: "px-3 py-1.5 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100" %>
+                  <%= link_to "Edit", edit_investment_path(investment), class: "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+                  <%= link_to "Transactions", investment_investment_transactions_path(investment), class: "px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100" %>
+                </div>
                 </td>
               </tr>
             <% end %>
@@ -181,15 +203,16 @@
         </table>
       </div>
     <% else %>
-      <div class="text-center py-8 bg-gray-50 rounded-lg">
-        <p class="text-gray-500 mb-4">You don't have any investments yet.</p>
-        <%= link_to "Add Your First Investment", new_investment_path, class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+      <div class="text-center py-12 bg-gray-50/80 rounded-2xl border border-dashed border-gray-200">
+        <p class="text-gray-600 mb-4">You don't have any investments yet.</p>
+        <%= link_to "Add Your First Investment", new_investment_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-cyan-600 text-white font-semibold shadow hover:bg-cyan-500" %>
       </div>
     <% end %>
   </div>
   
   <!-- Investment Tips -->
-  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-6">
+  <div class="rounded-3xl border border-white/15 backdrop-blur-xl p-6 text-white"
+       style="background: linear-gradient(135deg, rgba(6,182,212,0.9) 0%, rgba(99,102,241,0.85) 100%);">
     <h2 class="text-lg font-semibold mb-4">Investment Tips</h2>
     
     <div class="space-y-4">
@@ -214,15 +237,6 @@
         <p class="text-sm">Regularly review and rebalance your portfolio to maintain your target asset allocation.</p>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="fixed bottom-6 right-6">
-  <div class="flex flex-col space-y-2">
-    <%= link_to new_investment_path, class: "bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700" do %>
-      <i class="fa-solid fa-plus"></i>
-    <% end %>
   </div>
 </div>
 

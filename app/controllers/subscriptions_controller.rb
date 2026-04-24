@@ -54,6 +54,51 @@ class SubscriptionsController < ApplicationController
     end
   end
 
+  def checkout
+    plan_name = params[:plan_name]
+    unless %w[standard premium].include?(plan_name)
+      return redirect_to plans_subscription_path, alert: 'Invalid plan selected.'
+    end
+
+    plan = Subscription::PLANS[plan_name.to_sym]
+    service = DpoPayService.new(user: current_user, plan_name: plan_name, amount: plan[:price])
+    result = service.create_token
+
+    if result.success?
+      session[:dpo_plan] = plan_name
+      session[:dpo_token] = result.transaction_token
+      redirect_to result.redirect_url, allow_other_host: true
+    else
+      redirect_to plans_subscription_path, alert: "Payment initiation failed: #{result.error}"
+    end
+  end
+
+  def dpo_callback
+    transaction_token = params[:TransactionToken] || session[:dpo_token]
+    plan_name = session[:dpo_plan]
+
+    if transaction_token.blank? || plan_name.blank?
+      return redirect_to plans_subscription_path, alert: 'Invalid payment callback.'
+    end
+
+    service = DpoPayService.new(user: current_user, plan_name: plan_name, amount: 0)
+    result = service.verify_payment(transaction_token)
+
+    session.delete(:dpo_plan)
+    session.delete(:dpo_token)
+
+    if result.success?
+      sub = current_user.ensure_subscription
+      if sub.upgrade_to(plan_name)
+        redirect_to subscription_path, notice: "Payment successful! You are now on the #{plan_name.capitalize} plan."
+      else
+        redirect_to subscription_path, alert: 'Payment received but plan upgrade failed. Please contact support.'
+      end
+    else
+      redirect_to plans_subscription_path, alert: "Payment could not be verified: #{result.error}"
+    end
+  end
+
   def cancel
     if @subscription.cancel
       redirect_to subscription_path,

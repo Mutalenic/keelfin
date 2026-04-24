@@ -1,21 +1,9 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between p-5">
-    <li>
-      <%= link_to '', root_path, class: "text-xl fa-solid fa-home" %>
-    </li>
-    <li>
-      <h1 class="text-xl text-center uppercase">Subscription</h1>
-    </li>
-    <li>
-      <%= link_to '', plans_subscription_path, class: "text-xl fa-solid fa-crown" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Subscription" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-3xl mx-auto">
+<div class="space-y-8 max-w-3xl mx-auto">
     <!-- Subscription Status Card -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden mb-6">
       <div class="p-6">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-2xl font-bold text-gray-800">Your Subscription</h2>
@@ -67,7 +55,7 @@
     </div>
     
     <!-- Features Card -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden mb-6">
       <div class="p-6">
         <h3 class="text-xl font-bold text-gray-800 mb-4">Your Plan Features</h3>
         
@@ -154,7 +142,10 @@
     
     <!-- Action Buttons -->
     <div class="flex justify-center">
-      <%= link_to "View Available Plans", plans_subscription_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg" %>
+      <%= link_to plans_subscription_path, class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition" do %>
+        <i class="fa-solid fa-crown mr-2"></i>
+        View Available Plans
+      <% end %>
     </div>
   </div>
 </div>
