@@ -10,9 +10,9 @@
         <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Income Sources</h1>
         <p class="mt-1 text-sm text-white/70">Track all your income streams to get an accurate financial picture.</p>
       </div>
-      <%= link_to new_income_source_path, class: "inline-flex items-center px-5 py-2.5 rounded-2xl text-sm font-semibold bg-white/20 text-white border border-white/30 hover:bg-white/30 transition" do %>
+      <a href="<%= new_income_source_path %>" class="inline-flex items-center px-5 py-2.5 rounded-2xl text-sm font-semibold bg-white/20 text-white border border-white/30 hover:bg-white/30 transition">
         <i class="fa-solid fa-plus mr-2"></i> Add Income Source
-      <% end %>
+      </a>
     </div>
   </div>
 
@@ -63,12 +63,16 @@
                 <% end %>
               </div>
               <div class="flex gap-2">
-                <%= link_to edit_income_source_path(source), class: "p-2 rounded-xl hover:bg-brand-700/50 text-brand-400 hover:text-brand-200 transition" do %>
+                <a href="<%= edit_income_source_path(source) %>" class="p-2 rounded-xl hover:bg-brand-700/50 text-brand-400 hover:text-brand-200 transition">
                   <i class="fa-solid fa-pen text-sm"></i>
-                <% end %>
-                <%= link_to income_source_path(source), data: { turbo_method: :delete, turbo_confirm: "Remove #{source.name}?" }, class: "p-2 rounded-xl hover:bg-red-900/40 text-brand-400 hover:text-red-300 transition" do %>
-                  <i class="fa-solid fa-trash text-sm"></i>
-                <% end %>
+                </a>
+                <form action="<%= income_source_path(source) %>" method="post" data-turbo-confirm="Remove <%= source.name %>?" style="display:inline">
+                  <%= hidden_field_tag :_method, :delete %>
+                  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                  <button type="submit" class="p-2 rounded-xl hover:bg-red-900/40 text-brand-400 hover:text-red-300 transition border-0 bg-transparent cursor-pointer">
+                    <i class="fa-solid fa-trash text-sm"></i>
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -81,9 +85,9 @@
         </div>
         <h3 class="text-lg font-semibold text-brand-100 mb-2">No income sources yet</h3>
         <p class="text-brand-400 mb-6 max-w-sm mx-auto">Add your salary, business income, side hustles, and allowances to get an accurate financial picture.</p>
-        <%= link_to new_income_source_path, class: "inline-flex items-center px-6 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition" do %>
+        <a href="<%= new_income_source_path %>" class="inline-flex items-center px-6 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition">
           <i class="fa-solid fa-plus mr-2"></i> Add Your First Income Source
-        <% end %>
+        </a>
       </div>
     <% end %>
   </div>

@@ -1,4 +1,4 @@
-<%= form_with model: income_source, class: "space-y-5" do |f| %>
+<% form_with model: income_source, class: "space-y-5" do |f| %>
   <% if income_source.errors.any? %>
     <div class="bg-red-900/30 border border-red-700/40 text-red-300 rounded-xl px-4 py-3 text-sm">
       <ul class="list-disc list-inside space-y-1">
@@ -11,29 +11,23 @@
 
   <div>
     <%= f.label :name, "Source Name", class: "block text-sm font-medium text-brand-300 mb-1" %>
-    <%= f.text_field :name, placeholder: "e.g. Salary, Freelance, Rental Income",
-        class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+    <%= f.text_field :name, placeholder: "e.g. Salary, Freelance, Rental Income", class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
   </div>
 
   <div class="grid grid-cols-2 gap-4">
     <div>
       <%= f.label :amount, "Amount (ZMW)", class: "block text-sm font-medium text-brand-300 mb-1" %>
-      <%= f.number_field :amount, step: 0.01, min: 0, placeholder: "0.00",
-          class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
+      <%= f.number_field :amount, step: 0.01, min: 0, placeholder: "0.00", class: "w-full bg-brand-800/60 border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" %>
     </div>
     <div>
       <%= f.label :frequency, "Frequency", class: "block text-sm font-medium text-brand-300 mb-1" %>
-      <%= f.select :frequency,
-          options_for_select([["Monthly", "monthly"], ["Weekly", "weekly"], ["Bi-weekly", "biweekly"], ["Quarterly", "quarterly"], ["Annually", "annually"]], income_source.frequency),
-          {},
-          class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+      <%= f.select :frequency, options_for_select([["Monthly", "monthly"], ["Weekly", "weekly"], ["Bi-weekly", "biweekly"], ["Quarterly", "quarterly"], ["Annually", "annually"]], income_source.frequency), {}, class: "w-full bg-brand-800/60 border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" %>
     </div>
   </div>
 
   <div>
     <%= f.label :notes, "Notes (optional)", class: "block text-sm font-medium text-brand-300 mb-1" %>
-    <%= f.text_area :notes, rows: 2, placeholder: "e.g. Company name, payment date...",
-        class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" %>
+    <%= f.text_area :notes, rows: 2, placeholder: "e.g. Company name, payment date...", class: "w-full bg-brand-800/60 border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" %>
   </div>
 
   <div class="flex items-center gap-3">
@@ -42,8 +36,8 @@
   </div>
 
   <div class="flex gap-3 pt-2">
-    <%= f.submit income_source.new_record? ? "Add Income Source" : "Save Changes",
-        class: "flex-1 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer" %>
+    <% submit_label = income_source.new_record? ? "Add Income Source" : "Save Changes" %>
+    <%= f.submit submit_label, class: "flex-1 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer" %>
     <%= link_to "Cancel", income_sources_path, class: "px-6 py-3 rounded-2xl text-sm font-semibold border border-brand-600/40 text-brand-300 hover:bg-brand-800/50 transition" %>
   </div>
 <% end %>
