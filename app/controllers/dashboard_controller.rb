@@ -1,7 +1,11 @@
 class DashboardController < ApplicationController
   def index
     if params[:month].present?
-      selected = Date.strptime(params[:month], '%Y-%m') rescue Date.current
+      selected = begin
+        Date.strptime(params[:month], '%Y-%m')
+      rescue StandardError
+        Date.current
+      end
       start_date = selected.beginning_of_month
       end_date = selected.end_of_month
     else
@@ -24,6 +28,12 @@ class DashboardController < ApplicationController
   end
 
   def assign_presenter_variables
+    assign_financial_variables
+    assign_portfolio_variables
+    @budget_alerts = build_budget_alerts
+  end
+
+  def assign_financial_variables
     @start_date = @presenter.start_date
     @end_date = @presenter.end_date
     @date_range = @presenter.date_range
@@ -37,6 +47,11 @@ class DashboardController < ApplicationController
     @bnnb_comparison = @presenter.bnnb_comparison
     @active_goals = @presenter.active_goals
     @goals_progress = @presenter.goals_progress
+    @financial_insights = @presenter.financial_insights
+    @monthly_spending_trend = @presenter.monthly_spending_trend
+  end
+
+  def assign_portfolio_variables
     @investments = @presenter.investments
     @total_invested = @presenter.total_invested
     @investment_return = @presenter.investment_return
@@ -44,9 +59,6 @@ class DashboardController < ApplicationController
     @upcoming_recurring = @presenter.upcoming_recurring
     @recent_payments = @presenter.recent_payments
     @latest_economic_data = @presenter.latest_economic_data
-    @monthly_spending_trend = @presenter.monthly_spending_trend
-    @financial_insights = @presenter.financial_insights
-    @budget_alerts = build_budget_alerts
   end
 
   def build_budget_alerts
@@ -59,9 +71,9 @@ class DashboardController < ApplicationController
       .group(:category_id)
       .sum(:amount)
 
-    budgets.filter_map do |budget|
+    alert_rows = budgets.filter_map do |budget|
       spent = spending_by_category[budget.category_id] || 0
-      pct = budget.monthly_limit > 0 ? (spent.to_f / budget.monthly_limit * 100).round(2) : 0
+      pct = budget.monthly_limit.positive? ? (spent.to_f / budget.monthly_limit * 100).round(2) : 0
       next if pct < 80
 
       {
@@ -71,6 +83,7 @@ class DashboardController < ApplicationController
         pct: pct,
         overspent_by: [spent - budget.monthly_limit, 0].max
       }
-    end.sort_by { |b| -b[:pct] }
+    end
+    alert_rows.sort_by { |b| -b[:pct] }
   end
 end

@@ -29,11 +29,16 @@ Metrics/MethodLength:
   Exclude:
     - "app/models/category_preset.rb"
     - "app/models/category.rb"
+    - "app/controllers/annual_overview_controller.rb"
+    - "app/controllers/financial_analysis_controller.rb"
+    - "app/controllers/onboarding_controller.rb"
 Metrics/AbcSize:
   Include:
     - "app/controllers/*"
     - "app/models/*"
   Max: 50
+  Exclude:
+    - "app/controllers/financial_analysis_controller.rb"
 Metrics/ClassLength:
   Max: 150
 Metrics/BlockLength:

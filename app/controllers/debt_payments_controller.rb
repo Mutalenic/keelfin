@@ -6,7 +6,8 @@ class DebtPaymentsController < ApplicationController
     @debt_payment = @debt.debt_payments.new(debt_payment_params)
 
     if @debt_payment.save
-      redirect_to debt_path(@debt), notice: "Payment of K#{number_with_precision(@debt_payment.amount, precision: 2)} recorded."
+      redirect_to debt_path(@debt),
+                  notice: "Payment of K#{number_with_precision(@debt_payment.amount, precision: 2)} recorded."
     else
       redirect_to debt_path(@debt), alert: 'Could not record payment. Please check the details.'
     end

@@ -16,8 +16,8 @@ class BudgetAlertMailer < ApplicationMailer
     overspent = budget_data.count { |b| b[:pct] >= 100 }
     near = budget_data.count { |b| b[:pct] >= 80 && b[:pct] < 100 }
     parts = []
-    parts << "#{overspent} budget#{'s' if overspent > 1} exceeded" if overspent > 0
-    parts << "#{near} budget#{'s' if near > 1} near limit" if near > 0
+    parts << "#{overspent} budget#{'s' if overspent > 1} exceeded" if overspent.positive?
+    parts << "#{near} budget#{'s' if near > 1} near limit" if near.positive?
     parts.join(', ')
   end
 end

@@ -4,18 +4,16 @@ class PaymentsController < ApplicationController
   before_action :authorize_payment, only: %i[show edit update destroy]
 
   def create_global
-    category = current_user.categories.find_by(id: params[:payment][:category_id])
-    unless category
-      return redirect_back fallback_location: root_path, alert: 'Please select a valid category.'
-    end
+    category = current_user.categories.find_by(id: params.dig(:payment, :category_id))
+    return redirect_back_or_to(root_path, alert: 'Please select a valid category.') unless category
 
     @payment = category.payments.new(global_payment_params)
     @payment.user = current_user
 
     if @payment.save
-      redirect_back fallback_location: root_path, notice: 'Transaction added successfully.'
+      redirect_back_or_to(root_path, notice: 'Transaction added successfully.')
     else
-      redirect_back fallback_location: root_path, alert: @payment.errors.full_messages.to_sentence
+      redirect_back_or_to(root_path, alert: @payment.errors.full_messages.to_sentence)
     end
   end
 
@@ -104,7 +102,7 @@ class PaymentsController < ApplicationController
       headers.insert(2, 'Category') if include_category
       csv << headers
 
-      payments.each do |p|
+      payments.find_each do |p|
         row = [
           p.created_at.strftime('%Y-%m-%d'),
           p.name,

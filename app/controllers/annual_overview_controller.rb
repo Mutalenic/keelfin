@@ -16,7 +16,7 @@ class AnnualOverviewController < ApplicationController
 
   def build_monthly_data
     @months.map do |month|
-      period = month.beginning_of_month..month.end_of_month
+      period = month.all_month
 
       income = if @income_sources.any?
                  @income_sources.sum(&:monthly_equivalent)

@@ -63,7 +63,7 @@ class DpoPayService
           <Service>
             <ServiceType>3854</ServiceType>
             <ServiceDescription>Keelfin #{@plan_name.capitalize} Plan — 1 month</ServiceDescription>
-            <ServiceDate>#{Date.current.strftime('%Y/%m/%d %H:%M')}</ServiceDate>
+            <ServiceDate>#{Time.current.strftime('%Y/%m/%d %H:%M')}</ServiceDate>
           </Service>
         </Services>
       </API3G>

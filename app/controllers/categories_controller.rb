@@ -85,10 +85,10 @@ class CategoriesController < ApplicationController
   end
 
   def load_bnnb_comparison
-    return unless @category.bnnb_mapping.present?
+    return if @category.bnnb_mapping.blank?
 
     @bnnb_data = BnnbData.latest
-    return unless @bnnb_data&.item_breakdown.present?
+    return if @bnnb_data&.item_breakdown.blank?
 
     breakdown = @bnnb_data.item_breakdown
     key = @category.bnnb_mapping.downcase

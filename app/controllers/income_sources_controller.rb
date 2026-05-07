@@ -10,6 +10,8 @@ class IncomeSourcesController < ApplicationController
     @income_source = current_user.income_sources.new
   end
 
+  def edit; end
+
   def create
     @income_source = current_user.income_sources.new(income_source_params)
 
@@ -19,8 +21,6 @@ class IncomeSourcesController < ApplicationController
       render :new, status: :unprocessable_content
     end
   end
-
-  def edit; end
 
   def update
     if @income_source.update(income_source_params)

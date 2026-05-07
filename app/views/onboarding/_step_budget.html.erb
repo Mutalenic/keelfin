@@ -17,7 +17,7 @@
         <% current_user.categories.each do |category| %>
           <div class="flex items-center p-4 border border-brand-700/30 rounded-xl hover:border-brand-600/50 transition-colors bg-brand-800/40">
             <div class="w-10 h-10 rounded-lg flex items-center justify-center mr-4" style="background-color: <%= category.color %>30;">
-              <i class="<%= category.icon_name || 'fa-solid fa-tag' %> text-sm" style="color: <%= category.color %);"></i>
+              <i class="<%= category.icon_name || 'fa-solid fa-tag' %> text-sm" style="color: <%= category.color %>;"></i>
             </div>
             <div class="flex-1">
               <p class="text-sm font-medium text-brand-100"><%= category.name %></p>

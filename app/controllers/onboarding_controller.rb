@@ -15,6 +15,7 @@ class OnboardingController < ApplicationController
       if params[:income_sources].present?
         params[:income_sources].each do |source|
           next if source[:name].blank? || source[:amount].blank? || source[:amount].to_f <= 0
+
           current_user.income_sources.create(
             name: source[:name],
             amount: source[:amount].to_f,

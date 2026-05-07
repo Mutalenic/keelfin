@@ -2,7 +2,7 @@ class SendBudgetAlertsJob < ApplicationJob
   queue_as :default
 
   def perform
-    User.joins(:budgets).distinct.each do |user|
+    User.joins(:budgets).distinct.find_each do |user|
       budget_data = build_budget_data(user)
       next if budget_data.empty?
 
@@ -26,7 +26,7 @@ class SendBudgetAlertsJob < ApplicationJob
 
     user.budgets.includes(:category).filter_map do |budget|
       spent = spending[budget.category_id] || 0
-      pct = budget.monthly_limit > 0 ? (spent.to_f / budget.monthly_limit * 100).round(2) : 0
+      pct = budget.monthly_limit.positive? ? (spent.to_f / budget.monthly_limit * 100).round(2) : 0
       next if pct < 80
 
       {

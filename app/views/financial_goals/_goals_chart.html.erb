@@ -51,7 +51,7 @@
                   <% pct = goal.progress_percentage %>
                   <div class="flex items-center">
                     <div class="w-full bg-brand-800 rounded-full h-2.5 mr-2 w-24">
-                      <div class="bg-brand-400 h-2.5 rounded-full" style="width: <%= pct %>"></div>
+                      <div class="bg-brand-400 h-2.5 rounded-full" style="width: <%= [[pct.to_f, 0].max, 100].min %>%"></div>
                     </div>
                     <span class="text-sm font-medium text-brand-200"><%= pct %>&#37;</span>
                   </div>
