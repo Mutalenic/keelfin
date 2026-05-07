@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
+
   protect_from_forgery prepend: true
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -25,7 +27,8 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:name, :email, :password, :monthly_income) }
     devise_parameter_sanitizer.permit(:account_update) do |u|
-      u.permit(:name, :email, :password, :current_password, :monthly_income, :phone_number, :currency)
+      u.permit(:name, :email, :password, :current_password, :monthly_income, :phone_number, :currency,
+               :opening_balance, :balance_as_of)
     end
   end
 

@@ -1,48 +1,78 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between p-5">
-    <li>
-      <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
-    </li>
-    <li>
-      <h1 class="text-xl text-center uppercase">transactions</h1>
-    </li>
-    <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
-    </li>
-  </ul>
-</nav>
-<div class="card">
-   <div class="card-body">
-      <% if @payments.blank? %>
-         <p>No Payments yet </p>
-      <% else %>
-      <div >
-         
-           <div class="items-start p-3">
-            <h1><%= @category.name %></h1>
-            </div>
-                  <hr />
-         <ul>
-            <% @payments.each do |payment| %>
-               <li class="flex justify-between align-center shadow-lg hover:bg-[#C576F6] border p-4 flex mb-6">
-                  <a><%= payment.name %></a>
-                  <a>K<%= payment.amount %></a>
-      
-               </li>
-            <% end %>
-         </ul>
-          <hr />
-      </div>
-      <% end %>
-      <div class="text-left px-3 mt-6">
-         <p>Total Amount</p>
-         <p>K<%= @total_amount %></p>
-      </div>
-   </div>
-</div>
+<% content_for(:page_title) { @category.name } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div>
-  <button class=" w-full bg-[#5fb523] text-white p-3 ">
-    <%= link_to "Add Transaction", new_category_payment_path %>
-  </button>
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, <%= @category.color || '#059669' %> 0%, #022c22 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Transactions</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight"><%= @category.name %></h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          All payments recorded under this category.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to new_category_payment_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-gray-800 shadow-lg shadow-white/20" do %>
+          <i class="fa-solid fa-plus mr-2"></i>
+          Add transaction
+        <% end %>
+        <%= link_to export_category_payments_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-file-csv mr-2"></i>
+          Export CSV
+        <% end %>
+        <%= link_to category_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back to category
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary Card -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(5,150,105,0.95) 0%, rgba(4,120,87,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-brand-100/70">Total spent</p>
+      <p class="text-3xl font-semibold mt-3">K<%= number_with_precision(@total_amount, precision: 2) %></p>
+      <p class="text-xs text-brand-100/70 mt-1"><%= @payments.size %> transactions</p>
+    </div>
+  </div>
+
+  <!-- Transactions Table -->
+  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
+    <% if @payments.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-brand-700/30 text-sm">
+          <thead>
+            <tr class="text-left text-brand-400 uppercase text-xs tracking-wider">
+              <th class="px-6 py-3">Date</th>
+              <th class="px-6 py-3">Description</th>
+              <th class="px-6 py-3">Method</th>
+              <th class="px-6 py-3">Amount</th>
+              <th class="px-6 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-brand-700/30">
+            <% @payments.each do |payment| %>
+              <tr class="hover:bg-brand-800/40 transition">
+                <td class="px-6 py-4 text-brand-400"><%= payment.created_at.strftime('%b %d, %Y') %></td>
+                <td class="px-6 py-4"><%= payment.name %></td>
+                <td class="px-6 py-4 text-brand-300"><%= payment.payment_method&.titleize || 'N/A' %></td>
+                <td class="px-6 py-4 font-semibold text-brand-100">K<%= number_with_precision(payment.amount, precision: 2) %></td>
+                <td class="px-6 py-4 text-right">
+                  -
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="text-center py-12 bg-brand-800/50 rounded-2xl border border-dashed border-brand-700/30">
+        <p class="text-brand-300 mb-4">No transactions recorded yet.</p>
+      </div>
+    <% end %>
+  </div>
 </div>

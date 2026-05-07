@@ -5,7 +5,7 @@
                               radial-gradient(circle at 20% 75%, rgba(249,115,22,0.18) 0, transparent 40%);"></div>
 
   <div class="relative max-w-3xl mx-auto px-4 py-12">
-    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-8">
+    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-8">
       <!-- Progress Steps -->
       <div class="mb-10">
         <div class="flex items-center justify-center space-x-4">
@@ -18,9 +18,9 @@
                 <%= if completed
                       'bg-emerald-500 text-white'
                     elsif active
-                      'bg-brand-600 text-white ring-4 ring-brand-100'
+                      'bg-brand-600 text-white ring-4 ring-brand-700/50'
                     else
-                      'bg-gray-200 text-gray-500'
+                      'bg-brand-800 text-brand-500'
                     end %>">
                 <% if completed %>
                   <i class="fa-solid fa-check text-sm"></i>
@@ -28,10 +28,10 @@
                   <%= index + 1 %>
                 <% end %>
               </div>
-              <span class="ml-2 text-sm font-medium <%= active ? 'text-brand-700' : 'text-gray-500' %>"><%= step_label %></span>
+              <span class="ml-2 text-sm font-medium <%= active ? 'text-brand-300' : 'text-brand-500' %>"><%= step_label %></span>
             </div>
             <% unless index == steps.length - 1 %>
-              <div class="w-16 h-0.5 <%= completed ? 'bg-emerald-500' : 'bg-gray-200' %>"></div>
+              <div class="w-16 h-0.5 <%= completed ? 'bg-emerald-500' : 'bg-brand-800' %>"></div>
             <% end %>
           <% end %>
         </div>
@@ -44,8 +44,6 @@
         <%= render 'onboarding/step_categories' %>
       <% when :budget %>
         <%= render 'onboarding/step_budget' %>
-      <% when :complete %>
-        <script>window.location.href = '<%= onboarding_complete_path %>';</script>
       <% end %>
     </div>
   </div>

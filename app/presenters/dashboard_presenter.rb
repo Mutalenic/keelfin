@@ -36,6 +36,14 @@ class DashboardPresenter
     @projected_balance ||= user.projected_month_end_balance
   end
 
+  def actual_balance
+    @actual_balance ||= user.actual_balance
+  end
+
+  def total_monthly_income
+    @total_monthly_income ||= user.total_monthly_income
+  end
+
   # --- External services (memoized so each is called once) ---
 
   def debt_analysis
@@ -71,7 +79,7 @@ class DashboardPresenter
   end
 
   def total_invested
-    @total_invested ||= investments.sum(:current_value)
+    @total_invested ||= user.investments.active.sum(:current_value)
   end
 
   def investment_return

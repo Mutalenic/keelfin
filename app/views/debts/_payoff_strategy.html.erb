@@ -1,0 +1,97 @@
+<% 
+  active_debts = @debts.select { |d| d.status == 'active' && d.remaining_balance > 0 }
+  return if active_debts.empty?
+
+  # Avalanche: highest interest rate first
+  avalanche = active_debts.sort_by { |d| -(d.interest_rate || 0) }
+  # Snowball: lowest balance first
+  snowball = active_debts.sort_by { |d| d.remaining_balance }
+%>
+
+<div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-10 h-10 rounded-2xl bg-brand-700/60 flex items-center justify-center flex-shrink-0">
+      <i class="fa-solid fa-arrow-trend-down text-brand-300"></i>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold text-brand-100">Payoff Strategies</h2>
+      <p class="text-xs text-brand-400">Two proven methods to eliminate your debt faster</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Avalanche Method -->
+    <div class="bg-brand-800/50 border border-brand-700/30 rounded-2xl p-5">
+      <div class="flex items-center gap-2 mb-1">
+        <i class="fa-solid fa-fire text-red-400 text-sm"></i>
+        <h3 class="font-semibold text-brand-100 text-sm">Avalanche Method</h3>
+        <span class="ml-auto text-xs bg-red-900/40 text-red-300 border border-red-700/30 px-2 py-0.5 rounded-full">Saves most interest</span>
+      </div>
+      <p class="text-xs text-brand-400 mb-4">Pay minimums on all debts, then throw extra money at the <strong class="text-brand-300">highest interest rate</strong> first.</p>
+      <ol class="space-y-2">
+        <% avalanche.each_with_index do |debt, i| %>
+          <li class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-red-800/40 border border-red-700/30 text-red-300 text-xs font-bold flex items-center justify-center flex-shrink-0"><%= i + 1 %></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-brand-200 truncate"><%= debt.lender_name %></p>
+              <p class="text-xs text-brand-500">K<%= number_with_precision(debt.remaining_balance, precision: 0, delimiter: ',') %> remaining
+                <% if debt.interest_rate&.positive? %> · <%= debt.interest_rate %>% p.a.<% end %>
+              </p>
+            </div>
+            <% if i == 0 %>
+              <span class="text-xs text-red-400 font-semibold flex-shrink-0">Attack first</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ol>
+    </div>
+
+    <!-- Snowball Method -->
+    <div class="bg-brand-800/50 border border-brand-700/30 rounded-2xl p-5">
+      <div class="flex items-center gap-2 mb-1">
+        <i class="fa-solid fa-snowflake text-blue-400 text-sm"></i>
+        <h3 class="font-semibold text-brand-100 text-sm">Snowball Method</h3>
+        <span class="ml-auto text-xs bg-blue-900/40 text-blue-300 border border-blue-700/30 px-2 py-0.5 rounded-full">Fastest wins</span>
+      </div>
+      <p class="text-xs text-brand-400 mb-4">Pay minimums on all debts, then target the <strong class="text-brand-300">smallest balance</strong> first for quick psychological wins.</p>
+      <ol class="space-y-2">
+        <% snowball.each_with_index do |debt, i| %>
+          <li class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-full bg-blue-800/40 border border-blue-700/30 text-blue-300 text-xs font-bold flex items-center justify-center flex-shrink-0"><%= i + 1 %></span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-brand-200 truncate"><%= debt.lender_name %></p>
+              <p class="text-xs text-brand-500">K<%= number_with_precision(debt.remaining_balance, precision: 0, delimiter: ',') %> remaining</p>
+            </div>
+            <% if i == 0 %>
+              <span class="text-xs text-blue-400 font-semibold flex-shrink-0">Attack first</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ol>
+    </div>
+  </div>
+
+  <% total_monthly = active_debts.sum { |d| d.monthly_payment.to_f } %>
+  <% total_remaining = active_debts.sum(&:remaining_balance) %>
+  <% if total_monthly > 0 %>
+    <div class="mt-5 pt-5 border-t border-brand-700/30 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center text-sm">
+      <div>
+        <p class="text-xs text-brand-500 uppercase tracking-wide">Active debts</p>
+        <p class="font-bold text-brand-200 mt-1"><%= active_debts.size %></p>
+      </div>
+      <div>
+        <p class="text-xs text-brand-500 uppercase tracking-wide">Total remaining</p>
+        <p class="font-bold text-red-400 mt-1">K<%= number_with_precision(total_remaining, precision: 0, delimiter: ',') %></p>
+      </div>
+      <div>
+        <p class="text-xs text-brand-500 uppercase tracking-wide">Monthly payments</p>
+        <p class="font-bold text-brand-200 mt-1">K<%= number_with_precision(total_monthly, precision: 0, delimiter: ',') %></p>
+      </div>
+      <div>
+        <p class="text-xs text-brand-500 uppercase tracking-wide">Est. months to clear</p>
+        <% months_est = total_monthly > 0 ? (total_remaining / total_monthly).ceil : '—' %>
+        <p class="font-bold text-brand-200 mt-1"><%= months_est %></p>
+      </div>
+    </div>
+  <% end %>
+</div>

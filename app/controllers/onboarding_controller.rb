@@ -3,13 +3,27 @@ class OnboardingController < ApplicationController
 
   def show
     @step = determine_step
+    return redirect_to onboarding_complete_path if @step == :complete
+
     @category_presets = CategoryPreset.ordered if @step == :categories
   end
 
   def update
     case params[:step]
     when 'income'
-      current_user.update(monthly_income: params[:monthly_income])
+      current_user.update(monthly_income: params[:monthly_income]) if params[:monthly_income].present?
+      if params[:income_sources].present?
+        params[:income_sources].each do |source|
+          next if source[:name].blank? || source[:amount].blank? || source[:amount].to_f <= 0
+
+          current_user.income_sources.create(
+            name: source[:name],
+            amount: source[:amount].to_f,
+            frequency: source[:frequency] || 'monthly',
+            active: true
+          )
+        end
+      end
       redirect_to onboarding_path(step: 'categories')
     when 'categories'
       create_categories_from_presets

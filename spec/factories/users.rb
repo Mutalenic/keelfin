@@ -7,6 +7,7 @@ FactoryBot.define do
     password { 'password123' }
     monthly_income { 10_000 }
     role { 'user' }
+    confirmed_at { Time.current }
 
     trait :admin do
       role { 'admin' }

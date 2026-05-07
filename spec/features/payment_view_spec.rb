@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'payment/index', type: :feature do
-  let(:user) { User.create(name: 'John Doe', email: 'jgokp@tmail.com', password: 'password') }
+  let(:user) do
+    User.create(name: 'John Doe', email: 'jgokp@tmail.com', password: 'password', confirmed_at: Time.current)
+  end
   let(:category) { Category.create(name: 'Test Category', icon: 'user.png', user_id: user.id) }
   let(:payment) { Payment.create(name: 'Test Payment', amount: 100, user_id: user.id, category_id: category.id) }
 

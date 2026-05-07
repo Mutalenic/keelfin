@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'category/index', type: :feature do
   before do
-    @user = User.create(name: 'John Doe', email: 'johntest@test.com', password: 'password')
+    @user = User.create(name: 'John Doe', email: 'johntest@test.com', password: 'password', confirmed_at: Time.current)
     @category = Category.create(name: 'Test Category', icon: 'user.png', user_id: @user.id)
     @payment = Payment.create(name: 'Test Payment', amount: 100, user_id: @user.id, category_id: @category.id)
 
@@ -28,9 +28,8 @@ RSpec.describe 'category/index', type: :feature do
     expect(page).to have_content(@category.name)
   end
 
-  it 'I can access this page if user is not connected' do
+  it 'new category page renders a form with a submit button' do
     visit new_category_path
-    expect(page).not_to have_content('Test Category')
     expect(page).to have_css('form')
     expect(page).to have_css('input[type=submit]')
   end

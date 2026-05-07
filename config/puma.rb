@@ -33,7 +33,7 @@ if ENV.fetch("RAILS_ENV") { "development" } == "production"
   stdout_redirect "/home/deploy/keelfin/shared/log/puma.stdout.log", "/home/deploy/keelfin/shared/log/puma.stderr.log", true
 else
   # Development configuration
-  port ENV.fetch("PORT") { 3000 }
+  bind "tcp://localhost:#{ENV.fetch('PORT') { 3000 }}"
   pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 end
 

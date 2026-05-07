@@ -1,0 +1,11 @@
+<% content_for :page_title, "Add Income Source" %>
+
+<div class="max-w-lg mx-auto">
+  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-brand-100">Add Income Source</h2>
+      <p class="text-sm text-brand-400 mt-1">Add a salary, business income, side hustle, or any other income stream.</p>
+    </div>
+    <%= render 'form', income_source: @income_source %>
+  </div>
+</div>

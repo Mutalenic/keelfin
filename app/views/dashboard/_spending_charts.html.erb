@@ -1,54 +1,55 @@
-<div class="bg-white rounded-lg shadow p-6 mb-6">
+<div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-semibold">Spending Analytics</h2>
+    <h2 class="text-xl font-semibold text-brand-100">Spending Analytics</h2>
     <div class="flex space-x-2">
-      <button id="view-as-chart" class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg hover:bg-blue-200">
+      <button id="view-as-chart" class="bg-brand-800 text-brand-300 px-3 py-1 rounded-xl hover:bg-brand-700 border border-brand-700/50">
         <i class="fa-solid fa-chart-bar mr-1"></i> Chart
       </button>
-      <button id="view-as-table" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
+      <button id="view-as-table" class="bg-brand-800 text-brand-300 px-3 py-1 rounded-xl hover:bg-brand-700 border border-brand-700/50">
         <i class="fa-solid fa-table mr-1"></i> Table
       </button>
     </div>
   </div>
-  
+
   <div id="spending-chart" class="mb-6">
     <!-- Chart will be rendered here -->
     <div class="h-64">
       <canvas id="spending-by-category-chart"></canvas>
     </div>
   </div>
-  
+
   <script>
     // Make spending by category data available to the charts.js script
-    const spendingByCategoryData = <%= raw @spending_by_category.to_json %>;
+    const spendingByCategoryData = <%= json_escape(@spending_by_category.to_json) %>;
   </script>
-  
+
   <div id="spending-table" class="hidden">
     <% if @spending_by_category.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-brand-700/30">
+          <thead class="bg-brand-800/60">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Percentage</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="divide-y divide-brand-700/30">
             <% @spending_by_category.each do |category, amount| %>
-              <tr>
+              <% cat_pct = @total_spending > 0 ? (amount / @total_spending * 100).round(1) : 0 %>
+              <tr class="hover:bg-brand-800/40">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900"><%= category %></div>
+                  <div class="text-sm font-medium text-brand-100"><%= category %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium">K<%= number_with_precision(amount, precision: 2) %></div>
+                  <div class="text-sm font-medium text-brand-100">K<%= number_with_precision(amount, precision: 2) %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2 w-24">
-                      <div class="bg-blue-600 h-2.5 rounded-full" style="width: <%= (amount / @total_spending * 100).round(1) %>%"></div>
+                    <div class="w-full bg-brand-800 rounded-full h-2.5 mr-2 w-24">
+                      <div class="bg-brand-400 h-2.5 rounded-full" style="width: <%= cat_pct %>%"></div>
                     </div>
-                    <span class="text-sm font-medium"><%= number_with_precision((amount / @total_spending * 100), precision: 1) %>%</span>
+                    <span class="text-sm font-medium text-brand-200"><%= number_with_precision(cat_pct, precision: 1) %>%</span>
                   </div>
                 </td>
               </tr>
@@ -57,35 +58,40 @@
         </table>
       </div>
     <% else %>
-      <p class="text-gray-500 text-center py-4">No spending data available</p>
+      <p class="text-brand-400 text-center py-4">No spending data available</p>
     <% end %>
   </div>
 </div>
 
+<%
+  btn_active   = "bg-brand-600 text-white border-brand-500"
+  btn_inactive = "bg-brand-800 text-brand-300 border-brand-700/50"
+%>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const chartButton = document.getElementById('view-as-chart');
-    const tableButton = document.getElementById('view-as-table');
-    const chartDiv = document.getElementById('spending-chart');
-    const tableDiv = document.getElementById('spending-table');
-    
+    var chartButton = document.getElementById('view-as-chart');
+    var tableButton = document.getElementById('view-as-table');
+    var chartDiv    = document.getElementById('spending-chart');
+    var tableDiv    = document.getElementById('spending-table');
+    var ACTIVE   = "<%= btn_active %>".split(' ');
+    var INACTIVE = "<%= btn_inactive %>".split(' ');
+
     if (chartButton && tableButton && chartDiv && tableDiv) {
       chartButton.addEventListener('click', function() {
         chartDiv.classList.remove('hidden');
         tableDiv.classList.add('hidden');
-        chartButton.classList.remove('bg-gray-100', 'text-gray-700');
-        chartButton.classList.add('bg-blue-100', 'text-blue-700');
-        tableButton.classList.remove('bg-blue-100', 'text-blue-700');
-        tableButton.classList.add('bg-gray-100', 'text-gray-700');
+        INACTIVE.forEach(function(c){ chartButton.classList.remove(c); });
+        ACTIVE.forEach(function(c){   chartButton.classList.add(c); });
+        ACTIVE.forEach(function(c){   tableButton.classList.remove(c); });
+        INACTIVE.forEach(function(c){ tableButton.classList.add(c); });
       });
-      
       tableButton.addEventListener('click', function() {
         chartDiv.classList.add('hidden');
         tableDiv.classList.remove('hidden');
-        chartButton.classList.remove('bg-blue-100', 'text-blue-700');
-        chartButton.classList.add('bg-gray-100', 'text-gray-700');
-        tableButton.classList.remove('bg-gray-100', 'text-gray-700');
-        tableButton.classList.add('bg-blue-100', 'text-blue-700');
+        ACTIVE.forEach(function(c){   chartButton.classList.remove(c); });
+        INACTIVE.forEach(function(c){ chartButton.classList.add(c); });
+        INACTIVE.forEach(function(c){ tableButton.classList.remove(c); });
+        ACTIVE.forEach(function(c){   tableButton.classList.add(c); });
       });
     }
   });

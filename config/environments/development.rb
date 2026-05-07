@@ -1,6 +1,10 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Allow requests from localhost
+  config.hosts << "localhost"
+  config.hosts << "127.0.0.1"
+  
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   
   # Settings specified here will take precedence over those in config/application.rb.

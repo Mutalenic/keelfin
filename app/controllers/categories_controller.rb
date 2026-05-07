@@ -18,6 +18,7 @@ class CategoriesController < ApplicationController
     @total_amount = @category.total_amount
     @monthly_average = @category.monthly_average
     @percentage_of_total = @category.percentage_of_total_spending
+    load_bnnb_comparison
   end
 
   def new
@@ -80,6 +81,18 @@ class CategoriesController < ApplicationController
   private
 
   def category_params
-    params.require(:category).permit(:name, :icon, :description, :color, :icon_name, :category_type)
+    params.require(:category).permit(:name, :icon, :description, :color, :icon_name, :category_type, :bnnb_mapping)
+  end
+
+  def load_bnnb_comparison
+    return if @category.bnnb_mapping.blank?
+
+    @bnnb_data = BnnbData.latest
+    return if @bnnb_data&.item_breakdown.blank?
+
+    breakdown = @bnnb_data.item_breakdown
+    key = @category.bnnb_mapping.downcase
+    raw = breakdown[key] || breakdown.find { |k, _v| k.to_s.downcase == key }&.last
+    @bnnb_benchmark = raw.to_f if raw
   end
 end

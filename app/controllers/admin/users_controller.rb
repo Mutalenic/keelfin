@@ -3,12 +3,13 @@ module Admin
     before_action :set_user, only: %i[show edit update toggle_admin impersonate]
 
     def index
-      @users = User.order(created_at: :desc)
+      users = User.order(created_at: :desc)
       if params[:q].present?
-        @users = @users.where('name ILIKE ? OR email ILIKE ?', "%#{params[:q]}%",
-                              "%#{params[:q]}%")
+        users = users.where('name ILIKE ? OR email ILIKE ?', "%#{params[:q]}%",
+                            "%#{params[:q]}%")
       end
-      @users = @users.where(role: params[:role]) if params[:role].present?
+      users = users.where(role: params[:role]) if params[:role].present?
+      @pagy, @users = pagy(users)
     end
 
     def show

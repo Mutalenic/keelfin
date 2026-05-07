@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     collection do
       get :plans
       post :upgrade
+      post :checkout
+      get :dpo_callback
     end
     member do
       post :cancel
@@ -28,8 +30,16 @@ Rails.application.routes.draw do
   
   get 'dashboard', to: 'dashboard#index'
   get 'coming_soon', to: 'coming_soon#index'
+  get 'annual_overview', to: 'annual_overview#index', as: :annual_overview
+  get 'financial_analysis', to: 'financial_analysis#index', as: :financial_analysis
 
-  resources :debts
+  resources :income_sources
+  
+  post 'payments', to: 'payments#create_global', as: :global_payments
+
+  resources :debts do
+    resources :debt_payments, only: %i[create destroy]
+  end
   resources :budgets
   
   resources :financial_goals do
@@ -54,8 +64,14 @@ Rails.application.routes.draw do
     resources :investment_transactions
   end
   
+  get 'payments/export', to: 'payments#export_all', as: :export_all_payments
+
   resources :categories, only: %i[index new create show edit update destroy] do
-    resources :payments, only: %i[index new create show update destroy]
+    resources :payments, only: %i[index new create show update destroy] do
+      collection do
+        get :export
+      end
+    end
     collection do
       post :add_preset
     end

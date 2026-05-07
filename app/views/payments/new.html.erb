@@ -1,26 +1,36 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between p-5">
-    <li>
-      <%= link_to '', categories_path, class: "text-xl fa-solid fa-arrow-left" %>
-    </li>
-    <li>
-      <h1 class="text-xl text-center uppercase">new transactions</h1>
-    </li>
-    <li>
-      <%= button_to 'Log out', destroy_user_session_path, data: { turbo_method: :delete }, class: "text-white text-l uppercase" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "New Transaction" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="container mx-auto px-4 py-6">
-  <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-    <h1 class="text-2xl font-bold mb-6 text-gray-800">Add New Payment</h1>
-    
-    <%= form_with model: @payment, url: category_payments_path, class: "space-y-4" do |f| %>
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, <%= @category.color || '#4f46e5' %> 0%, #0f172a 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Transactions</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Add New Payment</h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          Record a new payment for <strong><%= @category.name %></strong>.
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to category_payments_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back to transactions
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="rounded-3xl shadow-2xl p-6 sm:p-8 max-w-2xl" style="background:#161b22; border:1px solid #30363d;">
+    <%= form_with(model: @payment, url: category_payments_path(@category), method: :post, class: "space-y-6") do |f| %>
       <% if @payment.errors.any? %>
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          <h2 class="font-bold"><%= pluralize(@payment.errors.count, "error") %> prohibited this payment from being saved:</h2>
-          <ul class="list-disc list-inside">
+        <div class="rounded-2xl p-4" style="background:rgba(248,81,73,0.1); border:1px solid rgba(248,81,73,0.4);">
+          <h2 class="font-semibold mb-2" style="color:#ff7b72;">
+            <%= pluralize(@payment.errors.count, "error") %> prohibited this payment from being saved:
+          </h2>
+          <ul class="list-disc list-inside text-sm" style="color:#ffa198;">
             <% @payment.errors.full_messages.each do |message| %>
               <li><%= message %></li>
             <% end %>
@@ -30,41 +40,47 @@
 
       <!-- Payment Name -->
       <div>
-        <%= f.label :name, "Payment Description", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= f.text_field :name, placeholder: 'e.g., Grocery shopping at Shoprite', class: 'w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+        <%= f.label :name, "Payment Description", class: "block text-sm font-medium mb-2" %>
+        <%= f.text_field :name, placeholder: "e.g., Grocery shopping at Shoprite",
+            class: "w-full px-4 py-3 rounded-xl text-sm" %>
       </div>
 
       <!-- Amount -->
       <div>
-        <%= f.label :amount, "Amount (K)", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= f.label :amount, "Amount (ZMW)", class: "block text-sm font-medium mb-2" %>
         <div class="relative">
-          <span class="absolute left-3 top-3 text-gray-500 font-semibold">K</span>
-          <%= f.number_field :amount, placeholder: '0.00', step: '0.01', min: '0', class: 'w-full p-3 pl-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <span class="font-semibold text-sm" style="color:#8b949e;">K</span>
+          </div>
+          <%= f.number_field :amount, placeholder: "0.00", step: "0.01", min: "0",
+              class: "w-full pl-10 pr-4 py-3 rounded-xl text-sm" %>
         </div>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <%= f.label :created_at, "Transaction Date", class: "block text-sm font-medium mb-2" %>
+        <%= f.date_field :created_at, value: @payment.created_at&.to_date || Date.current,
+            class: "w-full px-4 py-3 rounded-xl text-sm" %>
+        <p class="mt-1 text-xs" style="color:#8b949e;">Set the date the payment was actually made.</p>
       </div>
 
       <!-- Payment Method -->
       <div>
-        <%= f.label :payment_method, "Payment Method", class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= f.label :payment_method, "Payment Method", class: "block text-sm font-medium mb-2" %>
         <%= f.select :payment_method, 
-          [
-            ['Cash', 'cash'],
-            ['MTN MoMo', 'mtn_momo'],
-            ['Airtel Money', 'airtel_money'],
-            ['Bank Transfer/Card', 'bank']
-          ],
-          { include_blank: 'Select payment method' },
-          { class: 'w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500' }
-        %>
+            [['Cash', 'cash'], ['MTN MoMo', 'mtn_momo'], ['Airtel Money', 'airtel_money'], ['Bank Transfer/Card', 'bank']],
+            { include_blank: 'Select payment method' },
+            class: "w-full px-4 py-3 rounded-xl text-sm" %>
       </div>
 
       <!-- Essential Toggle -->
       <div class="flex items-center">
-        <%= f.check_box :is_essential, class: 'w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500' %>
-        <%= f.label :is_essential, "This is an essential expense", class: "ml-2 text-gray-700" %>
+        <%= f.check_box :is_essential, checked: true, class: "h-4 w-4 rounded" %>
+        <%= f.label :is_essential, "This is an essential expense", class: "ml-2 block text-sm" %>
         <div class="ml-2 group relative">
-          <i class="fa-solid fa-circle-info text-gray-400 cursor-help"></i>
-          <div class="hidden group-hover:block absolute left-0 top-6 bg-gray-800 text-white text-xs rounded p-2 w-48 z-10">
+          <i class="fa-solid fa-circle-info cursor-help" style="color:#8b949e;"></i>
+          <div class="hidden group-hover:block absolute left-0 top-6 text-white text-xs rounded p-2 w-48 z-10" style="background:#21262d; border:1px solid #30363d;">
             Essential expenses are necessary for basic living (food, rent, utilities, etc.)
           </div>
         </div>
@@ -72,18 +88,16 @@
 
       <!-- Notes -->
       <div>
-        <%= f.label :notes, "Notes (Optional)", class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= f.text_area :notes, placeholder: 'Add any additional details...', rows: 3, class: 'w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500' %>
+        <%= f.label :notes, "Notes (Optional)", class: "block text-sm font-medium mb-2" %>
+        <%= f.text_area :notes, placeholder: "Add any additional details...", rows: 3,
+            class: "w-full px-4 py-3 rounded-xl text-sm" %>
       </div>
 
       <!-- Submit Button -->
-      <div class="flex gap-3 pt-4">
-        <%= f.submit 'Add Payment', class: 'flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200' %>
-        <%= link_to 'Cancel', category_payments_path(@category), class: 'flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-lg text-center transition duration-200' %>
+      <div class="flex items-center gap-4 pt-2">
+        <%= f.submit "Add Payment", class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition cursor-pointer" %>
+        <a href="<%= category_payments_path(@category) %>" class="inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold transition" style="background:#21262d; color:#8b949e; border:1px solid #30363d;">Cancel</a>
       </div>
     <% end %>
   </div>
 </div>
-
-
-

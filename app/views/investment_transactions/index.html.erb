@@ -1,57 +1,60 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between align-center p-5">
-    <li>
-      <%= link_to '', investment_path(@investment), class: "text-xl fa-solid fa-arrow-left" %>
-    </li>
-    <li>
-      <h1 class="text-xl uppercase">Investment Transactions</h1>
-    </li>
-    <li>
-      <%= link_to '', new_investment_investment_transaction_path(@investment), class: "text-xl fa-solid fa-plus" %>
-    </li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Investment Transactions" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="container mx-auto px-4 py-6">
-  <!-- Investment Header -->
-  <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <div class="flex justify-between items-center">
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 55%, #1e1b4b 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
       <div>
-        <h2 class="text-xl font-semibold"><%= @investment.name %></h2>
-        <p class="text-gray-600"><%= @investment.investment_type_text %></p>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3"><%= @investment.investment_type_text %></p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight"><%= @investment.name %></h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          Transaction history for this investment.
+        </p>
       </div>
-      <div class="text-right">
-        <p class="text-sm text-gray-600">Current Value</p>
-        <p class="text-2xl font-bold">K<%= number_with_precision(@investment.current_value, precision: 2) %></p>
+      <div class="flex items-center gap-3">
+        <%= link_to investment_path(@investment), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back to Investment
+        <% end %>
+        <%= link_to new_investment_investment_transaction_path(@investment), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-cyan-700 shadow-lg shadow-white/20" do %>
+          <i class="fa-solid fa-plus mr-2"></i>
+          New Transaction
+        <% end %>
       </div>
     </div>
   </div>
 
   <!-- Transaction Summary -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-      <h3 class="text-sm text-gray-600 mb-2">Total Contributions</h3>
-      <p class="text-2xl font-bold text-green-600">K<%= number_with_precision(@total_contributions, precision: 2) %></p>
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(16,185,129,0.9) 0%, rgba(5,150,105,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Contributions</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@total_contributions, precision: 2) %></p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
-      <h3 class="text-sm text-gray-600 mb-2">Total Withdrawals</h3>
-      <p class="text-2xl font-bold text-red-600">K<%= number_with_precision(@total_withdrawals, precision: 2) %></p>
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(239,68,68,0.9) 0%, rgba(220,38,38,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Withdrawals</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@total_withdrawals, precision: 2) %></p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-      <h3 class="text-sm text-gray-600 mb-2">Total Income</h3>
-      <p class="text-2xl font-bold text-blue-600">K<%= number_with_precision(@total_income, precision: 2) %></p>
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(59,130,246,0.9) 0%, rgba(37,99,235,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Income</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@total_income, precision: 2) %></p>
     </div>
-    
-    <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-500">
-      <h3 class="text-sm text-gray-600 mb-2">Total Fees</h3>
-      <p class="text-2xl font-bold text-yellow-600">K<%= number_with_precision(@total_fees, precision: 2) %></p>
+
+    <div class="rounded-2xl border border-white/15 backdrop-blur-xl p-5 text-white shadow-lg"
+         style="background: linear-gradient(150deg, rgba(251,191,36,0.9) 0%, rgba(245,158,11,0.85) 100%);">
+      <p class="text-xs uppercase tracking-wide text-white/60">Fees</p>
+      <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@total_fees, precision: 2) %></p>
     </div>
   </div>
 
   <!-- Filters -->
-  <div class="bg-white rounded-lg shadow p-6 mb-6">
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <h3 class="text-lg font-medium mb-4">Filter Transactions</h3>
     
     <%= form_with url: investment_investment_transactions_path(@investment), method: :get, class: "flex flex-wrap gap-4" do |f| %>
@@ -82,19 +85,25 @@
       </div>
       
       <div class="flex items-end">
-        <%= f.submit "Apply Filters", class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+        <%= f.submit "Apply Filters", class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-cyan-600 text-white shadow hover:bg-cyan-500 transition" %>
         <% if params[:type].present? || params[:start_date].present? || params[:end_date].present? %>
-          <%= link_to "Clear Filters", investment_investment_transactions_path(@investment), class: "ml-2 text-gray-600 hover:text-gray-800" %>
+          <%= link_to "Clear", investment_investment_transactions_path(@investment), class: "ml-2 text-gray-500 hover:text-gray-700" %>
         <% end %>
       </div>
     <% end %>
   </div>
 
   <!-- Transactions List -->
-  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-xl font-semibold">Transactions</h2>
-      <%= link_to "Add New Transaction", new_investment_investment_transaction_path(@investment), class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900">Transactions</h2>
+        <p class="text-sm text-gray-500">All transaction history for this investment.</p>
+      </div>
+      <%= link_to new_investment_investment_transaction_path(@investment), class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-cyan-600 text-white shadow hover:bg-cyan-500 transition" do %>
+        <i class="fa-solid fa-plus mr-2"></i>
+        New Transaction
+      <% end %>
     </div>
     
     <% if @transactions.any? %>
@@ -140,9 +149,9 @@
                   <div class="text-sm text-gray-900"><%= transaction.reference_number.present? ? transaction.reference_number : '-' %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div class="flex space-x-2 justify-end">
-                    <%= link_to "Edit", edit_investment_investment_transaction_path(@investment, transaction), class: "text-indigo-600 hover:text-indigo-900" %>
-                    <%= button_to "Delete", investment_investment_transaction_path(@investment, transaction), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this transaction?" }, class: "text-red-600 hover:text-red-900 bg-transparent border-none p-0 cursor-pointer" %>
+                  <div class="flex items-center justify-end gap-2 text-xs font-semibold">
+                    <%= link_to "Edit", edit_investment_investment_transaction_path(@investment, transaction), class: "px-3 py-1.5 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100" %>
+                    <%= button_to "Delete", investment_investment_transaction_path(@investment, transaction), method: :delete, data: { turbo_confirm: "Are you sure you want to delete this transaction?" }, class: "px-3 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 bg-transparent border-none cursor-pointer" %>
                   </div>
                 </td>
               </tr>
@@ -151,19 +160,10 @@
         </table>
       </div>
     <% else %>
-      <div class="text-center py-8 bg-gray-50 rounded-lg">
-        <p class="text-gray-500 mb-4">No transactions found for this investment.</p>
-        <%= link_to "Add Your First Transaction", new_investment_investment_transaction_path(@investment), class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" %>
+      <div class="text-center py-12 bg-gray-50/80 rounded-2xl border border-dashed border-gray-200">
+        <p class="text-gray-600 mb-4">No transactions found for this investment.</p>
+        <%= link_to "Add Your First Transaction", new_investment_investment_transaction_path(@investment), class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-cyan-600 text-white font-semibold shadow hover:bg-cyan-500" %>
       </div>
-    <% end %>
-  </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="fixed bottom-6 right-6">
-  <div class="flex flex-col space-y-2">
-    <%= link_to new_investment_investment_transaction_path(@investment), class: "bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700" do %>
-      <i class="fa-solid fa-plus"></i>
     <% end %>
   </div>
 </div>

@@ -1,17 +1,30 @@
-<nav class="flex justify-center align-center space-x-4 bg-[#3778c2] text-white">
-  <ul class="w-full flex flex-row justify-between align-center p-5">
-    <li>
-      <%= link_to '', investment_investment_transactions_path(@investment), class: "text-xl fa-solid fa-arrow-left" %>
-    </li>
-    <li>
-      <h1 class="text-xl uppercase">Edit Transaction</h1>
-    </li>
-    <li></li>
-  </ul>
-</nav>
+<% content_for(:page_title) { "Edit Transaction" } %>
+<% content_for(:skip_card_wrapper, true) %>
 
-<div class="container mx-auto px-4 py-6">
-  <div class="bg-white rounded-lg shadow-lg p-6">
-    <%= render 'form', investment: @investment, transaction: @transaction %>
+<div class="space-y-8">
+  <!-- Hero Banner -->
+  <div class="rounded-3xl p-6 sm:p-8 text-white shadow-[0_25px_80px_rgba(15,23,42,0.45)] border border-white/10"
+       style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 55%, #1e1b4b 100%);">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-white/70 mb-3">Investment</p>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">Edit Transaction</h1>
+        <p class="mt-2 text-sm sm:text-base text-white/80 max-w-2xl">
+          <%= @investment.name %>
+        </p>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= link_to investment_investment_transactions_path(@investment), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold border border-white/30 text-white/90 hover:bg-white/5 transition" do %>
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          Back to Transactions
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto">
+    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+      <%= render 'form', investment: @investment, transaction: @transaction %>
+    </div>
   </div>
 </div>
