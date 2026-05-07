@@ -2,7 +2,7 @@ class DpoPayService
   BASE_URL = 'https://secure.3gdirectpay.com/API/v6/'.freeze
   COMPANY_TOKEN = ENV.fetch('DPO_COMPANY_TOKEN', '')
 
-  Result = Struct.new(:success?, :transaction_token, :redirect_url, :error, keyword_init: true)
+  Result = Struct.new(:success?, :transaction_token, :redirect_url, :error)
 
   def initialize(user:, plan_name:, amount:)
     @user = user

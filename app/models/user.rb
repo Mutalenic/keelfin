@@ -42,7 +42,7 @@ class User < ApplicationRecord
   alias is_over_indebted? over_indebted?
 
   def total_monthly_income
-    return income_sources.active.sum { |s| s.monthly_equivalent } if income_sources.any?
+    return income_sources.active.sum(&:monthly_equivalent) if income_sources.any?
 
     monthly_income.to_f
   end
@@ -52,7 +52,7 @@ class User < ApplicationRecord
 
     base = opening_balance.to_f
     since = balance_as_of || Date.current.beginning_of_month
-    earned = income_sources.active.sum { |s| s.monthly_equivalent }
+    earned = income_sources.active.sum(&:monthly_equivalent)
     spent = payments.where(created_at: since..).sum(:amount)
     base + earned - spent
   end

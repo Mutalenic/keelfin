@@ -73,7 +73,7 @@
                   <div class="font-semibold text-brand-100"><%= payment.name %></div>
                   <% if payment.is_essential %>
                     <span class="text-xs text-emerald-400">Essential</span>
-                  <% end %}
+                  <% end %>
                 </td>
                 <td class="px-6 py-4 text-brand-300"><%= payment.payment_method&.titleize || 'N/A' %></td>
                 <td class="px-6 py-4 font-semibold text-brand-100">K<%= number_with_precision(payment.amount, precision: 2) %></td>
@@ -84,7 +84,7 @@
                   </div>
                 </td>
               </tr>
-            <% end %}
+            <% end %>
           </tbody>
         </table>
       </div>
@@ -93,6 +93,6 @@
         <p class="text-brand-300 mb-4">No transactions recorded yet.</p>
         <%= link_to "Add your first transaction", new_category_payment_path(@category), class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold shadow hover:bg-brand-500" %>
       </div>
-    <% end %}
+    <% end %>
   </div>
 </div>
