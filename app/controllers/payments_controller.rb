@@ -102,7 +102,7 @@ class PaymentsController < ApplicationController
       headers.insert(2, 'Category') if include_category
       csv << headers
 
-      payments.find_each do |p|
+      payments.each do |p|
         row = [
           p.created_at.strftime('%Y-%m-%d'),
           p.name,
