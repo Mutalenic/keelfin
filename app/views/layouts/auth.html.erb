@@ -7,6 +7,9 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,6 +26,7 @@
                 500: '#10b981',
                 600: '#059669',
                 700: '#047857',
+                750: '#1B6B45',
                 800: '#065f46',
                 900: '#064e3b',
                 950: '#022c22',
@@ -33,11 +37,12 @@
       }
     </script>
 
+
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
     <%= javascript_include_tag "application" %>
   </head>
 
-  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
+  <body class="auth-page min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
         style="background-image: linear-gradient(135deg, #022c22 0%, #064e3b 40%, #065f46 70%, #047857 100%);">
     <div class="absolute inset-0 pointer-events-none">
       <div class="h-full w-full opacity-30"
@@ -45,6 +50,18 @@
                                   radial-gradient(circle at 70% 15%, rgba(5,150,105,0.15) 0, transparent 35%),
                                   radial-gradient(circle at 20% 80%, rgba(52,211,153,0.2) 0, transparent 40%);"></div>
     </div>
+
+    <% if alert.present? %>
+      <% unauthenticated_message = I18n.t("devise.failure.unauthenticated") %>
+      <% alert_message = alert == unauthenticated_message ? t("auth.alerts.unauthenticated") : alert %>
+      <div class="w-full bg-emerald-50 border-b border-emerald-400 text-emerald-900 px-6 py-3 text-sm flex items-center justify-between gap-3 shadow-sm" role="alert">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-info text-emerald-800"></i>
+          <span class="font-medium"><%= alert_message %></span>
+        </div>
+        <button type="button" class="text-emerald-800 hover:text-emerald-950" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button>
+      </div>
+    <% end %>
 
     <div class="relative min-h-full flex">
       <!-- Left Panel: Branding -->
@@ -59,7 +76,7 @@
             <line x1="400" y1="100" x2="400" y2="700" stroke="white" stroke-width="0.3"/>
           </svg>
         </div>
-        <div class="relative z-10 flex flex-col justify-between p-12 text-white w-full">
+        <div class="left-panel relative z-10 gap-10 text-white w-full">
           <div>
             <div class="flex items-center space-x-3">
               <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
@@ -77,30 +94,30 @@
               Budget smarter, track spending, manage debts, and grow your investments — all in one place.
             </p>
 
-            <div class="space-y-4">
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                  <i class="fa-solid fa-chart-pie text-brand-200 text-sm"></i>
+            <div class="space-y-5">
+              <div class="flex items-center space-x-3.5">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-chart-pie text-white text-sm"></i>
                 </div>
-                <span class="text-brand-100">Smart budgeting with real-time insights</span>
+                <span class="text-white/90 text-sm leading-snug">Smart budgeting with real-time insights</span>
               </div>
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                  <i class="fa-solid fa-shield-halved text-brand-200 text-sm"></i>
+              <div class="flex items-center space-x-3.5">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-shield-halved text-white text-sm"></i>
                 </div>
-                <span class="text-brand-100">Debt management and financial health alerts</span>
+                <span class="text-white/90 text-sm leading-snug">Debt management and financial health alerts</span>
               </div>
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                  <i class="fa-solid fa-bullseye text-brand-200 text-sm"></i>
+              <div class="flex items-center space-x-3.5">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-bullseye text-white text-sm"></i>
                 </div>
-                <span class="text-brand-100">Goal tracking with milestone celebrations</span>
+                <span class="text-white/90 text-sm leading-snug">Goal tracking with milestone celebrations</span>
               </div>
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                  <i class="fa-solid fa-chart-line text-brand-200 text-sm"></i>
+              <div class="flex items-center space-x-3.5">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-chart-line text-white text-sm"></i>
                 </div>
-                <span class="text-brand-100">Investment portfolio tracking</span>
+                <span class="text-white/90 text-sm leading-snug">Investment portfolio tracking</span>
               </div>
             </div>
           </div>
@@ -120,7 +137,7 @@
       </div>
 
       <!-- Right Panel: Auth Content -->
-      <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
+      <div class="flex-1 flex flex-col justify-center py-10 sm:py-12 px-4 sm:px-6 lg:px-20 xl:px-24 pb-16">
         <div class="mx-auto w-full max-w-sm lg:max-w-md">
           <!-- Mobile Logo -->
           <div class="lg:hidden mb-8 text-center">
@@ -138,14 +155,8 @@
               <span><%= notice %></span>
             </div>
           <% end %>
-          <% if alert.present? %>
-            <div class="mb-6 bg-red-900/30 border border-red-700/40 text-red-300 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
-              <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5 mr-3 flex-shrink-0"></i>
-              <span><%= alert %></span>
-            </div>
-          <% end %>
 
-          <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/20 px-6 py-8">
+          <div class="login-card bg-white border border-white/60 rounded-3xl shadow-2xl shadow-black/15">
             <%= yield %>
           </div>
         </div>

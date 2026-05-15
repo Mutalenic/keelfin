@@ -31,3 +31,19 @@
 
 en:
   hello: "Hello world"
+  auth:
+    alerts:
+      unauthenticated: "Please sign in or create an account to continue."
+  devise:
+    sessions:
+      new:
+        welcome_back: "Welcome back"
+        sign_in_description: "Sign in to manage your finances"
+        forgot_password: "Forgot password?"
+        log_in: "Log in"
+        signing_in: "Signing in..."
+        new_to_keelfin: "New to Keelfin?"
+        create_account: "Create your free account"
+        legal_text: "By signing in you agree to our"
+        terms: "Terms"
+        privacy_policy: "Privacy Policy"
