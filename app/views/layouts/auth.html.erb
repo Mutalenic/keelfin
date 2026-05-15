@@ -37,122 +37,6 @@
       }
     </script>
 
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
-      body {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      .auth-page {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        font-size: 15px;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      .auth-page * {
-        font-size: max(12px, 1em);
-      }
-
-      .auth-page input::placeholder {
-        color: #4B5563;
-      }
-
-      .auth-page input[type="email"],
-      .auth-page input[type="password"],
-      .auth-page input[type="text"] {
-        border: 1px solid #6B7280;
-      }
-
-      .auth-page input:-webkit-autofill,
-      .auth-page input:-webkit-autofill:hover,
-      .auth-page input:-webkit-autofill:focus {
-        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
-        -webkit-text-fill-color: #111827;
-        border: 1px solid #6B7280;
-        transition: background-color 5000s ease-in-out 0s;
-      }
-
-      .auth-page input:focus {
-        border-color: #1B6B45;
-        outline: 2px solid rgba(27, 107, 69, 0.3);
-        outline-offset: 0;
-      }
-
-      .auth-page a:focus-visible,
-      .auth-page button:focus-visible,
-      .auth-page input:focus-visible {
-        outline: 2px solid #1B6B45;
-        outline-offset: 2px;
-      }
-
-      .auth-page button,
-      .auth-page a,
-      .auth-page [role="button"] {
-        min-height: 44px;
-        min-width: 44px;
-      }
-
-      .auth-page a[href*="password"] {
-        color: #1B6B45;
-        text-decoration: underline;
-        text-underline-offset: 2px;
-      }
-
-      .auth-page a[href*="password"]:hover {
-        color: #145235;
-      }
-
-      .auth-page .divider-text,
-      .auth-page [class*="new-to"] {
-        color: #4B5563;
-      }
-
-      .auth-page .legal-text,
-      .auth-page [class*="terms"],
-      .auth-page [class*="privacy"] {
-        color: #4B5563;
-        font-size: 12px;
-      }
-
-      .auth-page .btn-secondary {
-        border: 1.5px solid #1B6B45;
-        color: #1B6B45;
-      }
-
-      .auth-page .feature-icon-wrapper {
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 8px;
-        padding: 8px;
-      }
-
-      .auth-page .left-panel {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 100vh;
-        padding: 48px;
-      }
-
-      .auth-page .login-card {
-        display: flex;
-        flex-direction: column;
-        padding: 32px 40px;
-        row-gap: 14px;
-      }
-
-      .auth-page .remember-me-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 16px 0;
-      }
-    </style>
 
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
     <%= javascript_include_tag "application" %>
@@ -168,7 +52,8 @@
     </div>
 
     <% if alert.present? %>
-      <% alert_message = alert == "You need to sign in or sign up before continuing." ? "Please sign in or create an account to continue." : alert %>
+      <% unauthenticated_message = I18n.t("devise.failure.unauthenticated") %>
+      <% alert_message = alert == unauthenticated_message ? t("auth.alerts.unauthenticated") : alert %>
       <div class="w-full bg-emerald-50 border-b border-emerald-400 text-emerald-900 px-6 py-3 text-sm flex items-center justify-between gap-3 shadow-sm" role="alert">
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-circle-info text-emerald-800"></i>

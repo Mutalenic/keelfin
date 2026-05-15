@@ -1,6 +1,6 @@
 <div>
-  <h2 class="text-3xl font-bold text-gray-900">Welcome back</h2>
-  <p class="mt-2 text-sm text-gray-600">Sign in to manage your finances</p>
+  <h2 class="text-3xl font-bold text-gray-900"><%= t(".welcome_back") %></h2>
+  <p class="mt-2 text-sm text-gray-600"><%= t(".sign_in_description") %></p>
 </div>
 
 <div class="mt-8">
@@ -21,16 +21,16 @@
     <div>
       <div class="flex items-center justify-between mb-1.5">
         <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
-        <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-[13px] font-medium transition-colors" %>
+        <%= link_to t(".forgot_password"), new_password_path(resource_name), class: "text-[13px] font-medium transition-colors" %>
       </div>
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
           <i class="fa-solid fa-lock text-gray-400 text-sm"></i>
         </div>
-        <%= f.password_field :password, autocomplete: "current-password", id: "login-password", placeholder: "Enter your password",
+        <%= f.password_field :password, autocomplete: "current-password", placeholder: "Enter your password",
           class: "block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-500 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-750 focus:border-brand-750 transition-colors text-sm" %>
-        <button type="button" onclick="toggleLoginPassword()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors" aria-label="Toggle password visibility">
-          <i class="fa-solid fa-eye text-sm" id="login-eye-icon"></i>
+        <button type="button" data-toggle-password="user_password" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors" aria-label="Toggle password visibility">
+          <i class="fa-solid fa-eye text-sm"></i>
         </button>
       </div>
     </div>
@@ -47,7 +47,7 @@
     <% end %>
 
     <div>
-      <%= f.submit "Log in", class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-600 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed", style: "background-color: #047857;", data: { disable_with: "Signing in..." } %>
+      <%= f.submit t(".log_in"), class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-brand-700 hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-600 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed", data: { disable_with: t(".signing_in") } %>
     </div>
   <% end %>
 
@@ -57,35 +57,21 @@
         <div class="w-full border-t border-gray-200"></div>
       </div>
       <div class="relative flex justify-center text-sm">
-        <span class="divider-text px-3 bg-white">New to Keelfin?</span>
+        <span class="divider-text px-3 bg-white"><%= t(".new_to_keelfin") %></span>
       </div>
     </div>
 
     <div class="mt-5">
       <%= link_to new_registration_path(resource_name), class: "btn-secondary w-full flex justify-center py-3 px-4 border-[1.5px] rounded-xl text-sm font-semibold bg-transparent hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-750 transition-all" do %>
-        Create your free account
+        <%= t(".create_account") %>
       <% end %>
     </div>
   </div>
 
   <p class="legal-text mt-6 text-center">
-    By signing in you agree to our
-    <%= link_to "Terms", terms_path, class: "terms-link hover:text-gray-700 hover:underline transition-colors" %>
+    <%= t(".legal_text") %>
+    <%= link_to t(".terms"), terms_path, class: "terms-link hover:text-gray-700 hover:underline transition-colors" %>
     &amp;
-    <%= link_to "Privacy Policy", privacy_path, class: "privacy-link hover:text-gray-700 hover:underline transition-colors" %>
+    <%= link_to t(".privacy_policy"), privacy_path, class: "privacy-link hover:text-gray-700 hover:underline transition-colors" %>
   </p>
 </div>
-
-<script>
-  function toggleLoginPassword() {
-    const input = document.getElementById('login-password');
-    const icon = document.getElementById('login-eye-icon');
-    if (input.type === 'password') {
-      input.type = 'text';
-      icon.className = 'fa-solid fa-eye-slash text-sm';
-    } else {
-      input.type = 'password';
-      icon.className = 'fa-solid fa-eye text-sm';
-    }
-  }
-</script>
