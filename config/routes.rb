@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   root to: "dashboard#index"
   
   get 'dashboard', to: 'dashboard#index'
+  get 'terms',   to: 'public_pages#terms',   as: :terms
+  get 'privacy', to: 'public_pages#privacy', as: :privacy
   get 'coming_soon', to: 'coming_soon#index'
   get 'annual_overview', to: 'annual_overview#index', as: :annual_overview
   get 'financial_analysis', to: 'financial_analysis#index', as: :financial_analysis
