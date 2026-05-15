@@ -1,10 +1,10 @@
 <div>
   <h2 class="text-3xl font-bold text-gray-900">Welcome back</h2>
-  <p class="mt-2 text-sm text-gray-500">Sign in to manage your finances</p>
+  <p class="mt-2 text-sm text-gray-600">Sign in to manage your finances</p>
 </div>
 
 <div class="mt-8">
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, html: { class: "space-y-5" }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, html: { class: "space-y-4" }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
     <div>
@@ -14,21 +14,21 @@
           <i class="fa-solid fa-envelope text-gray-400 text-sm"></i>
         </div>
         <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com",
-            class: "block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
+          class: "block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-500 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-750 focus:border-brand-750 transition-colors text-sm" %>
       </div>
     </div>
 
     <div>
       <div class="flex items-center justify-between mb-1.5">
         <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
-        <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors" %>
+        <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-[13px] font-medium transition-colors" %>
       </div>
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
           <i class="fa-solid fa-lock text-gray-400 text-sm"></i>
         </div>
         <%= f.password_field :password, autocomplete: "current-password", id: "login-password", placeholder: "Enter your password",
-            class: "block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
+          class: "block w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-500 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-750 focus:border-brand-750 transition-colors text-sm" %>
         <button type="button" onclick="toggleLoginPassword()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors" aria-label="Toggle password visibility">
           <i class="fa-solid fa-eye text-sm" id="login-eye-icon"></i>
         </button>
@@ -36,7 +36,7 @@
     </div>
 
     <% if devise_mapping.rememberable? %>
-      <label class="flex items-center cursor-pointer group select-none">
+      <label class="remember-me-row flex items-center cursor-pointer group select-none">
         <div class="relative flex items-center">
           <%= f.check_box :remember_me, class: "peer sr-only" %>
           <div class="w-9 h-5 bg-gray-300 peer-focus:ring-2 peer-focus:ring-brand-500 peer-focus:ring-offset-2 peer-focus:ring-offset-white rounded-full peer-checked:bg-brand-600 transition-colors"></div>
@@ -57,22 +57,22 @@
         <div class="w-full border-t border-gray-200"></div>
       </div>
       <div class="relative flex justify-center text-sm">
-        <span class="px-3 bg-white text-gray-500">New to Keelfin?</span>
+        <span class="divider-text px-3 bg-white">New to Keelfin?</span>
       </div>
     </div>
 
     <div class="mt-5">
-      <%= link_to new_registration_path(resource_name), class: "w-full flex justify-center py-3 px-4 border-2 border-brand-600 rounded-xl text-sm font-semibold text-brand-700 bg-transparent hover:bg-brand-50 hover:border-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all" do %>
+      <%= link_to new_registration_path(resource_name), class: "btn-secondary w-full flex justify-center py-3 px-4 border-[1.5px] rounded-xl text-sm font-semibold bg-transparent hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-750 transition-all" do %>
         Create your free account
       <% end %>
     </div>
   </div>
 
-  <p class="mt-6 text-center text-xs text-gray-400">
+  <p class="legal-text mt-6 text-center">
     By signing in you agree to our
-    <%= link_to "Terms", terms_path, class: "text-brand-600 hover:text-brand-700 hover:underline transition-colors" %>
+    <%= link_to "Terms", terms_path, class: "terms-link hover:text-gray-700 hover:underline transition-colors" %>
     &amp;
-    <%= link_to "Privacy Policy", privacy_path, class: "text-brand-600 hover:text-brand-700 hover:underline transition-colors" %>
+    <%= link_to "Privacy Policy", privacy_path, class: "privacy-link hover:text-gray-700 hover:underline transition-colors" %>
   </p>
 </div>
 

@@ -7,6 +7,9 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,6 +26,7 @@
                 500: '#10b981',
                 600: '#059669',
                 700: '#047857',
+                750: '#1B6B45',
                 800: '#065f46',
                 900: '#064e3b',
                 950: '#022c22',
@@ -33,11 +37,128 @@
       }
     </script>
 
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .auth-page {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .auth-page * {
+        font-size: max(12px, 1em);
+      }
+
+      .auth-page input::placeholder {
+        color: #4B5563;
+      }
+
+      .auth-page input[type="email"],
+      .auth-page input[type="password"],
+      .auth-page input[type="text"] {
+        border: 1px solid #6B7280;
+      }
+
+      .auth-page input:-webkit-autofill,
+      .auth-page input:-webkit-autofill:hover,
+      .auth-page input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+        -webkit-text-fill-color: #111827;
+        border: 1px solid #6B7280;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+
+      .auth-page input:focus {
+        border-color: #1B6B45;
+        outline: 2px solid rgba(27, 107, 69, 0.3);
+        outline-offset: 0;
+      }
+
+      .auth-page a:focus-visible,
+      .auth-page button:focus-visible,
+      .auth-page input:focus-visible {
+        outline: 2px solid #1B6B45;
+        outline-offset: 2px;
+      }
+
+      .auth-page button,
+      .auth-page a,
+      .auth-page [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      .auth-page a[href*="password"] {
+        color: #1B6B45;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .auth-page a[href*="password"]:hover {
+        color: #145235;
+      }
+
+      .auth-page .divider-text,
+      .auth-page [class*="new-to"] {
+        color: #4B5563;
+      }
+
+      .auth-page .legal-text,
+      .auth-page [class*="terms"],
+      .auth-page [class*="privacy"] {
+        color: #4B5563;
+        font-size: 12px;
+      }
+
+      .auth-page .btn-secondary {
+        border: 1.5px solid #1B6B45;
+        color: #1B6B45;
+      }
+
+      .auth-page .feature-icon-wrapper {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        padding: 8px;
+      }
+
+      .auth-page .left-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 48px;
+      }
+
+      .auth-page .login-card {
+        display: flex;
+        flex-direction: column;
+        padding: 32px 40px;
+        row-gap: 14px;
+      }
+
+      .auth-page .remember-me-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 16px 0;
+      }
+    </style>
+
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
     <%= javascript_include_tag "application" %>
   </head>
 
-  <body class="min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
+  <body class="auth-page min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
         style="background-image: linear-gradient(135deg, #022c22 0%, #064e3b 40%, #065f46 70%, #047857 100%);">
     <div class="absolute inset-0 pointer-events-none">
       <div class="h-full w-full opacity-30"
@@ -45,6 +166,17 @@
                                   radial-gradient(circle at 70% 15%, rgba(5,150,105,0.15) 0, transparent 35%),
                                   radial-gradient(circle at 20% 80%, rgba(52,211,153,0.2) 0, transparent 40%);"></div>
     </div>
+
+    <% if alert.present? %>
+      <% alert_message = alert == "You need to sign in or sign up before continuing." ? "Please sign in or create an account to continue." : alert %>
+      <div class="w-full bg-emerald-50 border-b border-emerald-400 text-emerald-900 px-6 py-3 text-sm flex items-center justify-between gap-3 shadow-sm" role="alert">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-circle-info text-emerald-800"></i>
+          <span class="font-medium"><%= alert_message %></span>
+        </div>
+        <button type="button" class="text-emerald-800 hover:text-emerald-950" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button>
+      </div>
+    <% end %>
 
     <div class="relative min-h-full flex">
       <!-- Left Panel: Branding -->
@@ -59,7 +191,7 @@
             <line x1="400" y1="100" x2="400" y2="700" stroke="white" stroke-width="0.3"/>
           </svg>
         </div>
-        <div class="relative z-10 flex flex-col justify-between p-12 text-white w-full">
+        <div class="left-panel relative z-10 gap-10 text-white w-full">
           <div>
             <div class="flex items-center space-x-3">
               <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
@@ -79,25 +211,25 @@
 
             <div class="space-y-5">
               <div class="flex items-center space-x-3.5">
-                <div class="w-9 h-9 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
                   <i class="fa-solid fa-chart-pie text-white text-sm"></i>
                 </div>
                 <span class="text-white/90 text-sm leading-snug">Smart budgeting with real-time insights</span>
               </div>
               <div class="flex items-center space-x-3.5">
-                <div class="w-9 h-9 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
                   <i class="fa-solid fa-shield-halved text-white text-sm"></i>
                 </div>
                 <span class="text-white/90 text-sm leading-snug">Debt management and financial health alerts</span>
               </div>
               <div class="flex items-center space-x-3.5">
-                <div class="w-9 h-9 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
                   <i class="fa-solid fa-bullseye text-white text-sm"></i>
                 </div>
                 <span class="text-white/90 text-sm leading-snug">Goal tracking with milestone celebrations</span>
               </div>
               <div class="flex items-center space-x-3.5">
-                <div class="w-9 h-9 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div class="feature-icon-wrapper flex items-center justify-center flex-shrink-0">
                   <i class="fa-solid fa-chart-line text-white text-sm"></i>
                 </div>
                 <span class="text-white/90 text-sm leading-snug">Investment portfolio tracking</span>
@@ -138,14 +270,8 @@
               <span><%= notice %></span>
             </div>
           <% end %>
-          <% if alert.present? %>
-            <div class="mb-6 bg-amber-100 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 text-sm flex items-start shadow-sm" role="alert">
-              <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 mr-3 flex-shrink-0"></i>
-              <span class="font-medium"><%= alert %></span>
-            </div>
-          <% end %>
 
-          <div class="bg-white border border-white/60 rounded-3xl shadow-2xl shadow-black/15 px-6 py-8">
+          <div class="login-card bg-white border border-white/60 rounded-3xl shadow-2xl shadow-black/15">
             <%= yield %>
           </div>
         </div>
