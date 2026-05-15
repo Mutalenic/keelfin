@@ -20,4 +20,6 @@ namespace :passenger do
   end
 end
 
-after 'deploy:finishing', 'passenger:standalone_restart'
+# Disabled: passenger:restart already handles Passenger restart
+# via tmp/restart.txt touch, which works reliably for standalone.
+# after 'deploy:finishing', 'passenger:standalone_restart'
