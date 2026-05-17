@@ -51,19 +51,20 @@
                                   radial-gradient(circle at 20% 80%, rgba(52,211,153,0.2) 0, transparent 40%);"></div>
     </div>
 
-    <% if alert.present? %>
-      <% unauthenticated_message = I18n.t("devise.failure.unauthenticated") %>
-      <% alert_message = alert == unauthenticated_message ? t("auth.alerts.unauthenticated") : alert %>
-      <div class="w-full bg-emerald-50 border-b border-emerald-400 text-emerald-900 px-6 py-3 text-sm flex items-center justify-between gap-3 shadow-sm" role="alert">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-circle-info text-emerald-800"></i>
-          <span class="font-medium"><%= alert_message %></span>
+    <div class="relative min-h-screen flex flex-col">
+      <% if alert.present? %>
+        <% unauthenticated_message = I18n.t("devise.failure.unauthenticated") %>
+        <% alert_message = alert == unauthenticated_message ? t("auth.alerts.unauthenticated") : alert %>
+        <div class="w-full bg-emerald-50 border-b border-emerald-400 text-emerald-900 px-6 py-3 text-sm flex items-center justify-between gap-3 shadow-sm flex-shrink-0" role="alert">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-emerald-800"></i>
+            <span class="font-medium"><%= alert_message %></span>
+          </div>
+          <button type="button" class="text-emerald-800 hover:text-emerald-950" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button>
         </div>
-        <button type="button" class="text-emerald-800 hover:text-emerald-950" aria-label="Dismiss" onclick="this.parentElement.remove()">×</button>
-      </div>
-    <% end %>
+      <% end %>
 
-    <div class="relative min-h-screen flex">
+      <div class="flex flex-1">
       <!-- Left Panel: Branding -->
       <div class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900/90 backdrop-blur-lg relative overflow-hidden border-r border-transparent shadow-2xl"
            style="background-image: linear-gradient(140deg, rgba(5,150,105,0.95) 0%, rgba(4,120,87,0.92) 50%, rgba(6,78,59,0.9) 100%);">
@@ -137,7 +138,7 @@
       </div>
 
       <!-- Right Panel: Auth Content -->
-      <div class="flex-1 flex flex-col justify-center py-10 sm:py-12 px-4 sm:px-6 lg:px-20 xl:px-24 pb-16" style="background-color: #064e3b;">
+      <div class="flex-1 flex flex-col justify-center py-10 sm:py-12 px-4 sm:px-6 lg:px-20 xl:px-24 pb-16 bg-brand-900">
         <div class="mx-auto w-full max-w-sm lg:max-w-md">
           <!-- Mobile Logo -->
           <div class="lg:hidden mb-8 text-center">
@@ -160,6 +161,7 @@
             <%= yield %>
           </div>
         </div>
+      </div>
       </div>
     </div>
   </body>
