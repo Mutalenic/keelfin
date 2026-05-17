@@ -6,9 +6,9 @@ namespace :passenger do # rubocop:disable Metrics/BlockLength
   task :force_restart do
     on roles(:app) do
       rbenv_prefix = fetch(:rbenv_prefix)
-      app_path = fetch(:passenger_app_path, current_path)
+      gemfile_path = "#{fetch(:deploy_to)}/current/Gemfile"
 
-      within app_path do
+      with BUNDLE_GEMFILE: gemfile_path do
         execute "#{rbenv_prefix} bundle exec passenger stop --port 3000 || true"
         sleep 3
         execute "#{rbenv_prefix} bundle exec passenger start " \
