@@ -8,8 +8,8 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    <script src="https://cdn.tailwindcss.com" nonce="<%= content_security_policy_nonce %>"></script>
+    <script nonce="<%= content_security_policy_nonce %>">
       tailwind.config = {
         safelist: [
           { pattern: /bg-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
@@ -42,7 +42,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
             integrity="sha256-IGtui7APx7uix+6AykHbPp4FunvgqjWr66nP1TV/XQ4="
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous"
+            nonce="<%= content_security_policy_nonce %>"></script>
     <%= javascript_include_tag "application" %>
 
     <style>
