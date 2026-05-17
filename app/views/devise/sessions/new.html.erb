@@ -47,7 +47,7 @@
     <% end %>
 
     <div>
-      <%= f.submit t(".log_in"), class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-brand-700 hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-600 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed", data: { disable_with: t(".signing_in") } %>
+      <%= f.submit t(".log_in"), class: "btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 disabled:opacity-50 disabled:cursor-not-allowed", data: { disable_with: t(".signing_in") } %>
     </div>
   <% end %>
 
@@ -62,7 +62,7 @@
     </div>
 
     <div class="mt-5">
-      <%= link_to new_registration_path(resource_name), class: "btn-secondary w-full flex justify-center py-3 px-4 border-[1.5px] rounded-xl text-sm font-semibold bg-transparent hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-750 transition-all" do %>
+      <%= link_to new_registration_path(resource_name), class: "btn-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500" do %>
         <%= t(".create_account") %>
       <% end %>
     </div>
