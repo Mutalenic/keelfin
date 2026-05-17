@@ -13,13 +13,16 @@ Rails.application.configure do
                        'https://cdn.tailwindcss.com',
                        'https://cdn.jsdelivr.net'
 
-    # Styles: self + Font Awesome (cdnjs) + inline (required by Tailwind CDN)
+    # Styles: self + Font Awesome (cdnjs) + Google Fonts + inline (required by Tailwind CDN)
     policy.style_src   :self, :unsafe_inline,
-                       'https://cdnjs.cloudflare.com'
+                       'https://cdnjs.cloudflare.com',
+                       'https://fonts.googleapis.com'
 
-    # Fonts: self + Font Awesome
+    # Fonts: self + Font Awesome + Google Fonts
     policy.font_src    :self, :data,
-                       'https://cdnjs.cloudflare.com'
+                       'https://cdnjs.cloudflare.com',
+                       'https://fonts.googleapis.com',
+                       'https://fonts.gstatic.com'
 
     # Images: self + data URIs (for inline chart images)
     policy.img_src     :self, :data, :blob
