@@ -27,7 +27,7 @@ set :keep_releases, 3
 
 # Official Capistrano workflow - Passenger standalone configuration
 set :passenger_roles, :app
-set :passenger_restart_with_touch, true
+set :passenger_restart_with_touch, false
 set :passenger_in_gemfile, true
 set :passenger_environment_variables, { 
   'PASSENGER_INSTANCE_REGISTRY_DIR' => '/tmp/passenger_instances'

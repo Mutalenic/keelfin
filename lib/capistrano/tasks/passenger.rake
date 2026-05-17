@@ -40,4 +40,5 @@ namespace :passenger do # rubocop:disable Metrics/BlockLength
   end
 end # rubocop:enable Metrics/BlockLength
 
+after 'deploy:symlink:release', 'passenger:force_restart'
 after 'deploy:finishing', 'passenger:smoke_test'
