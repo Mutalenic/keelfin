@@ -1,7 +1,7 @@
 # Restart Passenger standalone (not Passenger-in-nginx).
 # For Passenger standalone, touching tmp/restart.txt may not fully reload.
 # We force a full stop/start cycle to ensure code is reloaded.
-namespace :passenger do
+namespace :passenger do # rubocop:disable Metrics/BlockLength
   desc 'Force restart Passenger standalone server'
   task :force_restart do
     on roles(:app) do
@@ -23,24 +23,25 @@ namespace :passenger do
       # Wait for Passenger to fully start
       sleep 5
 
-      app_url = "http://localhost:3000"
+      app_url = 'http://localhost:3000'
       info "Testing app at #{app_url}..."
 
       # Check if app is responding
-      result = capture "curl -s -o /dev/null -w '%{http_code}' #{app_url} || echo '000'", raise_on_non_zero_exit: false
+      result = capture "curl -s -o /dev/null -w '%{http_code}' #{app_url} || echo '000'", raise_on_non_zero_exit: false # rubocop:disable Style/FormatStringToken
       http_code = result.strip
 
-      if http_code == '500' || http_code == '000'
+      if %w[500 000].include?(http_code)
         warn "⚠ App not responding (HTTP #{http_code}), attempting Passenger restart..."
         invoke 'passenger:force_restart'
         sleep 5
 
         # Retry after restart
-        result = capture "curl -s -o /dev/null -w '%{http_code}' #{app_url} || echo '000'", raise_on_non_zero_exit: false
+        result = capture "curl -s -o /dev/null -w '%{http_code}' #{app_url} || echo '000'", # rubocop:disable Style/FormatStringToken
+                         raise_on_non_zero_exit: false
         http_code = result.strip
 
-        if http_code == '500' || http_code == '000'
-          error "❌ App still unresponsive after restart! Deployment may have failed."
+        if %w[500 000].include?(http_code)
+          error '❌ App still unresponsive after restart! Deployment may have failed.'
           exit 1
         end
       end
@@ -52,6 +53,6 @@ namespace :passenger do
       end
     end
   end
-end
+end # rubocop:enable Metrics/BlockLength
 
 after 'deploy:finishing', 'passenger:smoke_test'
