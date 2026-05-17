@@ -5,14 +5,14 @@ namespace :passenger do
   desc 'Force restart Passenger standalone server'
   task :force_restart do
     on roles(:app) do
-      rbenv = fetch(:rbenv_prefix)
-      gemfile = "#{fetch(:deploy_to)}/current/Gemfile"
+      rbenv    = fetch(:rbenv_prefix) # rubocop:disable Layout/ExtraSpacing
+      app_path = "#{fetch(:deploy_to)}/current"
+      gemfile  = "#{app_path}/Gemfile" # rubocop:disable Layout/ExtraSpacing
+      prefix   = "cd #{app_path} && BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger" # rubocop:disable Layout/ExtraSpacing
 
-      pid_file = "#{fetch(:deploy_to)}/shared/tmp/pids/passenger.3000.pid"
-      execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger stop --pid-file #{pid_file} || true"
+      execute "#{prefix} stop --port 3000 || fuser -k 3000/tcp 2>/dev/null || true"
       sleep 3
-      execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger start " \
-              '--port 3000 --environment production --daemonize'
+      execute "#{prefix} start --port 3000 --environment production --daemonize"
     end
   end
 
