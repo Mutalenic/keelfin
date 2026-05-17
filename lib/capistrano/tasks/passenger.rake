@@ -18,7 +18,7 @@ namespace :passenger do # rubocop:disable Metrics/BlockLength
   end
 
   desc 'Smoke test: verify app is responding after deployment'
-  task :smoke_test do
+  task :smoke_test do # rubocop:disable Metrics/BlockLength
     on roles(:app) do
       # Wait for Passenger to fully start
       sleep 5
@@ -32,7 +32,14 @@ namespace :passenger do # rubocop:disable Metrics/BlockLength
 
       if %w[500 000].include?(http_code)
         warn "⚠ App not responding (HTTP #{http_code}), attempting Passenger restart..."
-        invoke 'passenger:force_restart'
+        rbenv_prefix = fetch(:rbenv_prefix)
+        app_path = fetch(:passenger_app_path, current_path)
+        within app_path do
+          execute "#{rbenv_prefix} bundle exec passenger stop --port 3000 || true"
+          sleep 3
+          execute "#{rbenv_prefix} bundle exec passenger start " \
+                  '--port 3000 --environment production --daemonize'
+        end
         sleep 5
 
         # Retry after restart
