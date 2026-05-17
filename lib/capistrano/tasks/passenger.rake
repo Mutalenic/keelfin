@@ -8,7 +8,8 @@ namespace :passenger do
       rbenv = fetch(:rbenv_prefix)
       gemfile = "#{fetch(:deploy_to)}/current/Gemfile"
 
-      execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger stop --port 3000 || true"
+      pid_file = "#{fetch(:deploy_to)}/shared/tmp/pids/passenger.3000.pid"
+      execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger stop --pid-file #{pid_file} || true"
       sleep 3
       execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger start " \
               '--port 3000 --environment production --daemonize'
