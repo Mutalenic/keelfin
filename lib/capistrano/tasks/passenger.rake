@@ -1,19 +1,17 @@
 # Restart Passenger standalone (not Passenger-in-nginx).
 # For Passenger standalone, touching tmp/restart.txt may not fully reload.
 # We force a full stop/start cycle to ensure code is reloaded.
-namespace :passenger do # rubocop:disable Metrics/BlockLength
+namespace :passenger do
   desc 'Force restart Passenger standalone server'
   task :force_restart do
     on roles(:app) do
-      rbenv_prefix = fetch(:rbenv_prefix)
-      gemfile_path = "#{fetch(:deploy_to)}/current/Gemfile"
+      rbenv = fetch(:rbenv_prefix)
+      gemfile = "#{fetch(:deploy_to)}/current/Gemfile"
 
-      with BUNDLE_GEMFILE: gemfile_path do
-        execute "#{rbenv_prefix} bundle exec passenger stop --port 3000 || true"
-        sleep 3
-        execute "#{rbenv_prefix} bundle exec passenger start " \
-                '--port 3000 --environment production --daemonize'
-      end
+      execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger stop --port 3000 || true"
+      sleep 3
+      execute "BUNDLE_GEMFILE=#{gemfile} #{rbenv} bundle exec passenger start " \
+              '--port 3000 --environment production --daemonize'
     end
   end
 
@@ -38,7 +36,7 @@ namespace :passenger do # rubocop:disable Metrics/BlockLength
       end
     end
   end
-end # rubocop:enable Metrics/BlockLength
+end
 
 after 'deploy:symlink:release', 'passenger:force_restart'
 after 'deploy:finishing', 'passenger:smoke_test'
