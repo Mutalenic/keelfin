@@ -44,7 +44,7 @@
             integrity="sha256-IGtui7APx7uix+6AykHbPp4FunvgqjWr66nP1TV/XQ4="
             crossorigin="anonymous"
             nonce="<%= content_security_policy_nonce %>"></script>
-    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "application", nonce: true %>
 
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
