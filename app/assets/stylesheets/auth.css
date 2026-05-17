@@ -126,7 +126,7 @@ body.auth-page {
 .auth-page .left-panel {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   min-height: 100vh;
   padding: 48px;
 }
