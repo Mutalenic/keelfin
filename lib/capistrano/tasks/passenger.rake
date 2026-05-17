@@ -39,5 +39,14 @@ namespace :passenger do
   end
 end
 
+# Override the capistrano/passenger gem's restart task — force_restart
+# handles the full stop/start cycle after deploy:symlink:release.
+Rake::Task['passenger:restart'].clear_actions if Rake::Task.task_defined?('passenger:restart')
+namespace :passenger do
+  task :restart do
+    # no-op: handled by passenger:force_restart below
+  end
+end
+
 after 'deploy:symlink:release', 'passenger:force_restart'
 after 'deploy:finishing', 'passenger:smoke_test'
