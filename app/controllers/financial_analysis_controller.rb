@@ -4,8 +4,12 @@ class FinancialAnalysisController < ApplicationController
 
     raw_monthly = current_user.payments
       .where(created_at: @months.first.beginning_of_month..Date.current.end_of_month)
-      .group("DATE_TRUNC('month', created_at)")
-      .pluck("DATE_TRUNC('month', created_at)", 'SUM(amount)', 'COUNT(*)')
+      .group(Arel.sql("DATE_TRUNC('month', created_at)::date"))
+      .pluck(
+        Arel.sql("DATE_TRUNC('month', created_at)::date"),
+        Arel.sql('SUM(amount)'),
+        Arel.sql('COUNT(*)')
+      )
       .each_with_object({}) { |(m, s, c), h| h[m.to_date.beginning_of_month] = { spending: s.to_f, transactions: c } }
 
     @monthly_data = @months.map do |m|
@@ -27,7 +31,7 @@ class FinancialAnalysisController < ApplicationController
       .joins(:payments)
       .where(payments: { created_at: month_start..month_end })
       .group('categories.id', 'categories.name')
-      .order('SUM(payments.amount) DESC')
+      .order(Arel.sql('SUM(payments.amount) DESC'))
       .limit(8)
       .sum('payments.amount')
 

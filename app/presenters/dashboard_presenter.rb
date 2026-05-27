@@ -75,7 +75,10 @@ class DashboardPresenter
   # --- Investments ---
 
   def investments
-    @investments ||= user.investments.active.order(current_value: :desc).limit(DASHBOARD_INVEST_LIMIT)
+    @investments ||= user.investments.active
+      .includes(:investment_transactions)
+      .order(current_value: :desc)
+      .limit(DASHBOARD_INVEST_LIMIT)
   end
 
   def total_invested
@@ -113,6 +116,7 @@ class DashboardPresenter
 
   def upcoming_recurring
     @upcoming_recurring ||= user.recurring_transactions.active
+      .includes(:category)
       .where(next_occurrence: ..UPCOMING_RECURRING_DAYS.days.from_now)
       .order(next_occurrence: :asc)
       .limit(DASHBOARD_GOALS_LIMIT)
@@ -125,7 +129,9 @@ class DashboardPresenter
   end
 
   def latest_economic_data
-    @latest_economic_data ||= EconomicIndicator.latest
+    @latest_economic_data ||= Rails.cache.fetch('economic_indicator/latest', expires_in: 1.hour) do
+      EconomicIndicator.latest
+    end
   end
 
   def monthly_spending_trend

@@ -297,13 +297,12 @@ function renderGoalsProgressChart(elementId, data) {
 }
 
 // Initialize all charts when the document is ready
-document.addEventListener('DOMContentLoaded', function() {
+function initAllCharts() {
   // Check if Chart.js is loaded
   if (typeof Chart === 'undefined') {
-    console.error('Chart.js is not loaded. Please include the Chart.js library.');
     return;
   }
-  
+
   // Initialize charts if the elements exist
   if (document.getElementById('portfolio-allocation-chart')) {
     // The data should be provided by the server and made available to JavaScript
@@ -311,34 +310,38 @@ document.addEventListener('DOMContentLoaded', function() {
       renderPortfolioAllocationChart('portfolio-allocation-chart', portfolioAllocationData);
     }
   }
-  
+
   if (document.getElementById('value-history-chart')) {
     if (typeof valueHistoryData !== 'undefined') {
       renderValueHistoryChart('value-history-chart', valueHistoryData);
     }
   }
-  
+
   if (document.getElementById('spending-by-category-chart')) {
     if (typeof spendingByCategoryData !== 'undefined') {
       renderSpendingByCategoryChart('spending-by-category-chart', spendingByCategoryData);
     }
   }
-  
+
   if (document.getElementById('monthly-spending-trend-chart')) {
     if (typeof monthlySpendingTrendData !== 'undefined') {
       renderMonthlySpendingTrendChart('monthly-spending-trend-chart', monthlySpendingTrendData);
     }
   }
-  
+
   if (document.getElementById('budget-vs-actual-chart')) {
     if (typeof budgetVsActualData !== 'undefined') {
       renderBudgetVsActualChart('budget-vs-actual-chart', budgetVsActualData);
     }
   }
-  
+
   if (document.getElementById('goals-progress-chart')) {
     if (typeof goalsProgressData !== 'undefined') {
       renderGoalsProgressChart('goals-progress-chart', goalsProgressData);
     }
   }
-});
+}
+
+// Support both regular page load and Turbo navigation
+document.addEventListener('DOMContentLoaded', initAllCharts);
+document.addEventListener('turbo:load', initAllCharts);

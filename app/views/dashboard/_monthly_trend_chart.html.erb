@@ -1,5 +1,5 @@
 <script>
-  const monthlySpendingTrendData = <%= json_escape(@monthly_spending_trend.to_json) %>;
+  const monthlySpendingTrendData = <%= raw json_escape(@monthly_spending_trend.to_json) %>;
 </script>
 <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
   <h2 class="text-xl font-semibold mb-4 text-brand-100">Monthly Spending Trend</h2>

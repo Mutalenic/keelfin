@@ -179,7 +179,7 @@
       
       <script>
         // Make value history data available to the charts.js script
-        const valueHistoryData = <%= json_escape(@value_history.to_json) %>;
+        const valueHistoryData = <%= raw json_escape(@value_history.to_json) %>;
       </script>
       
       <div class="mt-4 overflow-x-auto">

@@ -20,7 +20,7 @@
 
   <script>
     // Make spending by category data available to the charts.js script
-    const spendingByCategoryData = <%= json_escape(@spending_by_category.to_json) %>;
+    const spendingByCategoryData = <%= raw json_escape(@spending_by_category.to_json) %>;
   </script>
 
   <div id="spending-table" class="hidden">

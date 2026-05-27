@@ -20,7 +20,7 @@
 
   <script>
     // Make goals progress data available to the charts.js script
-    const goalsProgressData = <%= json_escape(@active_goals.to_json(only: [:name, :current_amount, :target_amount])) %>;
+    const goalsProgressData = <%= raw json_escape(@active_goals.to_json(only: [:name, :current_amount, :target_amount])) %>;
   </script>
 
   <div id="goals-table" class="hidden">

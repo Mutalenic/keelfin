@@ -21,9 +21,9 @@
   <script>
     // Make budget vs actual data available to the charts.js script
     const budgetVsActualData = {
-      categories: <%= json_escape(@budget_categories.to_json) %>,
-      budgetAmounts: <%= json_escape(@budget_amounts.to_json) %>,
-      actualAmounts: <%= json_escape(@actual_amounts.to_json) %>
+      categories: <%= raw json_escape(@budget_categories.to_json) %>,
+      budgetAmounts: <%= raw json_escape(@budget_amounts.to_json) %>,
+      actualAmounts: <%= raw json_escape(@actual_amounts.to_json) %>
     };
   </script>
 

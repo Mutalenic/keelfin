@@ -8,9 +8,10 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.tailwindcss.com" nonce="<%= content_security_policy_nonce %>"></script>
-    <script nonce="<%= content_security_policy_nonce %>">
-      tailwind.config = {
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
         safelist: [
           { pattern: /bg-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
           { pattern: /text-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
@@ -40,11 +41,10 @@
 
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
+        <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
             integrity="sha256-IGtui7APx7uix+6AykHbPp4FunvgqjWr66nP1TV/XQ4="
-            crossorigin="anonymous"
-            nonce="<%= content_security_policy_nonce %>"></script>
-    <%= javascript_include_tag "application", nonce: true %>
+            crossorigin="anonymous"></script>
+        <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
