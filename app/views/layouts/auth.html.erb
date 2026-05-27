@@ -6,7 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload", as: "style" %>
+    <%= stylesheet_link_tag "application", as: "style" %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -38,9 +38,8 @@
       }
     </script>
 
-
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "application", defer: true %>
   </head>
 
   <body class="auth-page min-h-screen bg-gradient-to-br from-brand-950 via-brand-900 to-brand-800"
