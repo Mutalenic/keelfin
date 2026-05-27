@@ -8,10 +8,11 @@ Rails.application.configure do
   config.content_security_policy do |policy|
     policy.default_src :self
 
-    # Scripts: self + Tailwind CDN + Chart.js (jsdelivr) + unsafe-inline for Turbo compatibility
+    # Scripts: self + Tailwind CDN + Chart.js (jsdelivr) + Cloudflare Analytics + unsafe-inline for Turbo compatibility
     policy.script_src  :self, :unsafe_inline,
                        'https://cdn.tailwindcss.com',
-                       'https://cdn.jsdelivr.net'
+                       'https://cdn.jsdelivr.net',
+                       'https://static.cloudflareinsights.com'
 
     # Styles: self + Font Awesome (cdnjs) + Google Fonts + inline (required by Tailwind CDN)
     policy.style_src   :self, :unsafe_inline,
@@ -30,8 +31,8 @@ Rails.application.configure do
     # Disallow plugins (Flash, etc.)
     policy.object_src  :none
 
-    # Allow XHR/fetch to self only
-    policy.connect_src :self
+    # Allow XHR/fetch to self + jsdelivr (for Chart.js source maps)
+    policy.connect_src :self, 'https://cdn.jsdelivr.net'
 
     # Restrict framing to same origin
     policy.frame_ancestors :self
