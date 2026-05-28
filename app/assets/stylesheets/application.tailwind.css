@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "./auth.css";
+
+@source "../../views/**/*.html.erb";
+@source "../../helpers/**/*.rb";
+@source "../../javascript/**/*.js";
+
+@theme {
+  --color-brand-50:  #e6edf3;
+  --color-brand-100: #cae8ff;
+  --color-brand-200: #7ee787;
+  --color-brand-300: #56d364;
+  --color-brand-400: #3fb950;
+  --color-brand-500: #2ea043;
+  --color-brand-600: #238636;
+  --color-brand-700: #30363d;
+  --color-brand-750: #1b6b45;
+  --color-brand-800: #21262d;
+  --color-brand-900: #161b22;
+  --color-brand-950: #0d1117;
+}
+
+/* Emerald palette scoped to auth + admin surfaces.
+   Overriding the --color-brand-* custom properties cascades through
+   every Tailwind utility generated from @theme. */
+.auth-page,
+.admin-page {
+  --color-brand-50:  #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-750: #1b6b45;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-brand-950: #022c22;
+}

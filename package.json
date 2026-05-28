@@ -6,5 +6,9 @@
     "stylelint-config-standard": "^21.0.0",
     "stylelint-csstree-validator": "^1.9.0",
     "stylelint-scss": "^3.21.0"
+  },
+  "scripts": {
+    "build:css": "bin/rails tailwindcss:build",
+    "watch:css": "bin/rails tailwindcss:watch"
   }
 }

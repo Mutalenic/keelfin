@@ -48,3 +48,6 @@ test_suite_analysis/
 DEPLOYMENT.md
 /docs
 /config/deploy/production.rb
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
