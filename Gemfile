@@ -50,7 +50,7 @@ gem 'bootsnap', require: false
 # gem "sassc-rails"
 
 # Use tailwindcss-rails for Tailwind CSS (standalone CLI, no Node needed)
-gem "tailwindcss-rails", "~> 3.3"
+gem 'tailwindcss-rails', '~> 3.3'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
