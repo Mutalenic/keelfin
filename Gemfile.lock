@@ -124,6 +124,8 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    cssbundling-rails (1.4.3)
+      railties (>= 6.0.0)
     database_cleaner-active_record (2.2.2)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0)
@@ -435,6 +437,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rbenv
   capybara
+  cssbundling-rails
   database_cleaner-active_record
   debug
   devise

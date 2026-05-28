@@ -6,38 +6,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", as: "style" %>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      window.tailwind = window.tailwind || {};
-      window.tailwind.config = {
-        safelist: [
-          { pattern: /bg-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /text-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /border-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /ring-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /hover:bg-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /hover:text-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /focus:ring-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /from-brand-(50|100|200|300|400|500|600|700|800|900|950)/ },
-          { pattern: /to-brand-(50|100|200|300|400|500|600|700|800|900|950)/ },
-          { pattern: /shadow-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-          { pattern: /divide-brand-(50|100|200|300|400|500|600|700|800|900|950)(\/\d+)?/ },
-        ],
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                50:  '#e6edf3', 100: '#cae8ff', 200: '#7ee787', 300: '#56d364',
-                400: '#3fb950', 500: '#2ea043', 600: '#238636', 700: '#30363d',
-                800: '#21262d', 900: '#161b22', 950: '#0d1117',
-              }
-            }
-          }
-        }
-      }
-    </script>
+    <%= stylesheet_link_tag "application.tailwind", as: "style" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwInks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
 
@@ -80,6 +50,7 @@
         color: #e6edf3 !important;
       }
     </style>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
   <body class="min-h-screen" style="background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #21262d 100%); color: #e6edf3;">
