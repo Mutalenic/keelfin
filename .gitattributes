@@ -9,6 +9,7 @@ vendor/** linguist-vendored
 # Exclude public assets from language stats.
 public/** linguist-vendored
 
-# Ensure Ruby and ERB are classified correctly.
+# Ensure Ruby and HTML ERB templates are classified correctly.
 *.rb linguist-language=Ruby
-*.erb linguist-language=ERB
+*.html.erb linguist-language=HTML+ERB
+*.text.erb linguist-language=ERB
