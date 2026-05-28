@@ -1,3 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@source "../../views/**/*.html.erb";
+@source "../../helpers/**/*.rb";
+@source "../../javascript/**/*.js";
+
+@theme {
+  --color-brand-50:  #e6edf3;
+  --color-brand-100: #cae8ff;
+  --color-brand-200: #7ee787;
+  --color-brand-300: #56d364;
+  --color-brand-400: #3fb950;
+  --color-brand-500: #2ea043;
+  --color-brand-600: #238636;
+  --color-brand-700: #30363d;
+  --color-brand-800: #21262d;
+  --color-brand-900: #161b22;
+  --color-brand-950: #0d1117;
+}
