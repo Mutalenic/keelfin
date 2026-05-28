@@ -6,7 +6,7 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", as: "style" %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script defer src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -44,7 +44,7 @@
         <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
             integrity="sha256-IGtui7APx7uix+6AykHbPp4FunvgqjWr66nP1TV/XQ4="
             crossorigin="anonymous"></script>
-        <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+        <%= javascript_include_tag "application", defer: true %>
 
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
