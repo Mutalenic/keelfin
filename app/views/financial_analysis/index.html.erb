@@ -58,7 +58,7 @@
       <canvas id="spendingTrendChart"></canvas>
     </div>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('turbo:load', function() {
         var ctx = document.getElementById('spendingTrendChart');
         if (!ctx) return;
         new Chart(ctx, {

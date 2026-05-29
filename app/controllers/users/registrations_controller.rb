@@ -1,13 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout :resolve_layout
-
-  private
-
-  def resolve_layout
-    action_name == 'edit' ? 'application' : 'auth'
-  end
-
-  public
+  layout ->(controller) { %w[edit update].include?(controller.action_name) ? 'application' : 'auth' }
 
   protected
 

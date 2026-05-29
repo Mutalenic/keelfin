@@ -214,7 +214,8 @@
         </div>
         <p class="text-sm text-red-300/60 mb-4 ml-11">Once you delete your account, all financial data is permanently removed. This cannot be undone.</p>
         <%= button_to "Delete my account", registration_path(resource_name),
-            data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete your account? All your financial data will be permanently lost." },
+            method: :delete,
+            data: { turbo_confirm: "Are you sure you want to delete your account? All your financial data will be permanently lost." },
             class: "px-6 py-2.5 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500",
             style: "border:1px solid rgba(239,68,68,0.35); background: transparent; min-height: auto; width: auto;" %>
       </div>

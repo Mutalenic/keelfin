@@ -111,12 +111,6 @@
 
             <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Account</p>
             <%= sidebar_link 'Subscription', subscription_path, 'fa-solid fa-crown', 'subscriptions' %>
-            <%= form_tag destroy_user_session_path, method: :delete, class: 'contents' do %>
-              <button type="submit" class="flex items-center w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-white/60 hover:bg-red-500/10 hover:text-red-400 text-left">
-                <i class="fa-solid fa-right-from-bracket w-5 text-center text-white/40 mr-0"></i>
-                <span class="ml-3">Sign Out</span>
-              </button>
-            <% end %>
             <% if current_user&.admin? %>
               <%= sidebar_link 'Admin', admin_root_path, 'fa-solid fa-shield-halved', 'admin' %>
             <% end %>
