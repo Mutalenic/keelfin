@@ -1,5 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout 'auth'
+  layout ->(controller) { %w[edit update].include?(controller.action_name) ? 'application' : 'auth' }
 
   protected
 

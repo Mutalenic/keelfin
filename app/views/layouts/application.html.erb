@@ -7,7 +7,7 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "tailwind", as: "style" %>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwInks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
 
     <%= favicon_link_tag 'favicon.svg', type: 'image/svg+xml' %>
 
@@ -86,7 +86,7 @@
           <!-- Navigation -->
           <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto text-white/80">
             <p class="px-3 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Overview</p>
-            <%= sidebar_link 'Dashboard', dashboard_path, 'fa-solid fa-grid-2', 'dashboard' %>
+            <%= sidebar_link 'Dashboard', dashboard_path, 'fa-solid fa-gauge', 'dashboard' %>
 
             <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Money</p>
             <%= sidebar_link 'Income', income_sources_path, 'fa-solid fa-money-bill-wave', 'income_sources' %>
@@ -130,9 +130,11 @@
                 <a href="<%= edit_user_registration_path %>" class="p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors" title="Settings">
                   <i class="fa-solid fa-gear text-sm"></i>
                 </a>
-                <a href="<%= destroy_user_session_path %>" data-turbo-method="delete" class="p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors" title="Sign out">
-                  <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                </a>
+                <%= form_tag destroy_user_session_path, method: :delete, class: 'contents' do %>
+                  <button type="submit" class="p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-400 transition-colors" title="Sign out">
+                    <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                  </button>
+                <% end %>
               </div>
             </div>
           </div>
@@ -195,61 +197,102 @@
 
     <!-- Global Add Transaction Modal -->
     <div id="global-add-transaction" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 backdrop-blur-sm" style="background:rgba(0,0,0,0.70)" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
-      <div class="relative rounded-2xl shadow-2xl p-6 w-full max-w-md" style="background:#161b22; border:1px solid #30363d;">
-        <div class="flex items-center justify-between mb-5">
-          <h2 class="text-lg font-semibold text-brand-100">Add Transaction</h2>
-          <button onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="p-2 rounded-xl hover:bg-brand-800 text-brand-400 hover:text-brand-200 transition">
+      <div class="absolute inset-0 backdrop-blur-sm" style="background:rgba(0,0,0,0.75)" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
+      <div class="relative rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden" style="background:#161b22; border:1px solid #30363d;">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between px-6 py-5" style="border-bottom:1px solid #30363d;">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-brand-600/20">
+              <i class="fa-solid fa-receipt text-brand-400"></i>
+            </div>
+            <div>
+              <h2 class="text-base font-semibold text-white">Add Transaction</h2>
+              <p class="text-xs text-white/40">Record a new expense or payment</p>
+            </div>
+          </div>
+          <button onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="p-2 rounded-xl hover:bg-white/5 text-white/40 hover:text-white/80 transition">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-        <form action="<%= global_payments_path %>" method="post" class="space-y-4" accept-charset="UTF-8">
+        <form action="<%= global_payments_path %>" method="post" class="px-6 py-5 space-y-4" accept-charset="UTF-8">
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <!-- Description -->
+          <div>
+            <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Description</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                <i class="fa-solid fa-pen-to-square text-white/30 text-sm"></i>
+              </div>
+              <input type="text" name="payment[name]" placeholder="e.g. Groceries at Shoprite" class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500" style="background:#21262d; border:1px solid #30363d;">
+            </div>
+          </div>
+          <!-- Amount + Date -->
           <div class="grid grid-cols-2 gap-3">
-            <div class="col-span-2">
-              <label class="block text-xs text-brand-400 mb-1">Name / Description</label>
-              <input type="text" name="payment[name]" placeholder="e.g. Groceries at Shoprite" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <div>
+              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Amount (K)</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <span class="text-white/40 text-sm font-semibold">K</span>
+                </div>
+                <input type="number" name="payment[amount]" step="0.01" min="0.01" placeholder="0.00" class="w-full pl-8 pr-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500" style="background:#21262d; border:1px solid #30363d;">
+              </div>
             </div>
             <div>
-              <label class="block text-xs text-brand-400 mb-1">Amount (ZMW)</label>
-              <input type="number" name="payment[amount]" step="0.01" min="0.01" placeholder="0.00" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Date</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-calendar text-white/30 text-sm"></i>
+                </div>
+                <input type="date" name="payment[created_at]" value="<%= Date.current %>" class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500" style="background:#21262d; border:1px solid #30363d;">
+              </div>
             </div>
-            <div>
-              <label class="block text-xs text-brand-400 mb-1">Date</label>
-              <input type="date" name="payment[created_at]" value="<%= Date.current %>" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-            </div>
-            <div class="col-span-2">
-              <label class="block text-xs text-brand-400 mb-1">Category</label>
-              <% if current_user&.categories&.any? %>
-                <select name="payment[category_id]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+          <!-- Category -->
+          <div>
+            <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Category</label>
+            <% if current_user&.categories&.any? %>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-tag text-white/30 text-sm"></i>
+                </div>
+                <select name="payment[category_id]" class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none" style="background:#21262d; border:1px solid #30363d;">
                   <option value="">Select a category</option>
                   <% current_user.categories.order(:name).each do |c| %>
                     <option value="<%= c.id %>"><%= c.name %></option>
                   <% end %>
                 </select>
-              <% else %>
-                <p class="text-sm text-brand-400">No categories yet. <a href="<%= categories_path %>" class="text-brand-300 underline">Add one first</a>.</p>
-              <% end %>
-            </div>
+                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+                  <i class="fa-solid fa-chevron-down text-white/30 text-xs"></i>
+                </div>
+              </div>
+            <% else %>
+              <p class="text-sm text-white/40">No categories yet. <a href="<%= categories_path %>" class="text-brand-400 underline">Add one first</a>.</p>
+            <% end %>
+          </div>
+          <!-- Payment Method + Essential -->
+          <div class="grid grid-cols-2 gap-3" style="border-top:1px solid #30363d; padding-top:1rem;">
             <div>
-              <label class="block text-xs text-brand-400 mb-1">Payment Method</label>
-              <select name="payment[payment_method]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                <% [["Cash","cash"],["Airtel Money","airtel_money"],["MTN MoMo","mtn_momo"],["Bank Transfer","bank_transfer"],["Card","card"],["Other","other"]].each do |label, val| %>
-                  <option value="<%= val %>" <%= "selected" if val == "cash" %>><%= label %></option>
+              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Payment Method</label>
+              <select name="payment[payment_method]" class="w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none" style="background:#21262d; border:1px solid #30363d;">
+                <% [["Cash","cash"],["Airtel Money","airtel_money"],["MTN MoMo","mtn_momo"],["Bank Transfer","bank_transfer"],["Card","card"],["Other","other"]].each do |lbl, val| %>
+                  <option value="<%= val %>" <%= "selected" if val == "cash" %>><%= lbl %></option>
                 <% end %>
               </select>
             </div>
             <div>
-              <label class="block text-xs text-brand-400 mb-1">Essential?</label>
-              <select name="payment[is_essential]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-                <option value="1" selected>Yes — essential</option>
-                <option value="0">No — discretionary</option>
+              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Type</label>
+              <select name="payment[is_essential]" class="w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none" style="background:#21262d; border:1px solid #30363d;">
+                <option value="1" selected>Essential</option>
+                <option value="0">Discretionary</option>
               </select>
             </div>
           </div>
+          <!-- Actions -->
           <div class="flex gap-3 pt-1">
-            <button type="submit" class="flex-1 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer">Add Transaction</button>
-            <button type="button" onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="px-5 py-3 rounded-2xl text-sm font-semibold border border-brand-600/40 text-brand-300 hover:bg-brand-800 transition">
+            <button type="submit" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition">
+              <i class="fa-solid fa-plus"></i> Add Transaction
+            </button>
+            <button type="button" onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="px-5 py-3 rounded-2xl text-sm font-semibold text-white/50 hover:bg-white/5 hover:text-white transition" style="border:1px solid #30363d;">
               Cancel
             </button>
           </div>

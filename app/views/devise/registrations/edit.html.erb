@@ -1,108 +1,225 @@
-<div class="max-w-2xl mx-auto px-4 py-8">
-  <div class="mb-8">
-    <h2 class="text-3xl font-bold text-gray-900">Account Settings</h2>
-    <p class="mt-2 text-sm text-gray-600">Manage your profile and security preferences</p>
+<% content_for :skip_card_wrapper, true %>
+<div class="flex min-h-screen -mx-4 sm:-mx-6 lg:-mx-8 -my-6">
+
+  <!-- Left Panel -->
+  <div class="hidden lg:flex lg:w-80 xl:w-96 flex-shrink-0 relative overflow-hidden"
+       style="background-image: linear-gradient(140deg, rgba(5,150,105,0.95) 0%, rgba(4,120,87,0.92) 50%, rgba(6,78,59,0.9) 100%);">
+    <!-- Mesh gradient blobs -->
+    <div class="absolute inset-0" style="background-image: radial-gradient(ellipse 60% 50% at 15% 20%, rgba(255,255,255,0.10) 0%, transparent 60%), radial-gradient(ellipse 50% 60% at 85% 75%, rgba(16,185,129,0.18) 0%, transparent 55%), radial-gradient(ellipse 40% 40% at 70% 10%, rgba(52,211,153,0.12) 0%, transparent 50%), radial-gradient(ellipse 55% 45% at 20% 85%, rgba(5,150,105,0.15) 0%, transparent 55%);"></div>
+    <!-- Dot grid -->
+    <div class="absolute inset-0 opacity-[0.15]">
+      <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="settings-dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1" fill="white"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#settings-dot-grid)"/>
+      </svg>
+    </div>
+    <!-- Content: top-aligned -->
+    <div class="relative z-10 flex flex-col gap-8 text-white p-10 pt-12 w-full">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-wallet text-white text-lg"></i>
+        </div>
+        <span class="text-xl font-bold tracking-tight">Keelfin</span>
+      </div>
+      <!-- Heading -->
+      <div class="space-y-2">
+        <h2 class="text-3xl font-bold leading-tight">Account<br>Settings</h2>
+        <p class="text-sm text-white/70 leading-relaxed">Keep your profile and security up to date.</p>
+      </div>
+      <!-- What you can manage -->
+      <div class="space-y-3.5">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-user text-white text-xs"></i>
+          </div>
+          <span class="text-sm text-white/85">Profile & contact info</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-wallet text-white text-xs"></i>
+          </div>
+          <span class="text-sm text-white/85">Income & opening balance</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-lock text-white text-xs"></i>
+          </div>
+          <span class="text-sm text-white/85">Password & security</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-white/15 border border-white/20 flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-shield-halved text-white text-xs"></i>
+          </div>
+          <span class="text-sm text-white/85">Account safety</span>
+        </div>
+      </div>
+      <!-- Back link -->
+      <div class="mt-2">
+        <%= link_to dashboard_path, class: "inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors" do %>
+          <i class="fa-solid fa-arrow-left text-xs"></i>
+          Back to Dashboard
+        <% end %>
+      </div>
+    </div>
   </div>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-8" }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
+  <!-- Right Panel: Form -->
+  <div class="flex-1 overflow-y-auto py-8 px-4 sm:px-8 lg:px-12" style="background-color: #0d1117;">
+    <div class="max-w-2xl mx-auto space-y-6">
 
-    <!-- Profile Section -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">Profile Information</h3>
-      <div class="space-y-4">
-        <div>
-          <%= f.label :name, "Full name", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.text_field :name, autocomplete: "name",
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-        </div>
-        <div>
-          <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email",
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-          <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-            <p class="mt-1 text-xs text-amber-600">
-              <i class="fa-solid fa-clock mr-1"></i>
-              Waiting confirmation for: <%= resource.unconfirmed_email %>
-            </p>
-          <% end %>
-        </div>
-        <div>
-          <%= f.label :monthly_income, "Monthly income (ZMW)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.number_field :monthly_income, step: 0.01, min: 0,
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-        </div>
-        <div>
-          <%= f.label :phone_number, "Phone number", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.text_field :phone_number, placeholder: "+260XXXXXXXXX",
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-        </div>
+      <!-- Mobile header -->
+      <div class="lg:hidden mb-2">
+        <h2 class="text-2xl font-bold text-white">Account Settings</h2>
+        <p class="mt-1 text-sm text-white/50">Manage your profile and security preferences</p>
       </div>
-    </div>
 
-    <!-- Opening Balance Section -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-1">Opening Balance</h3>
-      <p class="text-sm text-gray-500 mb-4">Set your actual bank balance so Keelfin can calculate your real cashflow position.</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <%= f.label :opening_balance, "Current bank balance (ZMW)", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.number_field :opening_balance, step: 0.01, min: 0, placeholder: "0.00",
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <!-- Profile Section -->
+        <div class="rounded-2xl p-6" style="background:#161b22; border:1px solid #30363d;">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-lg bg-brand-600/20 flex items-center justify-center">
+              <i class="fa-solid fa-user text-brand-400 text-sm"></i>
+            </div>
+            <h3 class="text-base font-semibold text-white">Profile Information</h3>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <%= f.label :name, "Full name", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+              <%= f.text_field :name, autocomplete: "name",
+                  class: "block w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500",
+                  style: "background:#21262d; border:1px solid #30363d;" %>
+            </div>
+            <div>
+              <%= f.label :email, "Email address", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                  class: "block w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500",
+                  style: "background:#21262d; border:1px solid #30363d;" %>
+              <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+                <p class="mt-1.5 text-xs text-amber-400 flex items-center gap-1">
+                  <i class="fa-solid fa-clock"></i>
+                  Waiting confirmation for: <%= resource.unconfirmed_email %>
+                </p>
+              <% end %>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <%= f.label :monthly_income, "Monthly income (ZMW)", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+                <%= f.number_field :monthly_income, step: 0.01, min: 0,
+                    class: "block w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500",
+                    style: "background:#21262d; border:1px solid #30363d;" %>
+              </div>
+              <div>
+                <%= f.label :phone_number, "Phone number", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+                <%= f.text_field :phone_number, placeholder: "+260XXXXXXXXX",
+                    class: "block w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500",
+                    style: "background:#21262d; border:1px solid #30363d;" %>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <%= f.label :balance_as_of, "Balance as of date", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.date_field :balance_as_of,
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-          <p class="mt-1 text-xs text-gray-500">Usually today or your last bank statement date</p>
+
+        <!-- Opening Balance Section -->
+        <div class="rounded-2xl p-6" style="background:#161b22; border:1px solid #30363d;">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-600/20 flex items-center justify-center">
+              <i class="fa-solid fa-building-columns text-brand-400 text-sm"></i>
+            </div>
+            <h3 class="text-base font-semibold text-white">Opening Balance</h3>
+          </div>
+          <p class="text-xs text-white/40 mb-5 ml-11">Set your actual bank balance so Keelfin can calculate your real cashflow.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <%= f.label :opening_balance, "Current bank balance (ZMW)", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+              <%= f.number_field :opening_balance, step: 0.01, min: 0, placeholder: "0.00",
+                  class: "block w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500",
+                  style: "background:#21262d; border:1px solid #30363d;" %>
+            </div>
+            <div>
+              <%= f.label :balance_as_of, "Balance as of date", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+              <%= f.date_field :balance_as_of,
+                  class: "block w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500",
+                  style: "background:#21262d; border:1px solid #30363d;" %>
+              <p class="mt-1.5 text-xs text-white/35">Usually today or your last bank statement date</p>
+            </div>
+          </div>
         </div>
+
+        <!-- Security Section -->
+        <div class="rounded-2xl p-6" style="background:#161b22; border:1px solid #30363d;">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-8 h-8 rounded-lg bg-brand-600/20 flex items-center justify-center">
+              <i class="fa-solid fa-lock text-brand-400 text-sm"></i>
+            </div>
+            <h3 class="text-base font-semibold text-white">Change Password</h3>
+          </div>
+          <p class="text-xs text-white/40 mb-5 ml-11">Leave blank if you don't want to change it.</p>
+          <div class="space-y-4">
+            <div>
+              <%= f.label :password, "New password", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+              <%= f.password_field :password, autocomplete: "new-password",
+                  class: "block w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500",
+                  style: "background:#21262d; border:1px solid #30363d;" %>
+              <% if @minimum_password_length %>
+                <p class="mt-1.5 text-xs text-white/35"><%= @minimum_password_length %> characters minimum</p>
+              <% end %>
+            </div>
+            <div>
+              <%= f.label :password_confirmation, "Confirm new password", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+              <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                  class: "block w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500",
+                  style: "background:#21262d; border:1px solid #30363d;" %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirm Changes -->
+        <div class="rounded-2xl p-6" style="background:#161b22; border:1px solid #30363d;">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+              <i class="fa-solid fa-key text-amber-400 text-sm"></i>
+            </div>
+            <h3 class="text-base font-semibold text-white">Confirm Changes</h3>
+          </div>
+          <div>
+            <%= f.label :current_password, "Current password", class: "block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5" %>
+            <%= f.password_field :current_password, autocomplete: "current-password",
+                placeholder: "Enter current password to save changes",
+                class: "block w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500",
+                style: "background:#21262d; border:1px solid #30363d;" %>
+            <p class="mt-1.5 text-xs text-white/35">Required to confirm any changes above</p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4">
+          <%= f.submit "Save changes", class: "px-8 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2", style: "width: auto; min-height: auto;" %>
+          <%= link_to "Cancel", :back, class: "text-sm font-medium text-white/40 hover:text-white/70 transition-colors" %>
+        </div>
+      <% end %>
+
+      <!-- Danger Zone -->
+      <div class="rounded-2xl p-6" style="background: rgba(127,29,29,0.15); border:1px solid rgba(239,68,68,0.25);">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 text-sm"></i>
+          </div>
+          <h3 class="text-base font-semibold text-red-300">Danger Zone</h3>
+        </div>
+        <p class="text-sm text-red-300/60 mb-4 ml-11">Once you delete your account, all financial data is permanently removed. This cannot be undone.</p>
+        <%= button_to "Delete my account", registration_path(resource_name),
+            method: :delete,
+            data: { turbo_confirm: "Are you sure you want to delete your account? All your financial data will be permanently lost." },
+            class: "px-6 py-2.5 rounded-xl text-sm font-semibold text-red-400 hover:bg-red-500/10 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-500",
+            style: "border:1px solid rgba(239,68,68,0.35); background: transparent; min-height: auto; width: auto;" %>
       </div>
-    </div>
 
-    <!-- Security Section -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h3>
-      <p class="text-sm text-gray-500 mb-4">Leave blank if you don't want to change it</p>
-      <div class="space-y-4">
-        <div>
-          <%= f.label :password, "New password", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.password_field :password, autocomplete: "new-password",
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-          <% if @minimum_password_length %>
-            <p class="mt-1 text-xs text-gray-500"><%= @minimum_password_length %> characters minimum</p>
-          <% end %>
-        </div>
-        <div>
-          <%= f.label :password_confirmation, "Confirm new password", class: "block text-sm font-medium text-gray-700 mb-1" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password",
-              class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-        </div>
-      </div>
     </div>
-
-    <!-- Confirm Changes -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirm Changes</h3>
-      <div>
-        <%= f.label :current_password, class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.password_field :current_password, autocomplete: "current-password", placeholder: "Enter current password to save",
-            class: "block w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-sm" %>
-        <p class="mt-1 text-xs text-gray-500">We need your current password to confirm changes</p>
-      </div>
-    </div>
-
-    <div class="flex items-center justify-between">
-      <%= f.submit "Save changes", class: "btn-primary w-auto px-8 py-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500", style: "width: auto;" %>
-      <%= link_to "Cancel", :back, class: "text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors" %>
-    </div>
-  <% end %>
-
-  <!-- Danger Zone -->
-  <div class="mt-12 bg-red-50 rounded-2xl border border-red-200 p-6">
-    <h3 class="text-lg font-semibold text-red-900 mb-2">Danger Zone</h3>
-    <p class="text-sm text-red-700 mb-4">Once you delete your account, all of your financial data will be permanently removed. This action cannot be undone.</p>
-    <%= button_to "Delete my account", registration_path(resource_name),
-        data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete your account? All your financial data will be permanently lost." },
-        class: "px-6 py-2.5 border border-red-300 rounded-xl text-sm font-semibold text-red-700 bg-white hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all cursor-pointer" %>
   </div>
 </div>

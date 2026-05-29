@@ -1,4 +1,5 @@
 class FinancialAnalysisController < ApplicationController
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def index
     @months = (0..5).map { |i| Date.current - i.months }.reverse
 
@@ -31,9 +32,10 @@ class FinancialAnalysisController < ApplicationController
       .joins(:payments)
       .where(payments: { created_at: month_start..month_end })
       .group('categories.id', 'categories.name')
+      .select('categories.name, SUM(payments.amount) AS total_amount')
       .order(Arel.sql('SUM(payments.amount) DESC'))
       .limit(8)
-      .sum('payments.amount')
+      .to_h { |c| [c.name, c.total_amount.to_f] }
 
     category_spending = current_user.payments
       .where(created_at: month_start..month_end)
@@ -53,4 +55,5 @@ class FinancialAnalysisController < ApplicationController
     @debt_analysis = DebtAnalysisService.new(current_user).analyze
     @active_goals = current_user.financial_goals.where(completed: false)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

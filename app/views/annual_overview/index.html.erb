@@ -62,11 +62,13 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-brand-700/20">
-          <% @monthly_data.each do |data| %>
+          <% @monthly_data.each_with_index do |data, idx| %>
             <% is_future = data[:month] > Date.current.end_of_month %>
             <% balance_color = data[:balance] >= 0 ? "text-emerald-400" : "text-red-400" %>
             <% if data[:is_current] %>
-            <tr class="bg-brand-700/20 border-l-2 border-l-brand-400 transition-colors">
+            <tr class="bg-brand-500/10 border-l-2 border-l-brand-400 transition-colors">
+            <% elsif idx.odd? %>
+            <tr class="bg-brand-800/20 hover:bg-brand-800/40 transition-colors">
             <% else %>
             <tr class="hover:bg-brand-800/30 transition-colors">
             <% end %>
