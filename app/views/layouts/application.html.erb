@@ -111,6 +111,12 @@
 
             <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Account</p>
             <%= sidebar_link 'Subscription', subscription_path, 'fa-solid fa-crown', 'subscriptions' %>
+            <%= form_tag destroy_user_session_path, method: :delete, class: 'contents' do %>
+              <button type="submit" class="flex items-center w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-gray-600 hover:bg-red-500/10 hover:text-red-300 text-left">
+                <i class="fa-solid fa-sign-out mr-3 text-sm"></i>
+                Sign Out
+              </button>
+            <% end %>
             <% if current_user&.admin? %>
               <%= sidebar_link 'Admin', admin_root_path, 'fa-solid fa-shield-halved', 'admin' %>
             <% end %>
@@ -131,7 +137,7 @@
                   <i class="fa-solid fa-gear text-sm"></i>
                 </a>
                 <a href="<%= destroy_user_session_path %>" data-turbo-method="delete" class="p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-300 transition-colors" title="Sign out">
-                  <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                  <i class="fa-solid fa-sign-out text-sm"></i>
                 </a>
               </div>
             </div>
