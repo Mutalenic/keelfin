@@ -131,6 +131,15 @@ body.auth-page {
   padding: 48px;
 }
 
+.auth-page .left-panel-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 48px;
+  gap: 2rem;
+}
+
 .auth-page .login-card {
   display: flex;
   flex-direction: column;

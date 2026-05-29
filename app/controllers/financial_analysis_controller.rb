@@ -27,13 +27,14 @@ class FinancialAnalysisController < ApplicationController
       .where(created_at: month_start..month_end)
       .sum(:amount)
 
-    @top_categories = current_user.categories
+    top_cats_raw = current_user.categories
       .joins(:payments)
       .where(payments: { created_at: month_start..month_end })
       .group('categories.id', 'categories.name')
       .order(Arel.sql('SUM(payments.amount) DESC'))
       .limit(8)
       .sum('payments.amount')
+    @top_categories = top_cats_raw.transform_keys { |k| k.is_a?(Array) ? k.last : k }
 
     category_spending = current_user.payments
       .where(created_at: month_start..month_end)

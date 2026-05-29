@@ -1,5 +1,13 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout 'auth'
+  layout :resolve_layout
+
+  private
+
+  def resolve_layout
+    action_name == 'edit' ? 'application' : 'auth'
+  end
+
+  public
 
   protected
 
