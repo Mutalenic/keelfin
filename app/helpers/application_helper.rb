@@ -15,10 +15,14 @@ module ApplicationHelper
 
   def sidebar_link(label, path, icon_class, controller_name_match)
     active = controller_name == controller_name_match
-    state_class = active ? 'bg-brand-600/20 text-brand-300' : 'text-white/60 hover:bg-white/5 hover:text-white'
+    state_class = if active
+                    'bg-accent/10 text-accent'
+                  else
+                    'text-subtle hover:bg-content/5 hover:text-content'
+                  end
     link_class = "flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-all #{state_class}"
     link_to path, class: link_class do
-      content_tag(:i, nil, class: "#{icon_class} w-5 text-center #{active ? 'text-brand-400' : 'text-white/40'}") +
+      content_tag(:i, nil, class: "#{icon_class} w-5 text-center #{active ? 'text-accent' : 'text-faint'}") +
         content_tag(:span, label, class: 'ml-3')
     end
   end

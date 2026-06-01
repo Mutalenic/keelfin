@@ -29,7 +29,7 @@
       <p class="text-xs uppercase tracking-wide text-white/60">Portfolio Value</p>
       <p class="text-2xl font-semibold mt-3">K<%= number_with_precision(@total_invested, precision: 2) %></p>
     </div>
-      <h3 class="text-sm text-gray-600 mb-2">Total Portfolio Value</h3>
+      <h3 class="text-sm text-subtle mb-2">Total Portfolio Value</h3>
       <p class="text-3xl font-bold">K<%= number_with_precision(@total_invested, precision: 2) %></p>
     </div>
     
@@ -57,14 +57,14 @@
   </div>
 
   <!-- Portfolio Allocation -->
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Portfolio Allocation</h2>
       <div class="flex space-x-2">
         <button id="view-as-chart" class="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-xl hover:bg-cyan-200">
           <i class="fa-solid fa-chart-pie mr-1"></i> Chart
         </button>
-        <button id="view-as-table" class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-200">
+        <button id="view-as-table" class="bg-content/5 text-content px-3 py-1 rounded-lg hover:bg-content/10">
           <i class="fa-solid fa-table mr-1"></i> Table
         </button>
       </div>
@@ -85,26 +85,26 @@
     <div id="allocation-table" class="hidden">
       <% if @portfolio_allocation.any? %>
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+          <table class="min-w-full divide-y divide-default">
+            <thead class="bg-content/5">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Investment Type</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allocation</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Investment Type</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Value</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Allocation</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody class="bg-surface divide-y divide-default">
               <% @portfolio_allocation.each do |type, data| %>
                 <tr>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm font-medium text-gray-900"><%= Investment.new(investment_type: type).investment_type_text %></div>
+                    <div class="text-sm font-medium text-content"><%= Investment.new(investment_type: type).investment_type_text %></div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm font-medium">K<%= number_with_precision(data[:total], precision: 2) %></div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
-                      <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2 w-24">
+                      <div class="w-full bg-content/10 rounded-full h-2.5 mr-2 w-24">
                         <div class="bg-blue-600 h-2.5 rounded-full" style="width: <%= data[:percentage] %>%"></div>
                       </div>
                       <span class="text-sm font-medium"><%= number_with_precision(data[:percentage], precision: 1) %>%</span>
@@ -116,17 +116,17 @@
           </table>
         </div>
       <% else %>
-        <p class="text-gray-500 text-center py-4">No investment data available</p>
+        <p class="text-subtle text-center py-4">No investment data available</p>
       <% end %>
     </div>
   </div>
 
   <!-- Investments List -->
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h2 class="text-xl font-semibold text-gray-900">Your Investments</h2>
-        <p class="text-sm text-gray-500">All your active and inactive investments.</p>
+        <h2 class="text-xl font-semibold text-content">Your Investments</h2>
+        <p class="text-sm text-subtle">All your active and inactive investments.</p>
       </div>
       <%= link_to new_investment_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-cyan-600 text-white shadow hover:bg-cyan-500 transition" do %>
         <i class="fa-solid fa-plus mr-2"></i>
@@ -136,30 +136,30 @@
     
     <% if @investments.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-default">
+          <thead class="bg-content/5">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Value</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk Level</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Type</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Current Value</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Return</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Risk Level</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="bg-surface divide-y divide-default">
             <% @investments.each do |investment| %>
-              <tr class="hover:bg-gray-50 <%= investment.active? ? '' : 'bg-gray-100' %>">
+              <tr class="hover:bg-content/5 <%= investment.active? ? '' : 'bg-content/10' %>">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900"><%= link_to investment.name, investment_path(investment) %></div>
-                  <div class="text-xs text-gray-500">
+                  <div class="text-sm font-medium text-content"><%= link_to investment.name, investment_path(investment) %></div>
+                  <div class="text-xs text-subtle">
                     <% if investment.institution.present? %>
                       <%= investment.institution %>
                     <% end %>
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900"><%= investment.investment_type_text %></div>
+                  <div class="text-sm text-content"><%= investment.investment_type_text %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium">K<%= number_with_precision(investment.current_value, precision: 2) %></div>
@@ -187,13 +187,13 @@
                       <%= investment.risk_level_text %>
                     </span>
                   <% else %>
-                    <span class="text-gray-500">-</span>
+                    <span class="text-subtle">-</span>
                   <% end %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div class="flex items-center justify-end gap-2 text-xs font-semibold">
                   <%= link_to "View", investment_path(investment), class: "px-3 py-1.5 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100" %>
-                  <%= link_to "Edit", edit_investment_path(investment), class: "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+                  <%= link_to "Edit", edit_investment_path(investment), class: "px-3 py-1.5 rounded-lg bg-content/5 text-content hover:bg-content/10" %>
                   <%= link_to "Transactions", investment_investment_transactions_path(investment), class: "px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100" %>
                 </div>
                 </td>
@@ -203,8 +203,8 @@
         </table>
       </div>
     <% else %>
-      <div class="text-center py-12 bg-gray-50/80 rounded-2xl border border-dashed border-gray-200">
-        <p class="text-gray-600 mb-4">You don't have any investments yet.</p>
+      <div class="text-center py-12 bg-content/5 rounded-2xl border border-dashed border-default">
+        <p class="text-subtle mb-4">You don't have any investments yet.</p>
         <%= link_to "Add Your First Investment", new_investment_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-cyan-600 text-white font-semibold shadow hover:bg-cyan-500" %>
       </div>
     <% end %>
@@ -250,18 +250,18 @@
     chartButton.addEventListener('click', function() {
       chartDiv.classList.remove('hidden');
       tableDiv.classList.add('hidden');
-      chartButton.classList.remove('bg-gray-100', 'text-gray-700');
+      chartButton.classList.remove('bg-content/5', 'text-content');
       chartButton.classList.add('bg-blue-100', 'text-blue-700');
       tableButton.classList.remove('bg-blue-100', 'text-blue-700');
-      tableButton.classList.add('bg-gray-100', 'text-gray-700');
+      tableButton.classList.add('bg-content/5', 'text-content');
     });
     
     tableButton.addEventListener('click', function() {
       chartDiv.classList.add('hidden');
       tableDiv.classList.remove('hidden');
       chartButton.classList.remove('bg-blue-100', 'text-blue-700');
-      chartButton.classList.add('bg-gray-100', 'text-gray-700');
-      tableButton.classList.remove('bg-gray-100', 'text-gray-700');
+      chartButton.classList.add('bg-content/5', 'text-content');
+      tableButton.classList.remove('bg-content/5', 'text-content');
       tableButton.classList.add('bg-blue-100', 'text-blue-700');
     });
   });

@@ -23,7 +23,7 @@
   </div>
 
   <div class="max-w-3xl mx-auto">
-    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
       <%= form_with(model: @debt, local: true, class: "space-y-5") do |f| %>
         <% if @debt.errors.any? %>
           <div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">
@@ -40,52 +40,52 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <%= f.label :lender_name, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.text_field :lender_name, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., Bayport, Madison" %>
+            <%= f.label :lender_name, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.text_field :lender_name, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., Bayport, Madison" %>
           </div>
 
           <div>
-            <%= f.label :principal_amount, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.number_field :principal_amount, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 50000", step: "0.01" %>
+            <%= f.label :principal_amount, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.number_field :principal_amount, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 50000", step: "0.01" %>
           </div>
 
           <div>
-            <%= f.label :interest_rate, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.number_field :interest_rate, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 15.5", step: "0.01" %>
+            <%= f.label :interest_rate, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.number_field :interest_rate, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 15.5", step: "0.01" %>
           </div>
 
           <div>
-            <%= f.label :monthly_payment, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.number_field :monthly_payment, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 2500", step: "0.01" %>
+            <%= f.label :monthly_payment, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.number_field :monthly_payment, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 2500", step: "0.01" %>
           </div>
 
           <div>
-            <%= f.label :start_date, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.date_field :start_date, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" %>
+            <%= f.label :start_date, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.date_field :start_date, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" %>
           </div>
 
           <div>
-            <%= f.label :end_date, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.date_field :end_date, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" %>
+            <%= f.label :end_date, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.date_field :end_date, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" %>
           </div>
 
           <div>
-            <%= f.label :status, class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= f.label :status, class: "block text-sm font-medium text-content mb-2" %>
             <%= f.select :status,
                         options_for_select([['Active', 'active'], ['Paid Off', 'paid_off']], @debt.status),
                         { prompt: 'Select status' },
-                        { class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" } %>
+                        { class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" } %>
           </div>
 
           <div>
-            <%= f.label :term, class: "block text-sm font-medium text-gray-700 mb-2" %>
-            <%= f.number_field :term, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 24 (months)" %>
+            <%= f.label :term, class: "block text-sm font-medium text-content mb-2" %>
+            <%= f.number_field :term, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g., 24 (months)" %>
           </div>
         </div>
 
         <div class="flex items-center gap-4 pt-4">
           <%= f.submit "Update Debt", class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition cursor-pointer" %>
-          <%= link_to "Cancel", @debt, class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition" %>
+          <%= link_to "Cancel", @debt, class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-content/5 text-content hover:bg-content/10 transition" %>
         </div>
       <% end %>
     </div>

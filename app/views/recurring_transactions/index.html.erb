@@ -57,11 +57,11 @@
   </div>
 
   <!-- Active Recurring Transactions -->
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h2 class="text-xl font-semibold text-gray-900">Active recurring transactions</h2>
-        <p class="text-sm text-gray-500">Essential bills, subscriptions, and repayments currently scheduled.</p>
+        <h2 class="text-xl font-semibold text-content">Active recurring transactions</h2>
+        <p class="text-sm text-subtle">Essential bills, subscriptions, and repayments currently scheduled.</p>
       </div>
       <%= link_to new_recurring_transaction_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition" do %>
         <i class="fa-solid fa-plus mr-2"></i>
@@ -71,9 +71,9 @@
 
     <% if @active_transactions.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-100 text-sm">
+        <table class="min-w-full divide-y divide-default text-sm">
           <thead>
-            <tr class="text-left text-gray-500 uppercase text-xs tracking-wider">
+            <tr class="text-left text-subtle uppercase text-xs tracking-wider">
               <th class="px-6 py-3">Name</th>
               <th class="px-6 py-3">Category</th>
               <th class="px-6 py-3">Amount</th>
@@ -82,35 +82,35 @@
               <th class="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100">
+          <tbody class="divide-y divide-default">
             <% @active_transactions.each do |transaction| %>
-              <tr class="hover:bg-gray-50 transition">
+              <tr class="hover:bg-content/5 transition">
                 <td class="px-6 py-4">
-                  <div class="text-gray-900 font-semibold">
+                  <div class="text-content font-semibold">
                     <%= link_to transaction.name, recurring_transaction_path(transaction), class: "hover:text-brand-600" %>
                   </div>
-                  <div class="text-xs text-gray-500"><%= transaction.is_essential ? 'Essential' : 'Non-essential' %></div>
+                  <div class="text-xs text-subtle"><%= transaction.is_essential ? 'Essential' : 'Non-essential' %></div>
                 </td>
-                <td class="px-6 py-4 text-gray-900"><%= transaction.category.name %></td>
+                <td class="px-6 py-4 text-content"><%= transaction.category.name %></td>
                 <td class="px-6 py-4">
-                  <div class="font-semibold text-gray-900">K<%= number_with_precision(transaction.amount, precision: 2) %></div>
-                  <div class="text-xs text-gray-500">~K<%= number_with_precision(transaction.estimated_monthly_impact, precision: 2) %>/month</div>
+                  <div class="font-semibold text-content">K<%= number_with_precision(transaction.amount, precision: 2) %></div>
+                  <div class="text-xs text-subtle">~K<%= number_with_precision(transaction.estimated_monthly_impact, precision: 2) %>/month</div>
                 </td>
-                <td class="px-6 py-4 text-gray-900"><%= transaction.human_readable_frequency %></td>
+                <td class="px-6 py-4 text-content"><%= transaction.human_readable_frequency %></td>
                 <td class="px-6 py-4">
                   <% if transaction.next_occurrence %>
-                    <div class="text-gray-900 font-semibold"><%= transaction.next_occurrence.strftime('%b %d, %Y') %></div>
+                    <div class="text-content font-semibold"><%= transaction.next_occurrence.strftime('%b %d, %Y') %></div>
                     <% days_until = (transaction.next_occurrence - Date.current).to_i %>
-                    <div class="text-xs <%= days_until <= 0 ? 'text-red-500 font-semibold' : 'text-gray-500' %>">
+                    <div class="text-xs <%= days_until <= 0 ? 'text-red-500 font-semibold' : 'text-subtle' %>">
                       <%= days_until <= 0 ? 'Due today' : "in #{days_until} days" %>
                     </div>
                   <% else %>
-                    <div class="text-sm text-gray-500">Not scheduled</div>
+                    <div class="text-sm text-subtle">Not scheduled</div>
                   <% end %>
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="flex items-center justify-end gap-2 text-xs font-semibold">
-                    <%= link_to "View", recurring_transaction_path(transaction), class: "px-3 py-1 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+                    <%= link_to "View", recurring_transaction_path(transaction), class: "px-3 py-1 rounded-lg bg-content/5 text-content hover:bg-content/10" %>
                     <%= link_to "Edit", edit_recurring_transaction_path(transaction), class: "px-3 py-1 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100" %>
                     <%= button_to "Pause", toggle_active_recurring_transaction_path(transaction), method: :patch, class: "px-3 py-1 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 border border-amber-200" %>
                   </div>
@@ -121,26 +121,26 @@
         </table>
       </div>
     <% else %>
-      <div class="text-center py-12 bg-gray-50/80 rounded-2xl border border-dashed border-gray-200">
-        <p class="text-gray-600 mb-4">You don't have any active recurring transactions yet.</p>
+      <div class="text-center py-12 bg-content/5 rounded-2xl border border-dashed border-default">
+        <p class="text-subtle mb-4">You don't have any active recurring transactions yet.</p>
         <%= link_to "Create your first recurring transaction", new_recurring_transaction_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold shadow hover:bg-brand-500" %>
       </div>
     <% end %>
   </div>
 
   <% if @inactive_transactions.any? %>
-    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h2 class="text-xl font-semibold text-gray-900">Inactive recurring transactions</h2>
-          <p class="text-sm text-gray-500">Paused or completed payments you can quickly re-activate.</p>
+          <h2 class="text-xl font-semibold text-content">Inactive recurring transactions</h2>
+          <p class="text-sm text-subtle">Paused or completed payments you can quickly re-activate.</p>
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-100 text-sm">
+        <table class="min-w-full divide-y divide-default text-sm">
           <thead>
-            <tr class="text-left text-gray-500 uppercase text-xs tracking-wider">
+            <tr class="text-left text-subtle uppercase text-xs tracking-wider">
               <th class="px-6 py-3">Name</th>
               <th class="px-6 py-3">Category</th>
               <th class="px-6 py-3">Amount</th>
@@ -148,15 +148,15 @@
               <th class="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100">
+          <tbody class="divide-y divide-default">
             <% @inactive_transactions.each do |transaction| %>
-              <tr class="hover:bg-gray-50">
+              <tr class="hover:bg-content/5">
                 <td class="px-6 py-4">
-                  <div class="text-gray-900 font-semibold"><%= link_to transaction.name, recurring_transaction_path(transaction), class: "hover:text-brand-600" %></div>
+                  <div class="text-content font-semibold"><%= link_to transaction.name, recurring_transaction_path(transaction), class: "hover:text-brand-600" %></div>
                 </td>
-                <td class="px-6 py-4 text-gray-900"><%= transaction.category.name %></td>
-                <td class="px-6 py-4 text-gray-900">K<%= number_with_precision(transaction.amount, precision: 2) %></td>
-                <td class="px-6 py-4 text-gray-900"><%= transaction.human_readable_frequency %></td>
+                <td class="px-6 py-4 text-content"><%= transaction.category.name %></td>
+                <td class="px-6 py-4 text-content">K<%= number_with_precision(transaction.amount, precision: 2) %></td>
+                <td class="px-6 py-4 text-content"><%= transaction.human_readable_frequency %></td>
                 <td class="px-6 py-4 text-right">
                   <div class="flex items-center justify-end gap-2 text-xs font-semibold">
                     <%= button_to "Activate", toggle_active_recurring_transaction_path(transaction), method: :patch, class: "px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100" %>

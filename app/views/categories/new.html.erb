@@ -24,8 +24,8 @@
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Custom Category Form -->
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
-      <h2 class="text-xl font-bold mb-6 text-brand-100">Create Custom Category</h2>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
+      <h2 class="text-xl font-bold mb-6 text-content">Create Custom Category</h2>
 
       <%= form_with(model: @category, url: categories_path, method: :post, class: "space-y-5") do |form| %>
         <% if @category.errors.any? %>
@@ -40,17 +40,17 @@
         <% end %>
 
         <div>
-          <%= form.label :name, class: "block text-sm font-medium text-brand-300 mb-2" %>
-          <%= form.text_field :name, class: "w-full px-4 py-3 bg-brand-800/60 border border-brand-700/50 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-brand-100 placeholder-brand-500/50", placeholder: 'Enter category name' %>
+          <%= form.label :name, class: "block text-sm font-medium text-subtle mb-2" %>
+          <%= form.text_field :name, class: "w-full px-4 py-3 bg-content/5 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-content placeholder-brand-500/50", placeholder: 'Enter category name' %>
         </div>
 
         <div>
-          <%= form.label :description, class: "block text-sm font-medium text-brand-300 mb-2" %>
-          <%= form.text_area :description, class: "w-full px-4 py-3 bg-brand-800/60 border border-brand-700/50 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-brand-100 placeholder-brand-500/50", placeholder: 'Enter category description', rows: 3 %>
+          <%= form.label :description, class: "block text-sm font-medium text-subtle mb-2" %>
+          <%= form.text_area :description, class: "w-full px-4 py-3 bg-content/5 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-content placeholder-brand-500/50", placeholder: 'Enter category description', rows: 3 %>
         </div>
 
         <div>
-          <%= form.label :icon_name, class: "block text-sm font-medium text-brand-300 mb-2" %>
+          <%= form.label :icon_name, class: "block text-sm font-medium text-subtle mb-2" %>
           <%= form.select :icon_name,
             [
               ['Apple', 'fa-solid fa-apple-whole'],
@@ -65,21 +65,21 @@
               ['Savings', 'fa-solid fa-piggy-bank']
             ],
             { include_blank: 'Select an icon' },
-            { class: "w-full px-4 py-3 bg-brand-800/60 border border-brand-700/50 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-brand-100" }
+            { class: "w-full px-4 py-3 bg-content/5 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-content" }
           %>
         </div>
 
         <div>
-          <%= form.label :color, class: "block text-sm font-medium text-brand-300 mb-2" %>
-          <%= form.color_field :color, class: "w-full h-12 p-1 bg-brand-800/60 border border-brand-700/50 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+          <%= form.label :color, class: "block text-sm font-medium text-subtle mb-2" %>
+          <%= form.color_field :color, class: "w-full h-12 p-1 bg-content/5 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
         </div>
 
         <div>
-          <%= form.label :category_type, class: "block text-sm font-medium text-brand-300 mb-2" %>
+          <%= form.label :category_type, class: "block text-sm font-medium text-subtle mb-2" %>
           <%= form.select :category_type,
             @category_types.map { |type| [type.capitalize, type] },
             { include_blank: 'Select a type' },
-            { class: "w-full px-4 py-3 bg-brand-800/60 border border-brand-700/50 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-brand-100" }
+            { class: "w-full px-4 py-3 bg-content/5 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm text-content" }
           %>
         </div>
 
@@ -90,23 +90,23 @@
     </div>
 
     <!-- Preset Categories -->
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
-      <h2 class="text-xl font-bold mb-2 text-brand-100">Quick Add Presets</h2>
-      <p class="text-brand-300 mb-6">Choose from predefined categories to get started quickly.</p>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
+      <h2 class="text-xl font-bold mb-2 text-content">Quick Add Presets</h2>
+      <p class="text-subtle mb-6">Choose from predefined categories to get started quickly.</p>
 
       <div class="space-y-3">
         <% @preset_categories.each do |preset| %>
-          <div class="flex items-center justify-between p-4 rounded-2xl border border-brand-700/30 hover:shadow-md transition bg-brand-800/50" style="border-left: 4px solid <%= preset[:color] %>">
+          <div class="flex items-center justify-between p-4 rounded-2xl border border-default hover:shadow-md transition bg-content/5" style="border-left: 4px solid <%= preset[:color] %>">
             <div class="flex items-center">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white mr-3" style="background-color: <%= preset[:color] %>">
                 <i class="<%= preset[:icon_name] %>"></i>
               </div>
               <div>
-                <h3 class="font-semibold text-brand-100"><%= preset[:name] %></h3>
-                <p class="text-xs text-brand-400"><%= preset[:category_type].capitalize %></p>
+                <h3 class="font-semibold text-content"><%= preset[:name] %></h3>
+                <p class="text-xs text-accent"><%= preset[:category_type].capitalize %></p>
               </div>
             </div>
-            <%= button_to 'Add', add_preset_categories_path(preset_name: preset[:name]), class: "px-3 py-1.5 rounded-lg text-sm font-semibold bg-brand-800 hover:bg-brand-700 text-brand-300 transition border border-brand-700/50" %>
+            <%= button_to 'Add', add_preset_categories_path(preset_name: preset[:name]), class: "px-3 py-1.5 rounded-lg text-sm font-semibold bg-content/5 hover:bg-content/10 text-subtle transition border border-default" %>
           </div>
         <% end %>
       </div>

@@ -18,18 +18,18 @@
   <% end %>
 
   <div>
-    <label class="block text-sm font-medium text-brand-300 mb-1">Source Name</label>
-    <input type="text" name="income_source[name]" value="<%= income_source.name %>" placeholder="e.g. Salary, Freelance, Rental Income" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+    <label class="block text-sm font-medium text-subtle mb-1">Source Name</label>
+    <input type="text" name="income_source[name]" value="<%= income_source.name %>" placeholder="e.g. Salary, Freelance, Rental Income" class="w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
   </div>
 
   <div class="grid grid-cols-2 gap-4">
     <div>
-      <label class="block text-sm font-medium text-brand-300 mb-1">Amount (ZMW)</label>
-      <input type="number" name="income_source[amount]" value="<%= income_source.amount %>" step="0.01" min="0" placeholder="0.00" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+      <label class="block text-sm font-medium text-subtle mb-1">Amount (ZMW)</label>
+      <input type="number" name="income_source[amount]" value="<%= income_source.amount %>" step="0.01" min="0" placeholder="0.00" class="w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
     </div>
     <div>
-      <label class="block text-sm font-medium text-brand-300 mb-1">Frequency</label>
-      <select name="income_source[frequency]" class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+      <label class="block text-sm font-medium text-subtle mb-1">Frequency</label>
+      <select name="income_source[frequency]" class="w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
         <% [["Monthly","monthly"],["Weekly","weekly"],["Bi-weekly","biweekly"],["Quarterly","quarterly"],["Annually","annually"]].each do |label, val| %>
           <option value="<%= val %>" <%= "selected" if income_source.frequency == val %>><%= label %></option>
         <% end %>
@@ -38,18 +38,18 @@
   </div>
 
   <div>
-    <label class="block text-sm font-medium text-brand-300 mb-1">Notes (optional)</label>
-    <textarea name="income_source[notes]" rows="2" placeholder="e.g. Company name, payment date..." class="w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"><%= income_source.notes %></textarea>
+    <label class="block text-sm font-medium text-subtle mb-1">Notes (optional)</label>
+    <textarea name="income_source[notes]" rows="2" placeholder="e.g. Company name, payment date..." class="w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"><%= income_source.notes %></textarea>
   </div>
 
   <div class="flex items-center gap-3">
     <input type="hidden" name="income_source[active]" value="0">
-    <input type="checkbox" name="income_source[active]" value="1" id="income_source_active" <%= "checked" if income_source.active? %> class="w-4 h-4 rounded border-brand-600 text-brand-500 focus:ring-brand-500 bg-brand-800">
-    <label for="income_source_active" class="text-sm text-brand-300">Active income source</label>
+    <input type="checkbox" name="income_source[active]" value="1" id="income_source_active" <%= "checked" if income_source.active? %> class="w-4 h-4 rounded border-brand-600 text-faint focus:ring-brand-500 bg-content/5">
+    <label for="income_source_active" class="text-sm text-subtle">Active income source</label>
   </div>
 
   <div class="flex gap-3 pt-2">
     <button type="submit" class="flex-1 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer"><%= submit_label %></button>
-    <a href="<%= income_sources_path %>" class="px-6 py-3 rounded-2xl text-sm font-semibold border border-brand-600/40 text-brand-300 hover:bg-brand-800/50 transition">Cancel</a>
+    <a href="<%= income_sources_path %>" class="px-6 py-3 rounded-2xl text-sm font-semibold border border-default text-subtle hover:bg-content/10 transition">Cancel</a>
   </div>
 </form>

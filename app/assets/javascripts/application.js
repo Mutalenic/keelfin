@@ -12,3 +12,4 @@
 //
 //= require charts
 //= require auth
+//= require theme

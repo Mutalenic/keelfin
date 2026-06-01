@@ -38,35 +38,35 @@
     </div>
   </div>
 
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
-    <h2 class="text-xl font-semibold text-gray-900 mb-6">Debt Details</h2>
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <h2 class="text-xl font-semibold text-content mb-6">Debt Details</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <% if @debt.interest_rate.present? %>
-        <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
-          <p class="text-xs uppercase tracking-wide text-gray-500">Interest Rate</p>
-          <p class="text-2xl font-bold text-gray-900 mt-2"><%= number_with_precision(@debt.interest_rate, precision: 2) %>%</p>
+        <div class="rounded-2xl bg-content/5 border border-default p-4">
+          <p class="text-xs uppercase tracking-wide text-subtle">Interest Rate</p>
+          <p class="text-2xl font-bold text-content mt-2"><%= number_with_precision(@debt.interest_rate, precision: 2) %>%</p>
         </div>
       <% end %>
 
       <% if @debt.term.present? %>
-        <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
-          <p class="text-xs uppercase tracking-wide text-gray-500">Term</p>
-          <p class="text-2xl font-bold text-gray-900 mt-2"><%= @debt.term %> months</p>
+        <div class="rounded-2xl bg-content/5 border border-default p-4">
+          <p class="text-xs uppercase tracking-wide text-subtle">Term</p>
+          <p class="text-2xl font-bold text-content mt-2"><%= @debt.term %> months</p>
         </div>
       <% end %>
 
       <% if @debt.start_date.present? %>
-        <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
-          <p class="text-xs uppercase tracking-wide text-gray-500">Start Date</p>
-          <p class="text-2xl font-bold text-gray-900 mt-2"><%= @debt.start_date.strftime('%b %d, %Y') %></p>
+        <div class="rounded-2xl bg-content/5 border border-default p-4">
+          <p class="text-xs uppercase tracking-wide text-subtle">Start Date</p>
+          <p class="text-2xl font-bold text-content mt-2"><%= @debt.start_date.strftime('%b %d, %Y') %></p>
         </div>
       <% end %>
 
       <% if @debt.end_date.present? %>
-        <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4">
-          <p class="text-xs uppercase tracking-wide text-gray-500">End Date</p>
-          <p class="text-2xl font-bold text-gray-900 mt-2"><%= @debt.end_date.strftime('%b %d, %Y') %></p>
+        <div class="rounded-2xl bg-content/5 border border-default p-4">
+          <p class="text-xs uppercase tracking-wide text-subtle">End Date</p>
+          <p class="text-2xl font-bold text-content mt-2"><%= @debt.end_date.strftime('%b %d, %Y') %></p>
         </div>
       <% end %>
     </div>
@@ -98,25 +98,25 @@
   </div>
 
   <!-- Payoff Progress -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold text-brand-100">Payoff Progress</h2>
-      <span class="text-sm font-bold text-brand-300"><%= @debt.payoff_percentage %>% paid</span>
+      <h2 class="text-xl font-semibold text-content">Payoff Progress</h2>
+      <span class="text-sm font-bold text-subtle"><%= @debt.payoff_percentage %>% paid</span>
     </div>
-    <div class="w-full bg-brand-800 rounded-full h-3 mb-4">
+    <div class="w-full bg-content/5 rounded-full h-3 mb-4">
       <div class="bg-gradient-to-r from-brand-500 to-emerald-400 h-3 rounded-full transition-all" style="width: <%= @debt.payoff_percentage %>%"></div>
     </div>
     <div class="grid grid-cols-3 gap-4 text-sm">
       <div>
-        <p class="text-brand-400 text-xs uppercase tracking-wide">Total Principal</p>
-        <p class="font-bold text-brand-100 mt-1">K<%= number_with_precision(@debt.principal_amount, precision: 2, delimiter: ',') %></p>
+        <p class="text-accent text-xs uppercase tracking-wide">Total Principal</p>
+        <p class="font-bold text-content mt-1">K<%= number_with_precision(@debt.principal_amount, precision: 2, delimiter: ',') %></p>
       </div>
       <div>
-        <p class="text-brand-400 text-xs uppercase tracking-wide">Total Paid</p>
+        <p class="text-accent text-xs uppercase tracking-wide">Total Paid</p>
         <p class="font-bold text-emerald-400 mt-1">K<%= number_with_precision(@debt.total_paid_amount, precision: 2, delimiter: ',') %></p>
       </div>
       <div>
-        <p class="text-brand-400 text-xs uppercase tracking-wide">Remaining</p>
+        <p class="text-accent text-xs uppercase tracking-wide">Remaining</p>
         <p class="font-bold text-red-400 mt-1">K<%= number_with_precision(@debt.remaining_balance, precision: 2, delimiter: ',') %></p>
       </div>
     </div>
@@ -124,24 +124,24 @@
 
   <!-- Record a Payment -->
   <% if @debt.status != 'paid_off' %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
-      <h2 class="text-xl font-semibold text-brand-100 mb-4">Record a Payment</h2>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <h2 class="text-xl font-semibold text-content mb-4">Record a Payment</h2>
       <%= form_with url: debt_debt_payments_path(@debt), method: :post, class: "flex flex-col sm:flex-row gap-3" do |f| %>
         <div class="flex-1">
-          <label class="block text-xs text-brand-400 mb-1">Amount (ZMW)</label>
+          <label class="block text-xs text-accent mb-1">Amount (ZMW)</label>
           <%= f.number_field :amount, step: 0.01, min: 0.01, placeholder: @debt.monthly_payment || "0.00",
               name: "debt_payment[amount]",
-              class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+              class: "w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500" %>
         </div>
         <div class="flex-1">
-          <label class="block text-xs text-brand-400 mb-1">Payment Date</label>
+          <label class="block text-xs text-accent mb-1">Payment Date</label>
           <%= f.date_field :paid_on, value: Date.current, name: "debt_payment[paid_on]",
-              class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+              class: "w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" %>
         </div>
         <div class="flex-1">
-          <label class="block text-xs text-brand-400 mb-1">Notes (optional)</label>
+          <label class="block text-xs text-accent mb-1">Notes (optional)</label>
           <%= f.text_field :notes, placeholder: "Reference number etc.", name: "debt_payment[notes]",
-              class: "w-full bg-brand-800/60 border border-brand-600/40 text-brand-100 rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500" %>
+              class: "w-full bg-content/5 border border-default text-content rounded-xl px-4 py-2.5 text-sm placeholder-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500" %>
         </div>
         <div class="flex items-end">
           <%= f.submit "Record", class: "w-full sm:w-auto px-6 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition cursor-pointer" %>
@@ -152,22 +152,22 @@
 
   <!-- Payment History -->
   <% if @debt.debt_payments.any? %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
-      <h2 class="text-xl font-semibold text-brand-100 mb-4">Payment History (<%= @debt.payment_count %>)</h2>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <h2 class="text-xl font-semibold text-content mb-4">Payment History (<%= @debt.payment_count %>)</h2>
       <div class="space-y-2">
         <% @debt.debt_payments.ordered.each do |payment| %>
-          <div class="flex items-center justify-between py-3 border-b border-brand-700/20 last:border-0">
+          <div class="flex items-center justify-between py-3 border-b border-default last:border-0">
             <div>
-              <p class="text-sm font-medium text-brand-100"><%= payment.paid_on.strftime('%B %d, %Y') %></p>
+              <p class="text-sm font-medium text-content"><%= payment.paid_on.strftime('%B %d, %Y') %></p>
               <% if payment.notes.present? %>
-                <p class="text-xs text-brand-400"><%= payment.notes %></p>
+                <p class="text-xs text-accent"><%= payment.notes %></p>
               <% end %>
             </div>
             <div class="flex items-center gap-3">
               <p class="font-bold text-emerald-400">K<%= number_with_precision(payment.amount, precision: 2, delimiter: ',') %></p>
               <%= button_to debt_debt_payment_path(@debt, payment), method: :delete,
                   data: { turbo_confirm: "Remove this payment record?" },
-                  class: "p-1.5 rounded-lg hover:bg-red-900/40 text-brand-500 hover:text-red-300 transition" do %>
+                  class: "p-1.5 rounded-lg hover:bg-red-900/40 text-faint hover:text-red-300 transition" do %>
                 <i class="fa-solid fa-times text-xs"></i>
               <% end %>
             </div>

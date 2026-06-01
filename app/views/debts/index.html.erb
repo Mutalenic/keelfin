@@ -60,9 +60,9 @@
   <% end %>
 
   <% if @analysis[:recommendations].any? %>
-    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">Recommendations</h2>
-      <ul class="space-y-2 text-sm text-gray-600 list-disc list-inside">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+      <h2 class="text-xl font-semibold text-content mb-4">Recommendations</h2>
+      <ul class="space-y-2 text-sm text-subtle list-disc list-inside">
         <% @analysis[:recommendations].each do |recommendation| %>
           <li><%= recommendation %></li>
         <% end %>
@@ -72,9 +72,9 @@
 
   <%= render 'payoff_strategy' %>
 
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold text-gray-900">Your debts</h2>
+      <h2 class="text-xl font-semibold text-content">Your debts</h2>
       <%= link_to new_debt_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-red-600 text-white shadow hover:bg-red-500 transition" do %>
         <i class="fa-solid fa-plus mr-2"></i>
         Add debt
@@ -83,9 +83,9 @@
 
     <% if @debts.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-100 text-sm">
+        <table class="min-w-full divide-y divide-default text-sm">
           <thead>
-            <tr class="text-left text-gray-500 uppercase text-xs tracking-wider">
+            <tr class="text-left text-subtle uppercase text-xs tracking-wider">
               <th class="px-6 py-3">Lender</th>
               <th class="px-6 py-3">Principal</th>
               <th class="px-6 py-3">Interest</th>
@@ -94,13 +94,13 @@
               <th class="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-100">
+          <tbody class="divide-y divide-default">
             <% @debts.each do |debt| %>
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 font-semibold text-gray-900"><%= debt.lender_name %></td>
-                <td class="px-6 py-4 text-gray-900">K<%= number_with_precision(debt.principal_amount, precision: 2) %></td>
-                <td class="px-6 py-4 text-gray-900"><%= debt.interest_rate ? "#{number_with_precision(debt.interest_rate, precision: 1)}%" : 'N/A' %></td>
-                <td class="px-6 py-4 text-gray-900"><%= debt.monthly_payment ? "K#{number_with_precision(debt.monthly_payment, precision: 2)}" : 'N/A' %></td>
+              <tr class="hover:bg-content/5">
+                <td class="px-6 py-4 font-semibold text-content"><%= debt.lender_name %></td>
+                <td class="px-6 py-4 text-content">K<%= number_with_precision(debt.principal_amount, precision: 2) %></td>
+                <td class="px-6 py-4 text-content"><%= debt.interest_rate ? "#{number_with_precision(debt.interest_rate, precision: 1)}%" : 'N/A' %></td>
+                <td class="px-6 py-4 text-content"><%= debt.monthly_payment ? "K#{number_with_precision(debt.monthly_payment, precision: 2)}" : 'N/A' %></td>
                 <td class="px-6 py-4">
                   <span class="px-2 py-1 rounded-full text-xs font-semibold <%= debt.status == 'active' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' %>">
                     <%= debt.status.titleize %>
@@ -108,7 +108,7 @@
                 </td>
                 <td class="px-6 py-4 text-right">
                   <div class="flex items-center justify-end gap-2 text-xs font-semibold">
-                    <%= link_to "View", debt_path(debt), class: "px-3 py-1 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+                    <%= link_to "View", debt_path(debt), class: "px-3 py-1 rounded-lg bg-content/5 text-content hover:bg-content/10" %>
                     <%= link_to "Edit", edit_debt_path(debt), class: "px-3 py-1 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100" %>
                     <%= link_to "Delete", debt_path(debt), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "px-3 py-1 rounded-lg bg-red-50 text-red-600 hover:bg-red-100" %>
                   </div>
@@ -119,14 +119,14 @@
         </table>
       </div>
     <% else %>
-      <div class="text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-        <p class="text-gray-600 mb-4">No debts recorded yet.</p>
+      <div class="text-center py-12 bg-content/5 rounded-2xl border border-dashed border-default">
+        <p class="text-subtle mb-4">No debts recorded yet.</p>
         <%= link_to "Add new debt", new_debt_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-red-600 text-white font-semibold shadow hover:bg-red-500" %>
       </div>
     <% end %>
   </div>
 
   <div class="text-sm">
-    <%= link_to "Back to dashboard", dashboard_path, class: "text-gray-600 hover:text-gray-900" %>
+    <%= link_to "Back to dashboard", dashboard_path, class: "text-subtle hover:text-content" %>
   </div>
 </div>

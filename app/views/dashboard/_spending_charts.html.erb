@@ -1,11 +1,11 @@
-<div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+<div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-xl p-6">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-semibold text-brand-100">Spending Analytics</h2>
+    <h2 class="text-xl font-semibold text-content">Spending Analytics</h2>
     <div class="flex space-x-2">
-      <button id="view-as-chart" class="bg-brand-800 text-brand-300 px-3 py-1 rounded-xl hover:bg-brand-700 border border-brand-700/50">
+      <button id="view-as-chart" class="bg-content/5 text-subtle px-3 py-1 rounded-xl hover:bg-content/10 border border-default">
         <i class="fa-solid fa-chart-bar mr-1"></i> Chart
       </button>
-      <button id="view-as-table" class="bg-brand-800 text-brand-300 px-3 py-1 rounded-xl hover:bg-brand-700 border border-brand-700/50">
+      <button id="view-as-table" class="bg-content/5 text-subtle px-3 py-1 rounded-xl hover:bg-content/10 border border-default">
         <i class="fa-solid fa-table mr-1"></i> Table
       </button>
     </div>
@@ -26,30 +26,30 @@
   <div id="spending-table" class="hidden">
     <% if @spending_by_category.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-brand-700/30">
-          <thead class="bg-brand-800/60">
+        <table class="min-w-full divide-y divide-default">
+          <thead class="bg-content/5">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Category</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Amount</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Percentage</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Category</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Percentage</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-brand-700/30">
+          <tbody class="divide-y divide-default">
             <% @spending_by_category.each do |category, amount| %>
               <% cat_pct = @total_spending > 0 ? (amount / @total_spending * 100).round(1) : 0 %>
-              <tr class="hover:bg-brand-800/40">
+              <tr class="hover:bg-content/5">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-brand-100"><%= category %></div>
+                  <div class="text-sm font-medium text-content"><%= category %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-brand-100">K<%= number_with_precision(amount, precision: 2) %></div>
+                  <div class="text-sm font-medium text-content">K<%= number_with_precision(amount, precision: 2) %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
-                    <div class="w-full bg-brand-800 rounded-full h-2.5 mr-2 w-24">
-                      <div class="bg-brand-400 h-2.5 rounded-full" style="width: <%= cat_pct %>%"></div>
+                    <div class="w-full bg-content/10 rounded-full h-2.5 mr-2 w-24">
+                      <div class="bg-accent h-2.5 rounded-full" style="width: <%= cat_pct %>%"></div>
                     </div>
-                    <span class="text-sm font-medium text-brand-200"><%= number_with_precision(cat_pct, precision: 1) %>%</span>
+                    <span class="text-sm font-medium text-subtle"><%= number_with_precision(cat_pct, precision: 1) %>%</span>
                   </div>
                 </td>
               </tr>
@@ -58,14 +58,14 @@
         </table>
       </div>
     <% else %>
-      <p class="text-brand-400 text-center py-4">No spending data available</p>
+      <p class="text-faint text-center py-4">No spending data available</p>
     <% end %>
   </div>
 </div>
 
 <%
-  btn_active   = "bg-brand-600 text-white border-brand-500"
-  btn_inactive = "bg-brand-800 text-brand-300 border-brand-700/50"
+  btn_active   = "bg-accent text-white border-accent"
+  btn_inactive = "bg-content/5 text-subtle border-default"
 %>
 <script>
   document.addEventListener('DOMContentLoaded', function() {

@@ -14,7 +14,7 @@
         </p>
       </div>
       <div class="flex items-center gap-3">
-        <%= link_to new_category_payment_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-gray-800 shadow-lg shadow-white/20" do %>
+        <%= link_to new_category_payment_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-surface text-content border border-default shadow-lg" do %>
           <i class="fa-solid fa-plus mr-2"></i>
           Add transaction
         <% end %>
@@ -34,19 +34,19 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
          style="background: linear-gradient(150deg, rgba(5,150,105,0.95) 0%, rgba(4,120,87,0.85) 100%);">
-      <p class="text-xs uppercase tracking-wide text-brand-100/70">Total spent</p>
+      <p class="text-xs uppercase tracking-wide text-white/70">Total spent</p>
       <p class="text-3xl font-semibold mt-3">K<%= number_with_precision(@total_amount, precision: 2) %></p>
-      <p class="text-xs text-brand-100/70 mt-1"><%= @payments.size %> transactions</p>
+      <p class="text-xs text-white/70 mt-1"><%= @payments.size %> transactions</p>
     </div>
   </div>
 
   <!-- Transactions Table -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
     <% if @payments.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-brand-700/30 text-sm">
+        <table class="min-w-full divide-y divide-default text-sm">
           <thead>
-            <tr class="text-left text-brand-400 uppercase text-xs tracking-wider">
+            <tr class="text-left text-accent uppercase text-xs tracking-wider">
               <th class="px-6 py-3">Date</th>
               <th class="px-6 py-3">Description</th>
               <th class="px-6 py-3">Method</th>
@@ -54,13 +54,13 @@
               <th class="px-6 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-brand-700/30">
+          <tbody class="divide-y divide-default">
             <% @payments.each do |payment| %>
-              <tr class="hover:bg-brand-800/40 transition">
-                <td class="px-6 py-4 text-brand-400"><%= payment.created_at.strftime('%b %d, %Y') %></td>
+              <tr class="hover:bg-content/10 transition">
+                <td class="px-6 py-4 text-accent"><%= payment.created_at.strftime('%b %d, %Y') %></td>
                 <td class="px-6 py-4"><%= payment.name %></td>
-                <td class="px-6 py-4 text-brand-300"><%= payment.payment_method&.titleize || 'N/A' %></td>
-                <td class="px-6 py-4 font-semibold text-brand-100">K<%= number_with_precision(payment.amount, precision: 2) %></td>
+                <td class="px-6 py-4 text-subtle"><%= payment.payment_method&.titleize || 'N/A' %></td>
+                <td class="px-6 py-4 font-semibold text-content">K<%= number_with_precision(payment.amount, precision: 2) %></td>
                 <td class="px-6 py-4 text-right">
                   -
                 </td>
@@ -70,8 +70,8 @@
         </table>
       </div>
     <% else %>
-      <div class="text-center py-12 bg-brand-800/50 rounded-2xl border border-dashed border-brand-700/30">
-        <p class="text-brand-300 mb-4">No transactions recorded yet.</p>
+      <div class="text-center py-12 bg-content/5 rounded-2xl border border-dashed border-default">
+        <p class="text-subtle mb-4">No transactions recorded yet.</p>
       </div>
     <% end %>
   </div>

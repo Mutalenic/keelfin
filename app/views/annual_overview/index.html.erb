@@ -28,7 +28,7 @@
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
     <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
          style="background: linear-gradient(150deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.85) 100%);">
-      <p class="text-xs uppercase tracking-wide text-brand-100/70">Annual Income</p>
+      <p class="text-xs uppercase tracking-wide text-white/70">Annual Income</p>
       <p class="text-2xl font-bold mt-2">K<%= number_with_precision(@annual_totals[:income], precision: 2, delimiter: ',') %></p>
     </div>
     <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
@@ -46,31 +46,31 @@
   </div>
 
   <!-- 12-Month Table -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden">
-    <div class="p-6 border-b border-brand-700/30">
-      <h2 class="text-lg font-semibold text-brand-100">Month-by-Month Breakdown</h2>
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden">
+    <div class="p-6 border-b border-default">
+      <h2 class="text-lg font-semibold text-content">Month-by-Month Breakdown</h2>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full">
-        <thead class="bg-brand-800/60">
+        <thead class="bg-content/5">
           <tr>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-brand-300 uppercase tracking-wider w-28">Month</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-brand-300 uppercase tracking-wider">Income</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-brand-300 uppercase tracking-wider">Spending</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-brand-300 uppercase tracking-wider">Balance</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-brand-300 uppercase tracking-wider">vs Budget</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-subtle uppercase tracking-wider w-28">Month</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold text-subtle uppercase tracking-wider">Income</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold text-subtle uppercase tracking-wider">Spending</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold text-subtle uppercase tracking-wider">Balance</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold text-subtle uppercase tracking-wider">vs Budget</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-brand-700/20">
+        <tbody class="divide-y divide-default">
           <% @monthly_data.each_with_index do |data, idx| %>
             <% is_future = data[:month] > Date.current.end_of_month %>
             <% balance_color = data[:balance] >= 0 ? "text-emerald-400" : "text-red-400" %>
             <% if data[:is_current] %>
             <tr class="bg-brand-500/10 border-l-2 border-l-brand-400 transition-colors">
             <% elsif idx.odd? %>
-            <tr class="bg-brand-800/20 hover:bg-brand-800/40 transition-colors">
+            <tr class="bg-content/5 hover:bg-content/10 transition-colors">
             <% else %>
-            <tr class="hover:bg-brand-800/30 transition-colors">
+            <tr class="hover:bg-content/10 transition-colors">
             <% end %>
               <td class="px-4 py-3 whitespace-nowrap">
                 <div class="flex items-center gap-2">
@@ -78,24 +78,24 @@
                     <span class="w-2 h-2 rounded-full bg-brand-400 flex-shrink-0"></span>
                   <% end %>
                   <div>
-                    <p class="text-sm font-semibold text-brand-100"><%= data[:month].strftime('%B') %></p>
-                    <p class="text-xs text-brand-500"><%= data[:month].strftime('%Y') %></p>
+                    <p class="text-sm font-semibold text-content"><%= data[:month].strftime('%B') %></p>
+                    <p class="text-xs text-faint"><%= data[:month].strftime('%Y') %></p>
                   </div>
                 </div>
               </td>
               <td class="px-4 py-3 text-right whitespace-nowrap">
-                <p class="text-sm font-medium text-brand-100">K<%= number_with_precision(data[:income], precision: 2, delimiter: ',') %></p>
+                <p class="text-sm font-medium text-content">K<%= number_with_precision(data[:income], precision: 2, delimiter: ',') %></p>
               </td>
               <td class="px-4 py-3 text-right whitespace-nowrap">
                 <% if is_future %>
-                  <p class="text-sm text-brand-500 italic">—</p>
+                  <p class="text-sm text-faint italic">—</p>
                 <% else %>
-                  <p class="text-sm font-medium text-brand-100">K<%= number_with_precision(data[:spending], precision: 2, delimiter: ',') %></p>
+                  <p class="text-sm font-medium text-content">K<%= number_with_precision(data[:spending], precision: 2, delimiter: ',') %></p>
                 <% end %>
               </td>
               <td class="px-4 py-3 text-right whitespace-nowrap">
                 <% if is_future %>
-                  <p class="text-sm text-brand-500 italic">—</p>
+                  <p class="text-sm text-faint italic">—</p>
                 <% else %>
                   <p class="text-sm font-bold <%= balance_color %>">K<%= number_with_precision(data[:balance], precision: 2, delimiter: ',') %></p>
                 <% end %>
@@ -118,11 +118,11 @@
             </tr>
           <% end %>
         </tbody>
-        <tfoot class="bg-brand-800/40 border-t-2 border-brand-600/40">
+        <tfoot class="bg-content/5 border-t-2 border-default">
           <tr>
-            <td class="px-4 py-3 text-sm font-bold text-brand-100">Total</td>
-            <td class="px-4 py-3 text-right text-sm font-bold text-brand-100">K<%= number_with_precision(@annual_totals[:income], precision: 2, delimiter: ',') %></td>
-            <td class="px-4 py-3 text-right text-sm font-bold text-brand-100">K<%= number_with_precision(@annual_totals[:spending], precision: 2, delimiter: ',') %></td>
+            <td class="px-4 py-3 text-sm font-bold text-content">Total</td>
+            <td class="px-4 py-3 text-right text-sm font-bold text-content">K<%= number_with_precision(@annual_totals[:income], precision: 2, delimiter: ',') %></td>
+            <td class="px-4 py-3 text-right text-sm font-bold text-content">K<%= number_with_precision(@annual_totals[:spending], precision: 2, delimiter: ',') %></td>
             <td class="px-4 py-3 text-right text-sm font-bold <%= @annual_totals[:balance] >= 0 ? 'text-emerald-400' : 'text-red-400' %>">K<%= number_with_precision(@annual_totals[:balance], precision: 2, delimiter: ',') %></td>
             <td class="px-4 py-3"></td>
           </tr>
@@ -132,10 +132,10 @@
   </div>
 
   <!-- Link to income sources -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl p-5 flex items-center justify-between">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl p-5 flex items-center justify-between">
     <div>
-      <p class="text-sm font-medium text-brand-100">Income not accurate?</p>
-      <p class="text-xs text-brand-400 mt-0.5">Manage your salary, side hustles, and other income streams.</p>
+      <p class="text-sm font-medium text-content">Income not accurate?</p>
+      <p class="text-xs text-accent mt-0.5">Manage your salary, side hustles, and other income streams.</p>
     </div>
     <%= link_to income_sources_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition flex-shrink-0" do %>
       <i class="fa-solid fa-money-bill-wave mr-2"></i> Manage Income
