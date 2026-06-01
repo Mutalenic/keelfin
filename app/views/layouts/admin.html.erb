@@ -13,7 +13,9 @@
 
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
-      [data-sidebar-toggle]:checked ~ .sidebar-panel { transform: translateX(0); }
+      .sidebar-panel { transition: translate 200ms ease-in-out, transform 200ms ease-in-out; }
+      [data-sidebar-toggle]:checked ~ .sidebar-panel { translate: 0; transform: translateX(0); }
+      .sidebar-panel.sidebar-open { translate: 0; transform: translateX(0); }
     </style>
   </head>
 

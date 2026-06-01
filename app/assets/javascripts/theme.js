@@ -56,4 +56,23 @@
   document.addEventListener("DOMContentLoaded", bind);
   // Turbo: re-bind after navigations
   document.addEventListener("turbo:load", bind);
+
+  // Sidebar toggle fallback: some browsers don't let transform override
+  // the translate property set by Tailwind v4, so we also toggle a class.
+  function initSidebarToggle() {
+    var toggleInput = document.getElementById("sidebar-toggle");
+    var panel = document.querySelector(".sidebar-panel");
+    if (!toggleInput || !panel || toggleInput.dataset.sidebarBound) return;
+    toggleInput.dataset.sidebarBound = "true";
+
+    // Sync initial state in case browser persisted checkbox state
+    panel.classList.toggle("sidebar-open", toggleInput.checked);
+
+    toggleInput.addEventListener("change", function () {
+      panel.classList.toggle("sidebar-open", toggleInput.checked);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", initSidebarToggle);
+  document.addEventListener("turbo:load", initSidebarToggle);
 })();
