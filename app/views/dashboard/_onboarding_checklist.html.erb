@@ -12,40 +12,40 @@
 %>
 
 <% unless all_done %>
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-xl p-6">
     <div class="flex items-center justify-between mb-4">
       <div>
-        <h2 class="text-lg font-semibold text-brand-100">Getting Started</h2>
-        <p class="text-xs text-brand-400 mt-0.5"><%= completed %> of <%= steps.size %> steps complete</p>
+        <h2 class="text-lg font-semibold text-content">Getting Started</h2>
+        <p class="text-xs text-faint mt-0.5"><%= completed %> of <%= steps.size %> steps complete</p>
       </div>
       <div class="flex items-center gap-2">
-        <div class="w-32 bg-brand-800 rounded-full h-2">
-          <div class="bg-brand-400 h-2 rounded-full transition-all" style="width: <%= (completed.to_f / steps.size * 100).round %>%"></div>
+        <div class="w-32 bg-content/10 rounded-full h-2">
+          <div class="bg-accent h-2 rounded-full transition-all" style="width: <%= (completed.to_f / steps.size * 100).round %>%"></div>
         </div>
-        <span class="text-sm font-bold text-brand-300"><%= (completed.to_f / steps.size * 100).round %>%</span>
+        <span class="text-sm font-bold text-subtle"><%= (completed.to_f / steps.size * 100).round %>%</span>
       </div>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       <% steps.each do |step| %>
         <% if step[:done] %>
-          <div class="flex items-center gap-3 p-3 rounded-xl bg-emerald-900/20 border border-emerald-700/30">
-            <div class="w-8 h-8 rounded-full bg-emerald-600/30 flex items-center justify-center flex-shrink-0">
-              <i class="fa-solid fa-check text-emerald-400 text-xs"></i>
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-success/10 border border-success/30">
+            <div class="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid fa-check text-success text-xs"></i>
             </div>
-            <span class="text-sm text-brand-400 line-through"><%= step[:label] %></span>
+            <span class="text-sm text-faint line-through"><%= step[:label] %></span>
           </div>
         <% else %>
           <% target = step[:link_action] == "open-modal" ? "#" : step[:link] %>
           <% onclick = step[:link_action] == "open-modal" ? "document.getElementById('global-add-transaction').classList.remove('hidden'); return false;" : nil %>
-          <%= link_to target, onclick: onclick, class: "flex items-center gap-3 p-3 rounded-xl bg-brand-800/50 border border-brand-700/30 hover:bg-brand-700/40 hover:border-brand-600/40 transition group" do %>
-            <div class="w-8 h-8 rounded-full bg-brand-700/60 flex items-center justify-center flex-shrink-0">
-              <i class="fa-solid <%= step[:icon] %> text-brand-400 text-xs group-hover:text-brand-200 transition"></i>
+          <%= link_to target, onclick: onclick, class: "flex items-center gap-3 p-3 rounded-xl bg-content/5 border border-default hover:bg-content/10 transition group" do %>
+            <div class="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+              <i class="fa-solid <%= step[:icon] %> text-accent text-xs transition"></i>
             </div>
             <div class="flex-1 min-w-0">
-              <span class="text-sm text-brand-200 font-medium"><%= step[:label] %></span>
+              <span class="text-sm text-content font-medium"><%= step[:label] %></span>
             </div>
-            <i class="fa-solid fa-chevron-right text-brand-500 text-xs group-hover:text-brand-300 transition"></i>
+            <i class="fa-solid fa-chevron-right text-faint text-xs group-hover:text-subtle transition"></i>
           <% end %>
         <% end %>
       <% end %>

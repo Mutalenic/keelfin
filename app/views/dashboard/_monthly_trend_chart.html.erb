@@ -1,12 +1,12 @@
 <script>
   const monthlySpendingTrendData = <%= raw json_escape(@monthly_spending_trend.to_json) %>;
 </script>
-<div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
-  <h2 class="text-xl font-semibold mb-4 text-brand-100">Monthly Spending Trend</h2>
+<div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-xl p-6">
+  <h2 class="text-xl font-semibold mb-4 text-content">Monthly Spending Trend</h2>
   <% has_trend = @monthly_spending_trend[:labels].any? %>
   <% unless has_trend %>
-    <div class="text-center py-8 bg-brand-800/50 rounded-xl border border-brand-700/30">
-      <p class="text-brand-400">Not enough spending history to display trend.</p>
+    <div class="text-center py-8 bg-content/5 rounded-xl border border-default">
+      <p class="text-faint">Not enough spending history to display trend.</p>
     </div>
   <% end %>
   <% if has_trend %>
@@ -14,7 +14,7 @@
       <canvas id="monthly-spending-trend-chart"></canvas>
     </div>
     <div class="space-y-1">
-      <div class="grid grid-cols-3 px-3 py-2 text-xs font-semibold text-brand-500 uppercase tracking-wider">
+      <div class="grid grid-cols-3 px-3 py-2 text-xs font-semibold text-faint uppercase tracking-wider">
         <span>Month</span><span>Spending</span><span>Change</span>
       </div>
       <% prev = nil %>
@@ -23,15 +23,15 @@
         <% change = prev && prev > 0 ? val - prev : nil %>
         <% change_pct = change && prev > 0 ? (change / prev * 100).round(1) : nil %>
         <% sign = change && change >= 0 ? '+' : '' %>
-        <div class="grid grid-cols-3 px-3 py-2 rounded-xl hover:bg-brand-800/40 text-sm">
-          <span class="text-brand-200"><%= month %></span>
-          <span class="text-brand-100 font-medium">K<%= number_with_precision(val, precision: 2) %></span>
+        <div class="grid grid-cols-3 px-3 py-2 rounded-xl hover:bg-content/5 text-sm">
+          <span class="text-subtle"><%= month %></span>
+          <span class="text-content font-medium">K<%= number_with_precision(val, precision: 2) %></span>
           <% if change && change < 0 %>
-          <span class="text-emerald-400">
+          <span class="text-success">
           <% elsif change %>
-          <span class="text-red-400">
+          <span class="text-danger">
           <% else %>
-          <span class="text-brand-500">
+          <span class="text-faint">
           <% end %>
             <% if change %>
               <%= sign %>K<%= number_with_precision(change, precision: 2) %>

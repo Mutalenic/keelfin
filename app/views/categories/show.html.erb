@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <%= link_to new_category_payment_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-gray-800 shadow-lg shadow-white/20" do %>
+        <%= link_to new_category_payment_path(@category), class: "inline-flex items-center px-5 py-3 rounded-2xl text-sm font-semibold bg-white text-content shadow-lg shadow-white/20" do %>
           <i class="fa-solid fa-plus mr-2"></i>
           Add payment
         <% end %>
@@ -54,11 +54,11 @@
   </div>
 
   <!-- Recent Transactions -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6 sm:p-8">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h2 class="text-xl font-semibold text-brand-100">Recent Transactions</h2>
-        <p class="text-sm text-brand-400">Latest payments in this category.</p>
+        <h2 class="text-xl font-semibold text-content">Recent Transactions</h2>
+        <p class="text-sm text-accent">Latest payments in this category.</p>
       </div>
       <%= link_to category_payments_path(@category), class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition" do %>
         <i class="fa-solid fa-list mr-2"></i>
@@ -68,35 +68,35 @@
 
     <% if @payments.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-brand-700/30 text-sm">
+        <table class="min-w-full divide-y divide-default text-sm">
           <thead>
-            <tr class="text-left text-brand-400 uppercase text-xs tracking-wider">
+            <tr class="text-left text-accent uppercase text-xs tracking-wider">
               <th class="px-6 py-3">Date</th>
               <th class="px-6 py-3">Description</th>
               <th class="px-6 py-3">Method</th>
               <th class="px-6 py-3 text-right">Amount</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-brand-700/30">
+          <tbody class="divide-y divide-default">
             <% @payments.each do |payment| %>
-              <tr class="hover:bg-brand-800/40 transition">
-                <td class="px-6 py-4 text-brand-400"><%= payment.created_at.strftime('%b %d, %Y') %></td>
+              <tr class="hover:bg-content/10 transition">
+                <td class="px-6 py-4 text-accent"><%= payment.created_at.strftime('%b %d, %Y') %></td>
                 <td class="px-6 py-4">
-                  <div class="font-semibold text-brand-100"><%= payment.name %></div>
+                  <div class="font-semibold text-content"><%= payment.name %></div>
                   <% if payment.is_essential %>
                     <span class="text-xs text-emerald-400">Essential</span>
                   <% end %>
                 </td>
-                <td class="px-6 py-4 text-brand-300"><%= payment.payment_method&.titleize || 'N/A' %></td>
-                <td class="px-6 py-4 text-right font-semibold text-brand-100">K<%= number_with_precision(payment.amount, precision: 2) %></td>
+                <td class="px-6 py-4 text-subtle"><%= payment.payment_method&.titleize || 'N/A' %></td>
+                <td class="px-6 py-4 text-right font-semibold text-content">K<%= number_with_precision(payment.amount, precision: 2) %></td>
               </tr>
             <% end %>
           </tbody>
         </table>
       </div>
     <% else %>
-      <div class="text-center py-12 bg-brand-800/50 rounded-2xl border border-dashed border-brand-700/30">
-        <p class="text-brand-300 mb-4">No transactions found for this category.</p>
+      <div class="text-center py-12 bg-content/5 rounded-2xl border border-dashed border-default">
+        <p class="text-subtle mb-4">No transactions found for this category.</p>
         <%= link_to new_category_payment_path(@category), class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold shadow hover:bg-brand-500" do %>
           <i class="fa-solid fa-plus mr-2"></i>
           Add first payment
@@ -106,27 +106,27 @@
   </div>
 
   <% if @category.bnnb_mapping.present? && @bnnb_data.present? %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
       <div class="flex items-center gap-3 mb-4">
         <div class="w-9 h-9 rounded-xl bg-cyan-800/40 flex items-center justify-center flex-shrink-0">
           <i class="fa-solid fa-chart-bar text-cyan-400 text-sm"></i>
         </div>
         <div>
-          <h2 class="text-base font-semibold text-brand-100">JCTR Benchmark Comparison</h2>
-          <p class="text-xs text-brand-400">Your "<%= @category.name %>" spend vs JCTR BNNB national basket</p>
+          <h2 class="text-base font-semibold text-content">JCTR Benchmark Comparison</h2>
+          <p class="text-xs text-accent">Your "<%= @category.name %>" spend vs JCTR BNNB national basket</p>
         </div>
       </div>
       <div class="grid grid-cols-3 gap-4 text-center">
-        <div class="bg-brand-800/60 rounded-2xl p-4">
-          <p class="text-xs text-brand-400 uppercase tracking-wide mb-1">Your Monthly Avg</p>
-          <p class="text-xl font-bold text-brand-100">K<%= number_with_precision(@monthly_average, precision: 2, delimiter: ',') %></p>
+        <div class="bg-content/5 rounded-2xl p-4">
+          <p class="text-xs text-accent uppercase tracking-wide mb-1">Your Monthly Avg</p>
+          <p class="text-xl font-bold text-content">K<%= number_with_precision(@monthly_average, precision: 2, delimiter: ',') %></p>
         </div>
-        <div class="bg-brand-800/60 rounded-2xl p-4">
-          <p class="text-xs text-brand-400 uppercase tracking-wide mb-1">JCTR Benchmark</p>
+        <div class="bg-content/5 rounded-2xl p-4">
+          <p class="text-xs text-accent uppercase tracking-wide mb-1">JCTR Benchmark</p>
           <p class="text-xl font-bold text-cyan-300">K<%= number_with_precision(@bnnb_benchmark, precision: 2, delimiter: ',') %></p>
         </div>
-        <div class="bg-brand-800/60 rounded-2xl p-4">
-          <p class="text-xs text-brand-400 uppercase tracking-wide mb-1">Difference</p>
+        <div class="bg-content/5 rounded-2xl p-4">
+          <p class="text-xs text-accent uppercase tracking-wide mb-1">Difference</p>
           <% diff = @monthly_average - @bnnb_benchmark %>
           <p class="text-xl font-bold <%= diff > 0 ? 'text-red-400' : 'text-emerald-400' %>">
             <%= diff >= 0 ? '+' : '' %>K<%= number_with_precision(diff.abs, precision: 2, delimiter: ',') %>
@@ -136,17 +136,17 @@
           </p>
         </div>
       </div>
-      <p class="text-xs text-brand-500 mt-4">Source: JCTR BNNB <%= @bnnb_data.month.strftime('%B %Y') %>, <%= @bnnb_data.location %></p>
+      <p class="text-xs text-faint mt-4">Source: JCTR BNNB <%= @bnnb_data.month.strftime('%B %Y') %>, <%= @bnnb_data.location %></p>
     </div>
   <% end %>
 
   <!-- Action Buttons -->
   <div class="flex flex-wrap items-center gap-4">
-    <%= link_to export_category_payments_path(@category), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-800/60 text-brand-300 border border-brand-700/30 hover:bg-brand-700/60 transition" do %>
+    <%= link_to export_category_payments_path(@category), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-content/5 text-subtle border border-default hover:bg-content/10 transition" do %>
       <i class="fa-solid fa-file-csv mr-2"></i>
       Export CSV
     <% end %>
-    <%= link_to edit_category_path(@category), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-800/60 text-brand-300 border border-brand-700/30 hover:bg-brand-700/60 transition" do %>
+    <%= link_to edit_category_path(@category), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-content/5 text-subtle border border-default hover:bg-content/10 transition" do %>
       <i class="fa-solid fa-pencil mr-2"></i>
       Edit category
     <% end %>

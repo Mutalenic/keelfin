@@ -5,7 +5,7 @@
                               radial-gradient(circle at 20% 75%, rgba(249,115,22,0.18) 0, transparent 40%);"></div>
 
   <div class="relative max-w-3xl mx-auto px-4 py-12">
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-8">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-8">
       <!-- Progress Steps -->
       <div class="mb-10">
         <div class="flex items-center justify-center space-x-4">
@@ -20,7 +20,7 @@
                     elsif active
                       'bg-brand-600 text-white ring-4 ring-brand-700/50'
                     else
-                      'bg-brand-800 text-brand-500'
+                      'bg-content/5 text-faint'
                     end %>">
                 <% if completed %>
                   <i class="fa-solid fa-check text-sm"></i>
@@ -28,10 +28,10 @@
                   <%= index + 1 %>
                 <% end %>
               </div>
-              <span class="ml-2 text-sm font-medium <%= active ? 'text-brand-300' : 'text-brand-500' %>"><%= step_label %></span>
+              <span class="ml-2 text-sm font-medium <%= active ? 'text-subtle' : 'text-faint' %>"><%= step_label %></span>
             </div>
             <% unless index == steps.length - 1 %>
-              <div class="w-16 h-0.5 <%= completed ? 'bg-emerald-500' : 'bg-brand-800' %>"></div>
+              <div class="w-16 h-0.5 <%= completed ? 'bg-emerald-500' : 'bg-content/5' %>"></div>
             <% end %>
           <% end %>
         </div>

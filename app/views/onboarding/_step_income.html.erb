@@ -1,10 +1,10 @@
-<div class="bg-brand-800/60 rounded-2xl shadow-sm border border-brand-700/30 p-8">
+<div class="bg-content/5 rounded-2xl shadow-sm border border-default p-8">
   <div class="text-center mb-8">
-    <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-700/50 rounded-2xl mb-4">
-      <i class="fa-solid fa-money-bill-wave text-brand-300 text-2xl"></i>
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-content/10 rounded-2xl mb-4">
+      <i class="fa-solid fa-money-bill-wave text-subtle text-2xl"></i>
     </div>
-    <h2 class="text-2xl font-bold text-brand-100">Welcome to Keelfin, <%= current_user.name.split(' ').first %>!</h2>
-    <p class="mt-2 text-brand-300">Add all your income streams — salary, business income, side hustles, allowances — for an accurate financial picture.</p>
+    <h2 class="text-2xl font-bold text-content">Welcome to Keelfin, <%= current_user.name.split(' ').first %>!</h2>
+    <p class="mt-2 text-subtle">Add all your income streams — salary, business income, side hustles, allowances — for an accurate financial picture.</p>
   </div>
 
   <%= form_tag onboarding_path, method: :post, class: "space-y-5" do %>
@@ -13,19 +13,19 @@
     <div id="income-sources-list" class="space-y-3">
       <div class="income-source-row grid grid-cols-12 gap-2 items-end">
         <div class="col-span-5">
-          <label class="block text-xs text-brand-400 mb-1">Source name</label>
+          <label class="block text-xs text-accent mb-1">Source name</label>
           <input type="text" name="income_sources[][name]" placeholder="e.g. Salary"
-                 class="w-full bg-brand-800/60 border border-brand-700/50 rounded-xl px-3 py-2.5 text-brand-100 placeholder-brand-500/60 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                 class="w-full bg-content/5 border border-default rounded-xl px-3 py-2.5 text-content placeholder-brand-500/60 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
         </div>
         <div class="col-span-4">
-          <label class="block text-xs text-brand-400 mb-1">Monthly amount (K)</label>
+          <label class="block text-xs text-accent mb-1">Monthly amount (K)</label>
           <input type="number" name="income_sources[][amount]" step="0.01" min="0" placeholder="0.00"
-                 class="w-full bg-brand-800/60 border border-brand-700/50 rounded-xl px-3 py-2.5 text-brand-100 placeholder-brand-500/60 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+                 class="w-full bg-content/5 border border-default rounded-xl px-3 py-2.5 text-content placeholder-brand-500/60 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
         </div>
         <div class="col-span-3">
-          <label class="block text-xs text-brand-400 mb-1">Frequency</label>
+          <label class="block text-xs text-accent mb-1">Frequency</label>
           <select name="income_sources[][frequency]"
-                  class="w-full bg-brand-800/60 border border-brand-700/50 rounded-xl px-3 py-2.5 text-brand-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  class="w-full bg-content/5 border border-default rounded-xl px-3 py-2.5 text-content text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
             <option value="monthly">Monthly</option>
             <option value="weekly">Weekly</option>
             <option value="biweekly">Bi-weekly</option>
@@ -36,20 +36,20 @@
       </div>
     </div>
 
-    <button type="button" onclick="addIncomeRow()" class="flex items-center gap-2 text-sm text-brand-400 hover:text-brand-200 transition">
+    <button type="button" onclick="addIncomeRow()" class="flex items-center gap-2 text-sm text-accent hover:text-subtle transition">
       <i class="fa-solid fa-plus-circle"></i> Add another income source
     </button>
 
-    <div class="border-t border-brand-700/40 pt-4">
-      <p class="text-xs text-brand-400 mb-2">Or enter a single monthly total if you prefer:</p>
+    <div class="border-t border-default pt-4">
+      <p class="text-xs text-accent mb-2">Or enter a single monthly total if you prefer:</p>
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <span class="text-brand-400 font-semibold text-sm">K</span>
+          <span class="text-accent font-semibold text-sm">K</span>
         </div>
         <input type="number" name="monthly_income" step="0.01" min="0"
                value="<%= current_user.monthly_income %>"
                placeholder="Monthly income total"
-               class="block w-full pl-10 pr-4 py-3 bg-brand-800/60 border border-brand-700/50 rounded-xl text-brand-100 placeholder-brand-500/50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+               class="block w-full pl-10 pr-4 py-3 bg-content/5 border border-default rounded-xl text-content placeholder-brand-500/50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
       </div>
     </div>
 

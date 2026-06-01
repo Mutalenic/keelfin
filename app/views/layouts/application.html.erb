@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html class="h-full bg-brand-950">
+<html class="h-full">
   <head>
     <title>Keelfin</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <%# No-flash theme: apply saved/system theme before first paint %>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("keelfin-theme");
+          if (!t) {
+            t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+          }
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
 
     <%= stylesheet_link_tag "tailwind", as: "style" %>
     <link rel="stylesheet" href="/fontawesome/css/all.min.css" />
@@ -19,40 +34,42 @@
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
       [data-sidebar-toggle]:checked ~ .sidebar-panel { transform: translateX(0); }
-      html, body { background-color: #0d1117 !important; }
-      main { background-color: #0d1117 !important; }
-      /* ── Global dark-theme form overrides ─────────────────────────── */
+      /* User menu dropdown: hide native disclosure marker */
+      #user-menu > summary::-webkit-details-marker { display: none; }
+      #user-menu > summary { list-style: none; }
+      html, body { background-color: var(--surface-bg) !important; }
+      main { background-color: var(--surface-bg) !important; }
+      /* ── Global theme-aware form styling ──────────────────────────── */
       input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
       select, textarea {
-        background-color: #21262d !important;
-        border: 1px solid #30363d !important;
-        color: #e6edf3 !important;
-        color-scheme: dark;
+        background-color: var(--input-bg) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-primary) !important;
         border-radius: 0.75rem;
       }
-      input::placeholder, textarea::placeholder { color: #6e7681 !important; }
-      label { color: #cae8ff !important; }
+      input::placeholder, textarea::placeholder { color: var(--text-muted) !important; }
+      label { color: var(--label-color) !important; }
       input:focus, select:focus, textarea:focus {
         outline: none !important;
-        border-color: #238636 !important;
-        box-shadow: 0 0 0 3px rgba(35,134,54,0.25) !important;
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent) !important;
       }
       /* Cancel / secondary buttons that use gray */
       .btn-cancel, a.btn-cancel {
-        background-color: #21262d !important;
-        color: #8b949e !important;
-        border: 1px solid #30363d !important;
+        background-color: var(--surface-elevated) !important;
+        color: var(--text-secondary) !important;
+        border: 1px solid var(--border-color) !important;
       }
-      /* White card overrides */
+      /* Card surfaces */
       .card-form {
-        background-color: #161b22 !important;
-        border: 1px solid #30363d !important;
-        color: #e6edf3 !important;
+        background-color: var(--surface-card) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-primary) !important;
       }
     </style>
   </head>
 
-  <body class="min-h-screen" style="background: linear-gradient(135deg, #0d1117 0%, #161b22 60%, #21262d 100%); color: #e6edf3;">
+  <body class="min-h-screen" style="background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 60%, var(--bg-grad-3) 100%); color: var(--text-primary);">
     <div class="absolute inset-0 pointer-events-none">
       <div class="h-full w-full opacity-40"
            style="background-image: radial-gradient(circle at 20% 20%, rgba(46,160,67,0.12) 0, transparent 45%),
@@ -68,27 +85,27 @@
       <label for="sidebar-toggle" class="sidebar-overlay hidden fixed inset-0 bg-gray-900/50 z-30 lg:hidden"></label>
 
       <!-- Sidebar -->
-      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 backdrop-blur-2xl transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out" style="background:#161b22; border-right:1px solid #30363d; box-shadow:4px 0 24px rgba(0,0,0,0.4);">
+      <aside class="sidebar-panel fixed inset-y-0 left-0 z-40 w-64 backdrop-blur-2xl transform -translate-x-full lg:translate-x-0 lg:static lg:flex lg:flex-col transition-transform duration-200 ease-in-out" style="background:var(--surface-card); border-right:1px solid var(--border-color); box-shadow:4px 0 24px rgba(0,0,0,0.25);">
         <div class="flex flex-col h-full">
           <!-- Logo -->
-          <div class="flex items-center justify-between h-16 px-5" style="border-bottom:1px solid #30363d; background:#0d1117;">
+          <div class="flex items-center justify-between h-16 px-5" style="border-bottom:1px solid var(--border-color); background:var(--surface-bg);">
             <a href="<%= root_path %>" class="flex items-center space-x-2.5">
               <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl flex items-center justify-center shadow-inner shadow-brand-900/30">
                 <i class="fa-solid fa-wallet text-white text-sm"></i>
               </div>
-              <span class="text-lg font-bold text-white tracking-tight">Keelfin</span>
+              <span class="text-lg font-bold text-content tracking-tight">Keelfin</span>
             </a>
-            <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-white/10 cursor-pointer text-white/70">
+            <label for="sidebar-toggle" class="lg:hidden p-1 rounded-md hover:bg-content/10 cursor-pointer text-subtle">
               <i class="fa-solid fa-xmark"></i>
             </label>
           </div>
 
           <!-- Navigation -->
-          <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto text-white/80">
-            <p class="px-3 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Overview</p>
+          <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto text-subtle">
+            <p class="px-3 text-xs font-semibold text-faint uppercase tracking-wider mb-2">Overview</p>
             <%= sidebar_link 'Dashboard', dashboard_path, 'fa-solid fa-gauge', 'dashboard' %>
 
-            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Money</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-faint uppercase tracking-wider mb-2">Money</p>
             <%= sidebar_link 'Income', income_sources_path, 'fa-solid fa-money-bill-wave', 'income_sources' %>
             <%= sidebar_link 'Categories', categories_path, 'fa-solid fa-tags', 'categories' %>
             <%= sidebar_link 'Budgets', budgets_path, 'fa-solid fa-chart-pie', 'budgets' %>
@@ -97,7 +114,7 @@
 
             <%= sidebar_link 'Analysis', financial_analysis_path, 'fa-solid fa-magnifying-glass-chart', 'financial_analysis' %>
 
-            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Wealth</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-faint uppercase tracking-wider mb-2">Wealth</p>
             <%= sidebar_link 'Debts', debts_path, 'fa-solid fa-credit-card', 'debts' %>
             <%= sidebar_link 'Goals', financial_goals_path, 'fa-solid fa-bullseye', 'financial_goals' %>
             <%= sidebar_link 'Investments', investments_path, 'fa-solid fa-chart-line', 'investments' %>
@@ -109,7 +126,7 @@
               </button>
             </div>
 
-            <p class="px-3 pt-5 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">Account</p>
+            <p class="px-3 pt-5 text-xs font-semibold text-faint uppercase tracking-wider mb-2">Account</p>
             <%= sidebar_link 'Subscription', subscription_path, 'fa-solid fa-crown', 'subscriptions' %>
             <% if current_user&.admin? %>
               <%= sidebar_link 'Admin', admin_root_path, 'fa-solid fa-shield-halved', 'admin' %>
@@ -117,26 +134,22 @@
           </nav>
 
           <!-- User Footer -->
-          <div class="p-4" style="border-top:1px solid #30363d; background:#0d1117;">
-            <div class="flex items-center">
-              <div class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
-                <span class="text-sm font-bold text-white"><%= current_user&.name&.first(2)&.upcase %></span>
+          <div class="p-4" style="border-top:1px solid var(--border-color); background:var(--surface-bg);">
+            <div class="flex items-center mb-3">
+              <div class="w-9 h-9 bg-accent/20 rounded-full flex items-center justify-center">
+                <span class="text-sm font-bold text-accent"><%= current_user&.name&.first(2)&.upcase %></span>
               </div>
               <div class="ml-3 flex-1 min-w-0">
-                <p class="text-sm font-medium text-white truncate"><%= current_user&.name %></p>
-                <p class="text-xs text-white/60 truncate"><%= current_user&.email %></p>
+                <p class="text-sm font-medium text-content truncate"><%= current_user&.name %></p>
+                <p class="text-xs text-subtle truncate"><%= current_user&.email %></p>
               </div>
-              <div class="flex items-center space-x-1">
-                <a href="<%= edit_user_registration_path %>" class="p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors" title="Settings">
-                  <i class="fa-solid fa-gear text-sm"></i>
-                </a>
-                <%= form_tag destroy_user_session_path, method: :delete, class: 'contents' do %>
-                  <button type="submit" class="p-1.5 rounded-md hover:bg-red-500/10 text-white/60 hover:text-red-400 transition-colors" title="Sign out">
-                    <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                  </button>
-                <% end %>
-              </div>
+              <a href="<%= edit_user_registration_path %>" class="p-1.5 rounded-md hover:bg-content/10 text-subtle hover:text-content transition-colors" title="Settings" aria-label="Account settings">
+                <i class="fa-solid fa-gear text-sm"></i>
+              </a>
             </div>
+            <%= button_to destroy_user_session_path, method: :delete, class: 'w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-danger border border-danger/30 hover:bg-danger/10 transition-colors', 'aria-label': 'Sign out' do %>
+              <i class="fa-solid fa-right-from-bracket text-sm"></i> Sign out
+            <% end %>
           </div>
         </div>
       </aside>
@@ -144,25 +157,62 @@
       <!-- Main Content -->
       <div class="flex-1 flex flex-col min-w-0">
         <!-- Top Bar -->
-        <header class="sticky top-0 z-20 backdrop-blur-2xl" style="background:rgba(13,17,23,0.85); border-bottom:1px solid #30363d; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
+        <header class="sticky top-0 z-20 backdrop-blur-2xl" style="background:color-mix(in srgb, var(--surface-bg) 85%, transparent); border-bottom:1px solid var(--border-color); box-shadow:0 4px 24px rgba(0,0,0,0.15);">
           <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center">
-              <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-white/10 cursor-pointer mr-3 text-white/70">
+              <label for="sidebar-toggle" class="lg:hidden p-2 -ml-2 rounded-md hover:bg-content/10 cursor-pointer mr-3 text-subtle">
                 <i class="fa-solid fa-bars"></i>
               </label>
-              <h1 class="text-lg font-semibold text-white"><%= yield(:page_title) if content_for?(:page_title) %></h1>
+              <h1 class="text-lg font-semibold text-content"><%= yield(:page_title) if content_for?(:page_title) %></h1>
             </div>
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 sm:space-x-3">
               <% if current_user && !current_user.confirmed_at %>
-                <div class="hidden sm:flex items-center bg-amber-400/20 text-amber-100 px-3 py-1.5 rounded-lg text-xs font-medium border border-amber-200/20">
+                <div class="hidden sm:flex items-center bg-warning/15 text-warning px-3 py-1.5 rounded-lg text-xs font-medium border border-warning/30">
                   <i class="fa-solid fa-envelope mr-1.5"></i>
                   Please verify your email
                 </div>
               <% end %>
               <% if current_user&.premium? %>
-                <span class="hidden sm:flex items-center bg-gradient-to-r from-amber-400/30 to-yellow-300/30 text-amber-100 px-3 py-1.5 rounded-lg text-xs font-semibold border border-amber-200/20">
-                  <i class="fa-solid fa-crown mr-1.5 text-amber-200"></i> Premium
+                <span class="hidden sm:flex items-center bg-warning/15 text-warning px-3 py-1.5 rounded-lg text-xs font-semibold border border-warning/30">
+                  <i class="fa-solid fa-crown mr-1.5"></i> Premium
                 </span>
+              <% end %>
+
+              <!-- Theme toggle -->
+              <button type="button" data-theme-toggle aria-pressed="false"
+                      class="p-2 rounded-lg text-subtle hover:text-content hover:bg-content/10 transition-colors"
+                      title="Toggle light/dark theme">
+                <i data-theme-icon="sun" class="fa-solid fa-sun text-sm"></i>
+                <i data-theme-icon="moon" class="fa-solid fa-moon text-sm hidden"></i>
+              </button>
+
+              <!-- User menu -->
+              <% if current_user %>
+                <details class="relative" id="user-menu">
+                  <summary class="list-none flex items-center gap-2 cursor-pointer px-1.5 py-1 rounded-lg hover:bg-content/10 transition-colors">
+                    <span class="w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center text-xs font-bold text-accent">
+                      <%= current_user.name&.first(2)&.upcase %>
+                    </span>
+                    <span class="hidden sm:block text-sm font-medium text-content max-w-[8rem] truncate"><%= current_user.name %></span>
+                    <i class="fa-solid fa-chevron-down text-xs text-subtle"></i>
+                  </summary>
+                  <div class="absolute right-0 mt-2 w-56 rounded-xl shadow-2xl overflow-hidden z-30"
+                       style="background:var(--surface-card); border:1px solid var(--border-color);">
+                    <div class="px-4 py-3" style="border-bottom:1px solid var(--border-color);">
+                      <p class="text-sm font-medium text-content truncate"><%= current_user.name %></p>
+                      <p class="text-xs text-subtle truncate"><%= current_user.email %></p>
+                    </div>
+                    <a href="<%= edit_user_registration_path %>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-subtle hover:text-content hover:bg-content/5 transition-colors">
+                      <i class="fa-solid fa-gear w-4 text-center"></i> Account settings
+                    </a>
+                    <a href="<%= subscription_path %>" class="flex items-center gap-3 px-4 py-2.5 text-sm text-subtle hover:text-content hover:bg-content/5 transition-colors">
+                      <i class="fa-solid fa-crown w-4 text-center"></i> Subscription
+                    </a>
+                    <%= button_to destroy_user_session_path, method: :delete, class: 'w-full flex items-center gap-3 px-4 py-2.5 text-sm text-danger hover:bg-danger/10 transition-colors', 'aria-label': 'Sign out' do %>
+                      <i class="fa-solid fa-right-from-bracket w-4 text-center"></i> Sign out
+                    <% end %>
+                  </div>
+                </details>
               <% end %>
             </div>
           </div>
@@ -171,23 +221,23 @@
         <!-- Flash Messages -->
         <% if notice.present? %>
           <div class="mx-4 sm:mx-6 lg:mx-8 mt-4">
-            <div class="bg-emerald-900/30 border border-emerald-700/40 text-emerald-300 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
-              <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5 mr-3 flex-shrink-0"></i>
+            <div class="bg-success/10 border border-success/30 text-success rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
+              <i class="fa-solid fa-circle-check mt-0.5 mr-3 flex-shrink-0"></i>
               <span><%= notice %></span>
             </div>
           </div>
         <% end %>
         <% if alert.present? %>
           <div class="mx-4 sm:mx-6 lg:mx-8 mt-4">
-            <div class="bg-red-900/30 border border-red-700/40 text-red-300 rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
-              <i class="fa-solid fa-circle-exclamation text-red-400 mt-0.5 mr-3 flex-shrink-0"></i>
+            <div class="bg-danger/10 border border-danger/30 text-danger rounded-xl px-4 py-3 text-sm flex items-start" role="alert">
+              <i class="fa-solid fa-circle-exclamation mt-0.5 mr-3 flex-shrink-0"></i>
               <span><%= alert %></span>
             </div>
           </div>
         <% end %>
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-y-auto" style="background-color: #0d1117;">
+        <main class="flex-1 overflow-y-auto" style="background-color: var(--surface-bg);">
           <div class="px-4 sm:px-6 lg:px-8 py-6">
             <%= yield %>
           </div>
@@ -198,19 +248,19 @@
     <!-- Global Add Transaction Modal -->
     <div id="global-add-transaction" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
       <div class="absolute inset-0 backdrop-blur-sm" style="background:rgba(0,0,0,0.75)" onclick="document.getElementById('global-add-transaction').classList.add('hidden')"></div>
-      <div class="relative rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden" style="background:#161b22; border:1px solid #30363d;">
+      <div class="relative rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden" style="background:var(--surface-card); border:1px solid var(--border-color);">
         <!-- Modal Header -->
-        <div class="flex items-center justify-between px-6 py-5" style="border-bottom:1px solid #30363d;">
+        <div class="flex items-center justify-between px-6 py-5" style="border-bottom:1px solid var(--border-color);">
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl flex items-center justify-center bg-brand-600/20">
-              <i class="fa-solid fa-receipt text-brand-400"></i>
+              <i class="fa-solid fa-receipt text-accent"></i>
             </div>
             <div>
-              <h2 class="text-base font-semibold text-white">Add Transaction</h2>
-              <p class="text-xs text-white/40">Record a new expense or payment</p>
+              <h2 class="text-base font-semibold text-content">Add Transaction</h2>
+              <p class="text-xs text-subtle">Record a new expense or payment</p>
             </div>
           </div>
-          <button onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="p-2 rounded-xl hover:bg-white/5 text-white/40 hover:text-white/80 transition">
+          <button onclick="document.getElementById('global-add-transaction').classList.add('hidden')" class="p-2 rounded-xl hover:bg-content/5 text-subtle hover:text-content transition">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -218,10 +268,10 @@
           <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
           <!-- Description -->
           <div>
-            <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Description</label>
+            <label class="block text-xs font-medium text-subtle uppercase tracking-wide mb-1.5">Description</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <i class="fa-solid fa-pen-to-square text-white/30 text-sm"></i>
+                <i class="fa-solid fa-pen-to-square text-faint text-sm"></i>
               </div>
               <input type="text" name="payment[name]" placeholder="e.g. Groceries at Shoprite" class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500" style="background:#21262d; border:1px solid #30363d;">
             </div>
@@ -229,19 +279,19 @@
           <!-- Amount + Date -->
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Amount (K)</label>
+              <label class="block text-xs font-medium text-subtle uppercase tracking-wide mb-1.5">Amount (K)</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <span class="text-white/40 text-sm font-semibold">K</span>
+                  <span class="text-subtle text-sm font-semibold">K</span>
                 </div>
                 <input type="number" name="payment[amount]" step="0.01" min="0.01" placeholder="0.00" class="w-full pl-8 pr-4 py-3 rounded-xl text-sm text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-brand-500" style="background:#21262d; border:1px solid #30363d;">
               </div>
             </div>
             <div>
-              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Date</label>
+              <label class="block text-xs font-medium text-subtle uppercase tracking-wide mb-1.5">Date</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <i class="fa-solid fa-calendar text-white/30 text-sm"></i>
+                  <i class="fa-solid fa-calendar text-faint text-sm"></i>
                 </div>
                 <input type="date" name="payment[created_at]" value="<%= Date.current %>" class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500" style="background:#21262d; border:1px solid #30363d;">
               </div>
@@ -249,11 +299,11 @@
           </div>
           <!-- Category -->
           <div>
-            <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Category</label>
+            <label class="block text-xs font-medium text-subtle uppercase tracking-wide mb-1.5">Category</label>
             <% if current_user&.categories&.any? %>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <i class="fa-solid fa-tag text-white/30 text-sm"></i>
+                  <i class="fa-solid fa-tag text-faint text-sm"></i>
                 </div>
                 <select name="payment[category_id]" class="w-full pl-10 pr-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none" style="background:#21262d; border:1px solid #30363d;">
                   <option value="">Select a category</option>
@@ -262,17 +312,17 @@
                   <% end %>
                 </select>
                 <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
-                  <i class="fa-solid fa-chevron-down text-white/30 text-xs"></i>
+                  <i class="fa-solid fa-chevron-down text-faint text-xs"></i>
                 </div>
               </div>
             <% else %>
-              <p class="text-sm text-white/40">No categories yet. <a href="<%= categories_path %>" class="text-brand-400 underline">Add one first</a>.</p>
+              <p class="text-sm text-subtle">No categories yet. <a href="<%= categories_path %>" class="text-accent underline">Add one first</a>.</p>
             <% end %>
           </div>
           <!-- Payment Method + Essential -->
-          <div class="grid grid-cols-2 gap-3" style="border-top:1px solid #30363d; padding-top:1rem;">
+          <div class="grid grid-cols-2 gap-3" style="border-top:1px solid var(--border-color); padding-top:1rem;">
             <div>
-              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Payment Method</label>
+              <label class="block text-xs font-medium text-subtle uppercase tracking-wide mb-1.5">Payment Method</label>
               <select name="payment[payment_method]" class="w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none" style="background:#21262d; border:1px solid #30363d;">
                 <% [["Cash","cash"],["Airtel Money","airtel_money"],["MTN MoMo","mtn_momo"],["Bank Transfer","bank_transfer"],["Card","card"],["Other","other"]].each do |lbl, val| %>
                   <option value="<%= val %>" <%= "selected" if val == "cash" %>><%= lbl %></option>
@@ -280,7 +330,7 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-white/50 uppercase tracking-wide mb-1.5">Type</label>
+              <label class="block text-xs font-medium text-subtle uppercase tracking-wide mb-1.5">Type</label>
               <select name="payment[is_essential]" class="w-full px-4 py-3 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none" style="background:#21262d; border:1px solid #30363d;">
                 <option value="1" selected>Essential</option>
                 <option value="0">Discretionary</option>

@@ -52,7 +52,7 @@
   </div>
 
   <!-- Goal Header -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
     <div class="flex justify-between items-start">
       <div class="flex items-center gap-3">
         <% if @financial_goal.completed? %>
@@ -64,7 +64,7 @@
             <i class="fa-solid fa-exclamation-circle mr-2"></i> Overdue
           </span>
         <% else %>
-          <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-brand-800/60 text-brand-300 border border-brand-700/40">
+          <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-content/5 text-subtle border border-default">
             <i class="fa-solid fa-circle-notch mr-2"></i> Active
           </span>
         <% end %>
@@ -73,46 +73,46 @@
   </div>
 
   <!-- Progress Section -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
-    <h2 class="text-xl font-semibold text-brand-100 mb-4">Progress</h2>
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+    <h2 class="text-xl font-semibold text-content mb-4">Progress</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      <div class="bg-brand-800/60 border border-brand-700/30 rounded-lg p-4">
-        <p class="text-sm text-brand-400 mb-1">Current Amount</p>
-        <p class="text-2xl font-bold text-brand-100">K<%= number_with_precision(@financial_goal.current_amount, precision: 2) %></p>
+      <div class="bg-content/5 border border-default rounded-lg p-4">
+        <p class="text-sm text-accent mb-1">Current Amount</p>
+        <p class="text-2xl font-bold text-content">K<%= number_with_precision(@financial_goal.current_amount, precision: 2) %></p>
       </div>
 
-      <div class="bg-brand-800/60 border border-brand-700/30 rounded-lg p-4">
-        <p class="text-sm text-brand-400 mb-1">Target Amount</p>
-        <p class="text-2xl font-bold text-brand-100">K<%= number_with_precision(@financial_goal.target_amount, precision: 2) %></p>
+      <div class="bg-content/5 border border-default rounded-lg p-4">
+        <p class="text-sm text-accent mb-1">Target Amount</p>
+        <p class="text-2xl font-bold text-content">K<%= number_with_precision(@financial_goal.target_amount, precision: 2) %></p>
       </div>
 
-      <div class="bg-brand-800/60 border border-brand-700/30 rounded-lg p-4">
-        <p class="text-sm text-brand-400 mb-1">Remaining</p>
-        <p class="text-2xl font-bold text-brand-100">K<%= number_with_precision(@financial_goal.target_amount - @financial_goal.current_amount, precision: 2) %></p>
+      <div class="bg-content/5 border border-default rounded-lg p-4">
+        <p class="text-sm text-accent mb-1">Remaining</p>
+        <p class="text-2xl font-bold text-content">K<%= number_with_precision(@financial_goal.target_amount - @financial_goal.current_amount, precision: 2) %></p>
       </div>
     </div>
 
     <!-- Progress Bar -->
     <div class="mb-2">
-      <div class="flex justify-between text-sm mb-1 text-brand-300">
+      <div class="flex justify-between text-sm mb-1 text-subtle">
         <span>Progress: <%= @financial_goal.progress_percentage %>%</span>
         <span><%= @financial_goal.days_remaining %> days remaining</span>
       </div>
-      <div class="w-full bg-brand-800 rounded-full h-4">
+      <div class="w-full bg-content/5 rounded-full h-4">
         <div class="bg-brand-500 h-4 rounded-full" style="width: <%= @financial_goal.progress_percentage %>"></div>
       </div>
     </div>
 
     <!-- Daily Target -->
-    <div class="mt-4 bg-brand-800/60 border border-brand-700/30 rounded-lg p-4">
+    <div class="mt-4 bg-content/5 border border-default rounded-lg p-4">
       <div class="flex items-center">
-        <div class="mr-4 text-brand-400">
+        <div class="mr-4 text-accent">
           <i class="fa-solid fa-calendar-day text-2xl"></i>
         </div>
         <div>
-          <p class="font-medium text-brand-200">Daily Target</p>
-          <p class="text-sm text-brand-300">You need to save <strong class="text-brand-100">K<%= number_with_precision(@financial_goal.daily_target, precision: 2) %></strong> per day to reach your goal on time.</p>
+          <p class="font-medium text-subtle">Daily Target</p>
+          <p class="text-sm text-subtle">You need to save <strong class="text-content">K<%= number_with_precision(@financial_goal.daily_target, precision: 2) %></strong> per day to reach your goal on time.</p>
         </div>
       </div>
     </div>
@@ -122,10 +122,10 @@
       <div class="mt-6">
         <%= form_with url: update_progress_financial_goal_path(@financial_goal), method: :patch, class: "flex items-center space-x-4" do |f| %>
           <div class="flex-grow">
-            <%= f.label :current_amount, "Update Current Amount", class: "block text-sm font-medium text-brand-300 mb-1" %>
+            <%= f.label :current_amount, "Update Current Amount", class: "block text-sm font-medium text-subtle mb-1" %>
             <div class="mt-1 flex rounded-md shadow-sm">
-              <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-brand-700/50 bg-brand-800/60 text-brand-400">K</span>
-              <%= f.number_field :current_amount, value: @financial_goal.current_amount, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-brand-700/50 bg-brand-800/60 text-brand-100 focus:ring-brand-500 focus:border-brand-500" %>
+              <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-default bg-content/5 text-accent">K</span>
+              <%= f.number_field :current_amount, value: @financial_goal.current_amount, step: "0.01", min: "0", class: "flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-r-md border border-default bg-content/5 text-content focus:ring-brand-500 focus:border-brand-500" %>
             </div>
           </div>
           <%= f.submit "Update Progress", class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white shadow hover:bg-emerald-500 transition" %>
@@ -135,62 +135,62 @@
   </div>
   
   <!-- Timeline & Milestones -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
-    <h2 class="text-xl font-semibold text-brand-100 mb-4">Timeline & Milestones</h2>
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+    <h2 class="text-xl font-semibold text-content mb-4">Timeline & Milestones</h2>
 
     <div class="flex justify-between mb-6 text-sm">
       <div>
-        <p class="text-brand-400">Start Date</p>
-        <p class="font-semibold text-brand-100"><%= @financial_goal.start_date.strftime('%b %d, %Y') %></p>
+        <p class="text-accent">Start Date</p>
+        <p class="font-semibold text-content"><%= @financial_goal.start_date.strftime('%b %d, %Y') %></p>
       </div>
       <div class="text-center">
-        <p class="text-brand-400">Duration</p>
-        <p class="font-semibold text-brand-100"><%= (@financial_goal.target_date - @financial_goal.start_date).to_i %> days</p>
+        <p class="text-accent">Duration</p>
+        <p class="font-semibold text-content"><%= (@financial_goal.target_date - @financial_goal.start_date).to_i %> days</p>
       </div>
       <div class="text-right">
-        <p class="text-brand-400">Target Date</p>
-        <p class="font-semibold text-brand-100"><%= @financial_goal.target_date.strftime('%b %d, %Y') %></p>
+        <p class="text-accent">Target Date</p>
+        <p class="font-semibold text-content"><%= @financial_goal.target_date.strftime('%b %d, %Y') %></p>
       </div>
     </div>
 
     <!-- Milestones -->
     <% if @financial_goal.milestones.present? && @financial_goal.milestones.any? %>
-      <h3 class="font-medium text-lg text-brand-200 mb-3">Milestones</h3>
+      <h3 class="font-medium text-lg text-subtle mb-3">Milestones</h3>
       <div class="space-y-4">
         <% @financial_goal.milestones.each do |milestone| %>
           <div class="flex items-center">
             <div class="relative mr-4">
-              <div class="h-full w-0.5 absolute left-2.5 bg-brand-700/50"></div>
-              <div class="w-5 h-5 rounded-full <%= milestone['completed'] ? 'bg-emerald-500' : 'bg-brand-700' %> flex items-center justify-center">
+              <div class="h-full w-0.5 absolute left-2.5 bg-content/10"></div>
+              <div class="w-5 h-5 rounded-full <%= milestone['completed'] ? 'bg-emerald-500' : 'bg-content/10' %> flex items-center justify-center">
                 <% if milestone['completed'] %>
                   <i class="fa-solid fa-check text-white text-xs"></i>
                 <% end %>
               </div>
             </div>
             <div class="flex-grow">
-              <p class="font-medium text-brand-100"><%= milestone['name'] %></p>
-              <p class="text-sm text-brand-400"><%= milestone['target_date'] %> • <%= number_with_precision(milestone['amount'], precision: 2) %></p>
+              <p class="font-medium text-content"><%= milestone['name'] %></p>
+              <p class="text-sm text-accent"><%= milestone['target_date'] %> • <%= number_with_precision(milestone['amount'], precision: 2) %></p>
             </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p class="text-brand-400 italic">No milestones set for this goal.</p>
+      <p class="text-accent italic">No milestones set for this goal.</p>
     <% end %>
   </div>
   
   <!-- Recommendations -->
   <% if @recommendations.present? %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
-      <h2 class="text-xl font-semibold text-brand-100 mb-4">Recommendations</h2>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+      <h2 class="text-xl font-semibold text-content mb-4">Recommendations</h2>
 
       <div class="space-y-4">
         <% @recommendations.each do |recommendation| %>
           <div class="flex items-start">
-            <div class="mr-3 text-brand-400">
+            <div class="mr-3 text-accent">
               <i class="fa-solid fa-lightbulb"></i>
             </div>
-            <p class="text-brand-200"><%= recommendation %></p>
+            <p class="text-subtle"><%= recommendation %></p>
           </div>
         <% end %>
       </div>
@@ -199,29 +199,29 @@
 
   <!-- Related Transactions -->
   <% if @related_transactions&.any? %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
-      <h2 class="text-xl font-semibold text-brand-100 mb-4">Related Transactions</h2>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+      <h2 class="text-xl font-semibold text-content mb-4">Related Transactions</h2>
 
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-brand-700/30">
-          <thead class="bg-brand-800/60">
+        <table class="min-w-full divide-y divide-default">
+          <thead class="bg-content/5">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Date</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-brand-300 uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Amount</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-brand-700/30">
+          <tbody class="divide-y divide-default">
             <% @related_transactions.each do |transaction| %>
-              <tr class="hover:bg-brand-800/40">
+              <tr class="hover:bg-content/10">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-brand-100"><%= transaction.name %></div>
+                  <div class="text-sm font-medium text-content"><%= transaction.name %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-brand-400"><%= transaction.created_at.strftime('%b %d, %Y') %></div>
+                  <div class="text-sm text-accent"><%= transaction.created_at.strftime('%b %d, %Y') %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-brand-100">K<%= number_with_precision(transaction.amount, precision: 2) %></div>
+                  <div class="text-sm font-medium text-content">K<%= number_with_precision(transaction.amount, precision: 2) %></div>
                 </td>
               </tr>
             <% end %>

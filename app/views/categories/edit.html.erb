@@ -23,7 +23,7 @@
   </div>
 
   <div class="max-w-2xl mx-auto">
-    <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
       <%= form_with(model: @category, url: category_path(@category), method: :patch, class: "space-y-5") do |form| %>
         <% if @category.errors.any? %>
           <div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-4">
@@ -37,22 +37,22 @@
         <% end %>
 
         <div>
-          <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.text_field :name, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter category name' %>
+          <%= form.label :name, class: "block text-sm font-medium text-content mb-2" %>
+          <%= form.text_field :name, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter category name' %>
         </div>
 
         <div>
-          <%= form.label :description, class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.text_area :description, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter category description', rows: 3 %>
+          <%= form.label :description, class: "block text-sm font-medium text-content mb-2" %>
+          <%= form.text_area :description, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter category description', rows: 3 %>
         </div>
 
         <div>
-          <%= form.label :icon, class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.text_field :icon, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter icon name' %>
+          <%= form.label :icon, class: "block text-sm font-medium text-content mb-2" %>
+          <%= form.text_field :icon, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: 'Enter icon name' %>
         </div>
 
         <div>
-          <%= form.label :icon_name, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.label :icon_name, class: "block text-sm font-medium text-content mb-2" %>
           <%= form.select :icon_name,
             [
               ['Apple', 'fa-solid fa-apple-whole'],
@@ -67,33 +67,33 @@
               ['Savings', 'fa-solid fa-piggy-bank']
             ],
             { include_blank: 'Select an icon' },
-            { class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" }
+            { class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" }
           %>
         </div>
 
         <div>
-          <%= form.label :color, class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.color_field :color, class: "w-full h-12 p-1 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
+          <%= form.label :color, class: "block text-sm font-medium text-content mb-2" %>
+          <%= form.color_field :color, class: "w-full h-12 p-1 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500" %>
         </div>
 
         <div>
-          <%= form.label :category_type, class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= form.label :category_type, class: "block text-sm font-medium text-content mb-2" %>
           <%= form.select :category_type,
             @category_types.map { |type| [type.capitalize, type] },
             { include_blank: 'Select a type' },
-            { class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" }
+            { class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm" }
           %>
         </div>
 
         <div>
-          <%= form.label :bnnb_mapping, "JCTR BNNB Basket Key (optional)", class: "block text-sm font-medium text-gray-700 mb-2" %>
-          <%= form.text_field :bnnb_mapping, class: "w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g. transport, rent, mealie_meal" %>
-          <p class="mt-1 text-xs text-gray-500">Maps this category to a JCTR BNNB item for benchmark comparisons. Leave blank to skip.</p>
+          <%= form.label :bnnb_mapping, "JCTR BNNB Basket Key (optional)", class: "block text-sm font-medium text-content mb-2" %>
+          <%= form.text_field :bnnb_mapping, class: "w-full px-4 py-3 border border-default rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm", placeholder: "e.g. transport, rent, mealie_meal" %>
+          <p class="mt-1 text-xs text-subtle">Maps this category to a JCTR BNNB item for benchmark comparisons. Leave blank to skip.</p>
         </div>
 
         <div class="flex items-center gap-4 pt-2">
           <%= form.submit 'Update Category', class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition cursor-pointer" %>
-          <%= link_to "Cancel", category_path(@category), class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition" %>
+          <%= link_to "Cancel", category_path(@category), class: "inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold bg-content/5 text-content hover:bg-content/10 transition" %>
         </div>
       <% end %>
     </div>

@@ -41,58 +41,58 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
          style="background: linear-gradient(150deg, rgba(5,150,105,0.9) 0%, rgba(4,120,87,0.85) 100%);">
-      <p class="text-xs uppercase tracking-wide text-brand-100/70">Budgets created</p>
+      <p class="text-xs uppercase tracking-wide text-white/70">Budgets created</p>
       <p class="text-3xl font-semibold mt-3"><%= @budgets.count %></p>
-      <p class="text-xs text-brand-100/70 mt-1">covering your core categories</p>
+      <p class="text-xs text-white/70 mt-1">covering your core categories</p>
     </div>
     <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
          style="background: linear-gradient(150deg, rgba(16,185,129,0.95) 0%, rgba(5,150,105,0.85) 100%);">
-      <p class="text-xs uppercase tracking-wide text-brand-100/70">Avg usage</p>
+      <p class="text-xs uppercase tracking-wide text-white/70">Avg usage</p>
       <p class="text-3xl font-semibold mt-3"><%= number_with_precision(average_usage, precision: 1) %>%</p>
-      <p class="text-xs text-brand-100/70 mt-1">of monthly limits consumed</p>
+      <p class="text-xs text-white/70 mt-1">of monthly limits consumed</p>
     </div>
     <div class="rounded-2xl border border-brand-400/30 backdrop-blur-xl p-5 text-white shadow-lg"
          style="background: linear-gradient(150deg, rgba(6,95,70,0.95) 0%, rgba(4,78,56,0.85) 100%);">
-      <p class="text-xs uppercase tracking-wide text-brand-100/70">BNNB coverage</p>
+      <p class="text-xs uppercase tracking-wide text-white/70">BNNB coverage</p>
       <p class="text-3xl font-semibold mt-3"><%= number_with_precision(food_ratio, precision: 1) %>%</p>
-      <p class="text-xs text-brand-100/70 mt-1">of JCTR food basket</p>
+      <p class="text-xs text-white/70 mt-1">of JCTR food basket</p>
     </div>
   </div>
 
   <% if @budget_categories.present? && @budget_categories.any? %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
-      <h2 class="text-xl font-semibold text-brand-100 mb-4">Budget comparison</h2>
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+      <h2 class="text-xl font-semibold text-content mb-4">Budget comparison</h2>
       <%= render 'budget_comparison_chart' %>
     </div>
   <% end %>
 
   <% if @bnnb_comparison %>
-    <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 class="text-xl font-semibold text-brand-100">JCTR benchmark comparison</h2>
-          <p class="text-sm text-brand-300">See how your Lusaka basket stacks up to the Basic Needs and Nutritious Basket.</p>
+          <h2 class="text-xl font-semibold text-content">JCTR benchmark comparison</h2>
+          <p class="text-sm text-subtle">See how your Lusaka basket stacks up to the Basic Needs and Nutritious Basket.</p>
         </div>
-        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-brand-800 text-brand-300 text-xs font-semibold border border-brand-700/50">
+        <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-content/5 text-subtle text-xs font-semibold border border-default">
           Last updated Jan 2026
         </span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="rounded-2xl bg-brand-800/60 border border-brand-700/30 p-4">
-          <p class="text-xs uppercase tracking-wide text-brand-400">JCTR food basket</p>
-          <p class="text-2xl font-bold text-brand-100 mt-2">K<%= number_with_precision(@bnnb_comparison[:bnnb_food] || 0, precision: 2) %></p>
+        <div class="rounded-2xl bg-content/5 border border-default p-4">
+          <p class="text-xs uppercase tracking-wide text-accent">JCTR food basket</p>
+          <p class="text-2xl font-bold text-content mt-2">K<%= number_with_precision(@bnnb_comparison[:bnnb_food] || 0, precision: 2) %></p>
         </div>
-        <div class="rounded-2xl bg-brand-800/60 border border-brand-700/30 p-4">
-          <p class="text-xs uppercase tracking-wide text-brand-400">Your food spend</p>
-          <p class="text-2xl font-bold text-brand-100 mt-2">K<%= number_with_precision(@bnnb_comparison[:user_food] || 0, precision: 2) %></p>
+        <div class="rounded-2xl bg-content/5 border border-default p-4">
+          <p class="text-xs uppercase tracking-wide text-accent">Your food spend</p>
+          <p class="text-2xl font-bold text-content mt-2">K<%= number_with_precision(@bnnb_comparison[:user_food] || 0, precision: 2) %></p>
         </div>
       </div>
     </div>
   <% end %>
 
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl shadow-black/20 p-6">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-semibold text-brand-100">Your budgets</h2>
+      <h2 class="text-xl font-semibold text-content">Your budgets</h2>
       <%= link_to new_budget_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-brand-600 text-white shadow hover:bg-brand-500 transition" do %>
         <i class="fa-solid fa-plus mr-2"></i>
         Add budget
@@ -102,31 +102,31 @@
     <% if @budgets.any? %>
       <div class="space-y-4">
         <% @budgets.each do |budget| %>
-          <div class="border border-brand-700/30 rounded-2xl p-5 bg-brand-800/50 shadow-sm hover:shadow-md transition">
+          <div class="border border-default rounded-2xl p-5 bg-content/5 shadow-sm hover:shadow-md transition">
             <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-3">
               <div>
-                <h3 class="font-semibold text-lg text-brand-100"><%= budget.category.name %></h3>
-                <p class="text-sm text-brand-400">
+                <h3 class="font-semibold text-lg text-content"><%= budget.category.name %></h3>
+                <p class="text-sm text-accent">
                   Monthly limit · K<%= number_with_precision(budget.monthly_limit, precision: 2) %>
                   <% if budget.inflation_adjusted %>
-                    <span class="ml-2 px-2 py-1 bg-brand-800 text-brand-300 text-xs rounded-full border border-brand-700/50">Inflation adjusted</span>
+                    <span class="ml-2 px-2 py-1 bg-content/5 text-subtle text-xs rounded-full border border-default">Inflation adjusted</span>
                   <% end %>
                 </p>
               </div>
               <div class="flex gap-2">
-                <%= link_to "Edit", edit_budget_path(budget), class: "px-3 py-1.5 rounded-lg text-sm font-semibold bg-brand-800 text-brand-300 hover:bg-brand-700 border border-brand-700/50" %>
+                <%= link_to "Edit", edit_budget_path(budget), class: "px-3 py-1.5 rounded-lg text-sm font-semibold bg-content/5 text-subtle hover:bg-content/10 border border-default" %>
                 <%= link_to "Delete", budget_path(budget), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 rounded-lg text-sm font-semibold bg-red-900/30 text-red-400 hover:bg-red-900/50 border border-red-700/30" %>
               </div>
             </div>
 
             <div class="mb-3">
-              <div class="flex justify-between text-sm mb-1 text-brand-300">
+              <div class="flex justify-between text-sm mb-1 text-subtle">
                 <span>Spent: K<%= number_with_precision(budget.current_spending, precision: 2) %></span>
-                <span class="<%= budget.is_overspent? ? 'text-red-400 font-semibold' : 'text-brand-200' %>">
+                <span class="<%= budget.is_overspent? ? 'text-red-400 font-semibold' : 'text-subtle' %>">
                   <%= number_with_precision(budget.percentage_used, precision: 1) %>% used
                 </span>
               </div>
-              <div class="w-full bg-brand-800 rounded-full h-2">
+              <div class="w-full bg-content/5 rounded-full h-2">
                 <div class="<%= budget.is_overspent? ? 'bg-red-500' : 'bg-emerald-500' %> h-2 rounded-full" style="width: <%= [budget.percentage_used, 100].min %>%"></div>
               </div>
             </div>
@@ -140,16 +140,16 @@
         <% end %>
       </div>
     <% else %>
-      <div class="text-center py-12 bg-brand-800/50 rounded-2xl border border-dashed border-brand-700/30">
-        <p class="text-brand-300 mb-4">No budgets created yet.</p>
+      <div class="text-center py-12 bg-content/5 rounded-2xl border border-dashed border-default">
+        <p class="text-subtle mb-4">No budgets created yet.</p>
         <%= link_to "Create budget", new_budget_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl bg-brand-600 text-white font-semibold shadow hover:bg-brand-500" %>
       </div>
     <% end %>
   </div>
 
-  <div class="bg-brand-800/60 border border-brand-600/40 rounded-3xl p-6 shadow-inner">
-    <h3 class="font-semibold text-brand-100 mb-3">💡 Budgeting tips for Zambia</h3>
-    <ul class="text-sm text-brand-300 space-y-2 list-disc list-inside">
+  <div class="bg-content/5 border border-default rounded-3xl p-6 shadow-inner">
+    <h3 class="font-semibold text-content mb-3">💡 Budgeting tips for Zambia</h3>
+    <ul class="text-sm text-subtle space-y-2 list-disc list-inside">
       <li>Enable inflation adjustment to follow the current 9.4% CPI trend.</li>
       <li>Compare your food basket to JCTR's K4,900 benchmark for a family of five.</li>
       <li>Split categories into essential vs discretionary to protect priorities.</li>
@@ -158,6 +158,6 @@
   </div>
 
   <div class="text-sm">
-    <%= link_to "Back to dashboard", dashboard_path, class: "text-brand-400 hover:text-brand-300" %>
+    <%= link_to "Back to dashboard", dashboard_path, class: "text-accent hover:text-subtle" %>
   </div>
 </div>

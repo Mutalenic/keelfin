@@ -5,6 +5,60 @@
 @source "../../helpers/**/*.rb";
 @source "../../javascript/**/*.js";
 
+/* ──────────────────────────────────────────────────────────────────
+   Semantic theme tokens. These swap per-theme via the data-theme
+   attribute on <html>. All UI should prefer the semantic Tailwind
+   utilities (bg-surface, text-content, border-default, etc.) that map
+   to these variables in the @theme block below, so a single toggle
+   restyles the whole app.
+   ────────────────────────────────────────────────────────────────── */
+
+/* Dark theme (default — preserves the current GitHub-style look) */
+:root,
+[data-theme="dark"] {
+  --surface-bg:       #0d1117;
+  --surface-card:     #161b22;
+  --surface-elevated: #21262d;
+  --border-color:     #30363d;
+  --text-primary:     #e6edf3;
+  --text-secondary:   #8b949e;
+  --text-muted:       #6e7681;
+  --accent:           #2ea043;
+  --accent-hover:     #238636;
+  --success:          #3fb950;
+  --danger:           #f85149;
+  --warning:          #d29922;
+  --input-bg:         #21262d;
+  --label-color:      #cae8ff;
+  /* Page background gradient stops */
+  --bg-grad-1:        #0d1117;
+  --bg-grad-2:        #161b22;
+  --bg-grad-3:        #21262d;
+  color-scheme: dark;
+}
+
+/* Light theme (finance-grade neutral palette, WCAG AA) */
+[data-theme="light"] {
+  --surface-bg:       #f6f8fa;
+  --surface-card:     #ffffff;
+  --surface-elevated: #ffffff;
+  --border-color:     #e1e4e8;
+  --text-primary:     #1c2128;
+  --text-secondary:   #57606a;
+  --text-muted:       #8b949e;
+  --accent:           #1a7f37;
+  --accent-hover:     #116329;
+  --success:          #1a7f37;
+  --danger:           #cf222e;
+  --warning:          #bf8700;
+  --input-bg:         #ffffff;
+  --label-color:      #1c2128;
+  --bg-grad-1:        #f6f8fa;
+  --bg-grad-2:        #ffffff;
+  --bg-grad-3:        #eef1f4;
+  color-scheme: light;
+}
+
 @theme {
   --color-brand-50:  #e6edf3;
   --color-brand-100: #cae8ff;
@@ -18,6 +72,22 @@
   --color-brand-800: #21262d;
   --color-brand-900: #161b22;
   --color-brand-950: #0d1117;
+
+  /* Semantic color utilities backed by the theme tokens above.
+     e.g. bg-surface, bg-surface-elevated, text-content, text-subtle,
+     border-default, text-accent/bg-accent, text-success, text-danger. */
+  --color-surface:          var(--surface-card);
+  --color-surface-bg:       var(--surface-bg);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-default:          var(--border-color);
+  --color-content:          var(--text-primary);
+  --color-subtle:           var(--text-secondary);
+  --color-faint:            var(--text-muted);
+  --color-accent:           var(--accent);
+  --color-accent-hover:     var(--accent-hover);
+  --color-success:          var(--success);
+  --color-danger:           var(--danger);
+  --color-warning:          var(--warning);
 }
 
 /* Emerald palette scoped to auth + admin surfaces.

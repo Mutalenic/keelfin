@@ -17,59 +17,59 @@
   </div>
 
   <!-- Summary Card -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div>
-        <p class="text-xs uppercase tracking-wide text-brand-400 mb-1">Total Monthly Income</p>
-        <p class="text-3xl font-bold text-brand-100">K<%= number_with_precision(@total_monthly, precision: 2, delimiter: ',') %></p>
-        <p class="text-xs text-brand-400 mt-1"><%= @income_sources.active.count %> active source<%= @income_sources.active.count == 1 ? '' : 's' %></p>
+        <p class="text-xs uppercase tracking-wide text-accent mb-1">Total Monthly Income</p>
+        <p class="text-3xl font-bold text-content">K<%= number_with_precision(@total_monthly, precision: 2, delimiter: ',') %></p>
+        <p class="text-xs text-accent mt-1"><%= @income_sources.active.count %> active source<%= @income_sources.active.count == 1 ? '' : 's' %></p>
       </div>
       <div>
-        <p class="text-xs uppercase tracking-wide text-brand-400 mb-1">Annual Equivalent</p>
-        <p class="text-3xl font-bold text-brand-100">K<%= number_with_precision(@total_monthly * 12, precision: 2, delimiter: ',') %></p>
-        <p class="text-xs text-brand-400 mt-1">Projected yearly total</p>
+        <p class="text-xs uppercase tracking-wide text-accent mb-1">Annual Equivalent</p>
+        <p class="text-3xl font-bold text-content">K<%= number_with_precision(@total_monthly * 12, precision: 2, delimiter: ',') %></p>
+        <p class="text-xs text-accent mt-1">Projected yearly total</p>
       </div>
       <div>
-        <p class="text-xs uppercase tracking-wide text-brand-400 mb-1">Weekly Equivalent</p>
-        <p class="text-3xl font-bold text-brand-100">K<%= number_with_precision(@total_monthly / 4.33, precision: 2, delimiter: ',') %></p>
-        <p class="text-xs text-brand-400 mt-1">Average per week</p>
+        <p class="text-xs uppercase tracking-wide text-accent mb-1">Weekly Equivalent</p>
+        <p class="text-3xl font-bold text-content">K<%= number_with_precision(@total_monthly / 4.33, precision: 2, delimiter: ',') %></p>
+        <p class="text-xs text-accent mt-1">Average per week</p>
       </div>
     </div>
   </div>
 
   <!-- Income Sources List -->
-  <div class="bg-brand-900/80 border border-brand-700/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <% if @income_sources.any? %>
       <div class="space-y-3">
         <% @income_sources.each do |source| %>
-          <div class="flex items-center justify-between p-4 rounded-2xl border border-brand-700/30 hover:bg-brand-800/50 transition-colors <%= source.active ? '' : 'opacity-50' %>">
+          <div class="flex items-center justify-between p-4 rounded-2xl border border-default hover:bg-content/10 transition-colors <%= source.active ? '' : 'opacity-50' %>">
             <div class="flex items-center gap-4">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-brand-700/60">
-                <i class="fa-solid fa-money-bill-wave text-brand-300"></i>
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-content/10">
+                <i class="fa-solid fa-money-bill-wave text-subtle"></i>
               </div>
               <div>
-                <p class="font-semibold text-brand-100"><%= source.name %></p>
-                <p class="text-sm text-brand-400"><%= source.frequency_label %> • K<%= number_with_precision(source.amount, precision: 2, delimiter: ',') %></p>
+                <p class="font-semibold text-content"><%= source.name %></p>
+                <p class="text-sm text-accent"><%= source.frequency_label %> • K<%= number_with_precision(source.amount, precision: 2, delimiter: ',') %></p>
                 <% if source.notes.present? %>
-                  <p class="text-xs text-brand-500 mt-0.5"><%= source.notes %></p>
+                  <p class="text-xs text-faint mt-0.5"><%= source.notes %></p>
                 <% end %>
               </div>
             </div>
             <div class="flex items-center gap-4">
               <div class="text-right">
-                <p class="font-bold text-brand-100">K<%= number_with_precision(source.monthly_equivalent, precision: 2, delimiter: ',') %>/mo</p>
+                <p class="font-bold text-content">K<%= number_with_precision(source.monthly_equivalent, precision: 2, delimiter: ',') %>/mo</p>
                 <% unless source.active? %>
-                  <span class="text-xs text-brand-500 bg-brand-800 px-2 py-0.5 rounded-full">Inactive</span>
+                  <span class="text-xs text-faint bg-content/5 px-2 py-0.5 rounded-full">Inactive</span>
                 <% end %>
               </div>
               <div class="flex gap-2">
-                <a href="<%= edit_income_source_path(source) %>" class="p-2 rounded-xl hover:bg-brand-700/50 text-brand-400 hover:text-brand-200 transition">
+                <a href="<%= edit_income_source_path(source) %>" class="p-2 rounded-xl hover:bg-content/10 text-accent hover:text-subtle transition">
                   <i class="fa-solid fa-pen text-sm"></i>
                 </a>
                 <form action="<%= income_source_path(source) %>" method="post" data-turbo-confirm="Remove <%= source.name %>?" style="display:inline">
                   <%= hidden_field_tag :_method, :delete %>
                   <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-                  <button type="submit" class="p-2 rounded-xl hover:bg-red-900/40 text-brand-400 hover:text-red-300 transition border-0 bg-transparent cursor-pointer">
+                  <button type="submit" class="p-2 rounded-xl hover:bg-red-900/40 text-accent hover:text-red-300 transition border-0 bg-transparent cursor-pointer">
                     <i class="fa-solid fa-trash text-sm"></i>
                   </button>
                 </form>
@@ -80,11 +80,11 @@
       </div>
     <% else %>
       <div class="text-center py-12">
-        <div class="w-16 h-16 rounded-2xl bg-brand-800/60 flex items-center justify-center mx-auto mb-4">
-          <i class="fa-solid fa-money-bill-wave text-brand-400 text-2xl"></i>
+        <div class="w-16 h-16 rounded-2xl bg-content/5 flex items-center justify-center mx-auto mb-4">
+          <i class="fa-solid fa-money-bill-wave text-accent text-2xl"></i>
         </div>
-        <h3 class="text-lg font-semibold text-brand-100 mb-2">No income sources yet</h3>
-        <p class="text-brand-400 mb-6 max-w-sm mx-auto">Add your salary, business income, side hustles, and allowances to get an accurate financial picture.</p>
+        <h3 class="text-lg font-semibold text-content mb-2">No income sources yet</h3>
+        <p class="text-accent mb-6 max-w-sm mx-auto">Add your salary, business income, side hustles, and allowances to get an accurate financial picture.</p>
         <a href="<%= new_income_source_path %>" class="inline-flex items-center px-6 py-3 rounded-2xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition">
           <i class="fa-solid fa-plus mr-2"></i> Add Your First Income Source
         </a>

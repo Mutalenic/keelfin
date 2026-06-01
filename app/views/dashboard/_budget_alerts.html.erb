@@ -2,14 +2,14 @@
 <% near_limit = @budget_alerts&.select { |b| b[:pct] >= 80 && b[:pct] < 100 } || [] %>
 
 <% if overspent.any? %>
-  <div class="bg-red-950/60 border border-red-600/40 rounded-2xl p-4">
+  <div class="bg-danger/10 border border-danger/30 rounded-2xl p-4">
     <div class="flex items-start gap-3">
-      <i class="fa-solid fa-triangle-exclamation text-red-400 mt-0.5 text-lg"></i>
+      <i class="fa-solid fa-triangle-exclamation text-danger mt-0.5 text-lg"></i>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold text-red-300 mb-2">Budget exceeded in <%= overspent.size %> categor<%= overspent.size == 1 ? 'y' : 'ies' %></p>
+        <p class="text-sm font-semibold text-danger mb-2">Budget exceeded in <%= overspent.size %> categor<%= overspent.size == 1 ? 'y' : 'ies' %></p>
         <div class="flex flex-wrap gap-2">
           <% overspent.each do |b| %>
-            <%= link_to budgets_path, class: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-red-900/50 border border-red-700/40 text-xs text-red-300 hover:bg-red-800/50 transition" do %>
+            <%= link_to budgets_path, class: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-danger/10 border border-danger/30 text-xs text-danger hover:bg-danger/20 transition" do %>
               <i class="fa-solid fa-circle-exclamation"></i>
               <%= b[:name] %> — K<%= number_with_precision(b[:overspent_by], precision: 0, delimiter: ',') %> over
             <% end %>
@@ -21,14 +21,14 @@
 <% end %>
 
 <% if near_limit.any? %>
-  <div class="bg-amber-950/60 border border-amber-600/40 rounded-2xl p-4">
+  <div class="bg-warning/10 border border-warning/30 rounded-2xl p-4">
     <div class="flex items-start gap-3">
-      <i class="fa-solid fa-circle-exclamation text-amber-400 mt-0.5 text-lg"></i>
+      <i class="fa-solid fa-circle-exclamation text-warning mt-0.5 text-lg"></i>
       <div class="flex-1 min-w-0">
-        <p class="text-sm font-semibold text-amber-300 mb-2">Approaching limit in <%= near_limit.size %> categor<%= near_limit.size == 1 ? 'y' : 'ies' %></p>
+        <p class="text-sm font-semibold text-warning mb-2">Approaching limit in <%= near_limit.size %> categor<%= near_limit.size == 1 ? 'y' : 'ies' %></p>
         <div class="flex flex-wrap gap-2">
           <% near_limit.each do |b| %>
-            <%= link_to budgets_path, class: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-900/50 border border-amber-700/40 text-xs text-amber-300 hover:bg-amber-800/50 transition" do %>
+            <%= link_to budgets_path, class: "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-warning/10 border border-warning/30 text-xs text-warning hover:bg-warning/20 transition" do %>
               <i class="fa-solid fa-gauge-high"></i>
               <%= b[:name] %> — <%= b[:pct].round %>% used
             <% end %>

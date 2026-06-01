@@ -41,7 +41,7 @@
   </div>
 
   <!-- Transaction Details -->
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex justify-between items-start">
       <div class="flex items-center gap-3">
         <% if @recurring_transaction.active? %>
@@ -49,7 +49,7 @@
             <i class="fa-solid fa-circle-notch mr-2"></i> Active
           </span>
         <% else %>
-          <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gray-100 text-gray-800">
+          <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-content/5 text-content">
             <i class="fa-solid fa-pause mr-2"></i> Inactive
           </span>
         <% end %>
@@ -57,30 +57,30 @@
     </div>
     
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-gray-50 rounded-lg p-4">
-        <p class="text-sm text-gray-600 mb-1">Amount</p>
+      <div class="bg-content/5 rounded-lg p-4">
+        <p class="text-sm text-subtle mb-1">Amount</p>
         <p class="text-2xl font-bold">K<%= number_with_precision(@recurring_transaction.amount, precision: 2) %></p>
       </div>
       
-      <div class="bg-gray-50 rounded-lg p-4">
-        <p class="text-sm text-gray-600 mb-1">Frequency</p>
+      <div class="bg-content/5 rounded-lg p-4">
+        <p class="text-sm text-subtle mb-1">Frequency</p>
         <p class="text-2xl font-bold"><%= @recurring_transaction.human_readable_frequency %></p>
       </div>
       
-      <div class="bg-gray-50 rounded-lg p-4">
-        <p class="text-sm text-gray-600 mb-1">Monthly Impact</p>
+      <div class="bg-content/5 rounded-lg p-4">
+        <p class="text-sm text-subtle mb-1">Monthly Impact</p>
         <p class="text-2xl font-bold">K<%= number_with_precision(@recurring_transaction.estimated_monthly_impact, precision: 2) %></p>
       </div>
     </div>
     
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <p class="text-sm text-gray-600 mb-1">Start Date</p>
+        <p class="text-sm text-subtle mb-1">Start Date</p>
         <p class="text-lg font-medium"><%= @recurring_transaction.start_date.strftime('%B %d, %Y') %></p>
       </div>
       
       <div>
-        <p class="text-sm text-gray-600 mb-1">End Date</p>
+        <p class="text-sm text-subtle mb-1">End Date</p>
         <p class="text-lg font-medium">
           <% if @recurring_transaction.end_date %>
             <%= @recurring_transaction.end_date.strftime('%B %d, %Y') %>
@@ -91,12 +91,12 @@
       </div>
       
       <div>
-        <p class="text-sm text-gray-600 mb-1">Next Occurrence</p>
+        <p class="text-sm text-subtle mb-1">Next Occurrence</p>
         <p class="text-lg font-medium">
           <% if @recurring_transaction.next_occurrence %>
             <%= @recurring_transaction.next_occurrence.strftime('%B %d, %Y') %>
             <% days_until = (@recurring_transaction.next_occurrence - Date.current).to_i %>
-            <span class="text-sm <%= days_until <= 0 ? 'text-red-600 font-bold' : 'text-gray-600' %>">
+            <span class="text-sm <%= days_until <= 0 ? 'text-red-600 font-bold' : 'text-subtle' %>">
               (<%= days_until <= 0 ? 'Due today' : "in #{days_until} days" %>)
             </span>
           <% else %>
@@ -106,7 +106,7 @@
       </div>
       
       <div>
-        <p class="text-sm text-gray-600 mb-1">Last Occurrence</p>
+        <p class="text-sm text-subtle mb-1">Last Occurrence</p>
         <p class="text-lg font-medium">
           <% if @recurring_transaction.last_occurrence %>
             <%= @recurring_transaction.last_occurrence.strftime('%B %d, %Y') %>
@@ -119,41 +119,41 @@
     
     <% if @recurring_transaction.notes.present? %>
       <div class="mt-6">
-        <p class="text-sm text-gray-600 mb-1">Notes</p>
+        <p class="text-sm text-subtle mb-1">Notes</p>
         <p class="text-lg"><%= @recurring_transaction.notes %></p>
       </div>
     <% end %>
   </div>
   
   <!-- Payment History -->
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <h2 class="text-xl font-semibold mb-4">Payment History</h2>
     
     <% if @payment_history.any? %>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <table class="min-w-full divide-y divide-default">
+          <thead class="bg-content/5">
             <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-subtle uppercase tracking-wider">Payment Method</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="bg-surface divide-y divide-default">
             <% @payment_history.each do |payment| %>
-              <tr class="hover:bg-gray-50">
+              <tr class="hover:bg-content/5">
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900"><%= payment.created_at.strftime('%b %d, %Y') %></div>
+                  <div class="text-sm text-content"><%= payment.created_at.strftime('%b %d, %Y') %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900"><%= payment.name %></div>
+                  <div class="text-sm font-medium text-content"><%= payment.name %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium">K<%= number_with_precision(payment.amount, precision: 2) %></div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900"><%= payment.payment_method.present? ? payment.payment_method.titleize : 'N/A' %></div>
+                  <div class="text-sm text-content"><%= payment.payment_method.present? ? payment.payment_method.titleize : 'N/A' %></div>
                 </td>
               </tr>
             <% end %>
@@ -161,23 +161,23 @@
         </table>
       </div>
     <% else %>
-      <p class="text-gray-500 italic">No payment history found for this recurring transaction.</p>
+      <p class="text-subtle italic">No payment history found for this recurring transaction.</p>
     <% end %>
   </div>
   
   <!-- Financial Impact -->
-  <div class="bg-white/95 border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <h2 class="text-xl font-semibold mb-4">Financial Impact</h2>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-gray-50 rounded-lg p-4">
-        <p class="text-sm text-gray-600 mb-1">Monthly Impact</p>
+      <div class="bg-content/5 rounded-lg p-4">
+        <p class="text-sm text-subtle mb-1">Monthly Impact</p>
         <p class="text-2xl font-bold">K<%= number_with_precision(@recurring_transaction.estimated_monthly_impact, precision: 2) %></p>
-        <p class="text-sm text-gray-600 mt-2">This is approximately <%= ((@recurring_transaction.estimated_monthly_impact / current_user.monthly_income) * 100).round(1) %>% of your monthly income.</p>
+        <p class="text-sm text-subtle mt-2">This is approximately <%= ((@recurring_transaction.estimated_monthly_impact / current_user.monthly_income) * 100).round(1) %>% of your monthly income.</p>
       </div>
       
-      <div class="bg-gray-50 rounded-lg p-4">
-        <p class="text-sm text-gray-600 mb-1">Annual Impact</p>
+      <div class="bg-content/5 rounded-lg p-4">
+        <p class="text-sm text-subtle mb-1">Annual Impact</p>
         <p class="text-2xl font-bold">K<%= number_with_precision(@recurring_transaction.estimated_monthly_impact * 12, precision: 2) %></p>
       </div>
     </div>
