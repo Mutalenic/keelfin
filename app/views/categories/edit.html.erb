@@ -23,7 +23,7 @@
   </div>
 
   <div class="max-w-2xl mx-auto">
-    <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6 sm:p-8">
       <%= form_with(model: @category, url: category_path(@category), method: :patch, class: "space-y-5") do |form| %>
         <% if @category.errors.any? %>
           <div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-4">

@@ -60,7 +60,7 @@
   <% end %>
 
   <% if @analysis[:recommendations].any? %>
-    <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+    <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
       <h2 class="text-xl font-semibold text-content mb-4">Recommendations</h2>
       <ul class="space-y-2 text-sm text-subtle list-disc list-inside">
         <% @analysis[:recommendations].each do |recommendation| %>
@@ -72,7 +72,7 @@
 
   <%= render 'payoff_strategy' %>
 
-  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-semibold text-content">Your debts</h2>
       <%= link_to new_debt_path, class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold bg-red-600 text-white shadow hover:bg-red-500 transition" do %>

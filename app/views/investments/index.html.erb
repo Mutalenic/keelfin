@@ -57,7 +57,7 @@
   </div>
 
   <!-- Portfolio Allocation -->
-  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Portfolio Allocation</h2>
       <div class="flex space-x-2">
@@ -122,7 +122,7 @@
   </div>
 
   <!-- Investments List -->
-  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
         <h2 class="text-xl font-semibold text-content">Your Investments</h2>
@@ -149,7 +149,7 @@
           </thead>
           <tbody class="bg-surface divide-y divide-default">
             <% @investments.each do |investment| %>
-              <tr class="hover:bg-content/5 <%= investment.active? ? '' : 'bg-content/5' %>">
+              <tr class="hover:bg-content/5 <%= investment.active? ? '' : 'bg-content/10' %>">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-content"><%= link_to investment.name, investment_path(investment) %></div>
                   <div class="text-xs text-subtle">

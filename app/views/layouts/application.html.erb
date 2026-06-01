@@ -134,23 +134,25 @@
           </nav>
 
           <!-- User Footer -->
-          <div class="p-4" style="border-top:1px solid var(--border-color); background:var(--surface-bg);">
-            <div class="flex items-center mb-3">
-              <div class="w-9 h-9 bg-accent/20 rounded-full flex items-center justify-center">
-                <span class="text-sm font-bold text-accent"><%= current_user&.name&.first(2)&.upcase %></span>
+          <% if current_user %>
+            <div class="p-4" style="border-top:1px solid var(--border-color); background:var(--surface-bg);">
+              <div class="flex items-center mb-3">
+                <div class="w-9 h-9 bg-accent/20 rounded-full flex items-center justify-center">
+                  <span class="text-sm font-bold text-accent"><%= current_user.name&.first(2)&.upcase %></span>
+                </div>
+                <div class="ml-3 flex-1 min-w-0">
+                  <p class="text-sm font-medium text-content truncate"><%= current_user.name %></p>
+                  <p class="text-xs text-subtle truncate"><%= current_user.email %></p>
+                </div>
+                <a href="<%= edit_user_registration_path %>" class="p-1.5 rounded-md hover:bg-content/10 text-subtle hover:text-content transition-colors" title="Settings" aria-label="Account settings">
+                  <i class="fa-solid fa-gear text-sm"></i>
+                </a>
               </div>
-              <div class="ml-3 flex-1 min-w-0">
-                <p class="text-sm font-medium text-content truncate"><%= current_user&.name %></p>
-                <p class="text-xs text-subtle truncate"><%= current_user&.email %></p>
-              </div>
-              <a href="<%= edit_user_registration_path %>" class="p-1.5 rounded-md hover:bg-content/10 text-subtle hover:text-content transition-colors" title="Settings" aria-label="Account settings">
-                <i class="fa-solid fa-gear text-sm"></i>
-              </a>
+              <%= button_to destroy_user_session_path, method: :delete, class: 'w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-danger border border-danger/30 hover:bg-danger/10 transition-colors', 'aria-label': 'Sign out' do %>
+                <i class="fa-solid fa-right-from-bracket text-sm"></i> Sign out
+              <% end %>
             </div>
-            <%= button_to destroy_user_session_path, method: :delete, class: 'w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-danger border border-danger/30 hover:bg-danger/10 transition-colors', 'aria-label': 'Sign out' do %>
-              <i class="fa-solid fa-right-from-bracket text-sm"></i> Sign out
-            <% end %>
-          </div>
+          <% end %>
         </div>
       </aside>
 

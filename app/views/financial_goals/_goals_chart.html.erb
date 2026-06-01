@@ -78,15 +78,19 @@
       chartButton.addEventListener('click', function() {
         chartDiv.classList.remove('hidden');
         tableDiv.classList.add('hidden');
-        chartButton.className = chartButton.className.replace('bg-content/5','bg-brand-600').replace('text-subtle','text-white');
-        tableButton.className = tableButton.className.replace('bg-brand-600','bg-content/5').replace('text-white','text-subtle');
+        chartButton.classList.remove('bg-content/5', 'text-subtle');
+        chartButton.classList.add('bg-brand-600', 'text-white');
+        tableButton.classList.remove('bg-brand-600', 'text-white');
+        tableButton.classList.add('bg-content/5', 'text-subtle');
       });
 
       tableButton.addEventListener('click', function() {
         chartDiv.classList.add('hidden');
         tableDiv.classList.remove('hidden');
-        tableButton.className = tableButton.className.replace('bg-content/5','bg-brand-600').replace('text-subtle','text-white');
-        chartButton.className = chartButton.className.replace('bg-brand-600','bg-content/5').replace('text-white','text-subtle');
+        tableButton.classList.remove('bg-content/5', 'text-subtle');
+        tableButton.classList.add('bg-brand-600', 'text-white');
+        chartButton.classList.remove('bg-brand-600', 'text-white');
+        chartButton.classList.add('bg-content/5', 'text-subtle');
       });
     }
   });

@@ -41,7 +41,7 @@
   </div>
 
   <!-- Transaction Details -->
-  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <div class="flex justify-between items-start">
       <div class="flex items-center gap-3">
         <% if @recurring_transaction.active? %>
@@ -126,7 +126,7 @@
   </div>
   
   <!-- Payment History -->
-  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <h2 class="text-xl font-semibold mb-4">Payment History</h2>
     
     <% if @payment_history.any? %>
@@ -166,7 +166,7 @@
   </div>
   
   <!-- Financial Impact -->
-  <div class="bg-surface border border-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
+  <div class="bg-surface border border-default backdrop-blur-2xl rounded-3xl shadow-2xl p-6">
     <h2 class="text-xl font-semibold mb-4">Financial Impact</h2>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
