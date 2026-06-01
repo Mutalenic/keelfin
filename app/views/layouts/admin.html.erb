@@ -13,7 +13,8 @@
 
     <style>
       [data-sidebar-toggle]:checked ~ .sidebar-overlay { display: block; }
-      [data-sidebar-toggle]:checked ~ .sidebar-panel { transform: translateX(0); }
+      [data-sidebar-toggle]:checked ~ .sidebar-panel { translate: 0; transition: translate 200ms ease-in-out; }
+      .sidebar-panel.sidebar-open { translate: 0; transition: translate 200ms ease-in-out; }
     </style>
   </head>
 
