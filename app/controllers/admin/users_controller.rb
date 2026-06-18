@@ -67,7 +67,9 @@ module Admin
     end
 
     def ensure_not_already_impersonating
-      redirect_to admin_root_path, alert: 'You are already impersonating a user.' if session[:impersonating_admin_id].present?
+      return if session[:impersonating_admin_id].blank?
+
+      redirect_to admin_root_path, alert: 'You are already impersonating a user.'
     end
 
     def user_params

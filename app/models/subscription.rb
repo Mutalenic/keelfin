@@ -82,7 +82,7 @@ class Subscription < ApplicationRecord
     features[feature.to_s] || false
   end
 
-  def upgrade_to(new_plan, reason: nil)
+  def upgrade_to(new_plan)
     return false unless %w[free standard premium].include?(new_plan)
 
     # Don't downgrade from premium to standard

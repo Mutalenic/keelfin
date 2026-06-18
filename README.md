@@ -86,6 +86,7 @@
 
 - [Ruby 3.3.5](https://www.ruby-lang.org/en/documentation/installation/)
 - [Rails 7.2](https://guides.rubyonrails.org/getting_started.html)
+- [Node.js & npm](https://nodejs.org/)
 - PostgreSQL
 
 ### Setup
@@ -139,7 +140,13 @@ bundle exec rspec
 ### Linting
 
 ```bash
-rubocop
+bundle exec rubocop
+```
+
+For CSS/SCSS linting:
+
+```bash
+npx stylelint "app/assets/stylesheets/**/*.{css,scss}"
 ```
 
 ### Security audit
