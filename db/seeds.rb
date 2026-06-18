@@ -13,17 +13,19 @@ puts "  ✓ Category presets created"
 puts ""
 puts "Creating users..."
 
-admin = User.find_or_create_by!(email: 'admin@keelfin.co.zm') do |u|
+admin_password    = ENV.fetch('ADMIN_PASSWORD')    { raise 'ADMIN_PASSWORD env var is not set' }
+demo_password     = ENV.fetch('DEMO_USER_PASSWORD') { raise 'DEMO_USER_PASSWORD env var is not set' }
+admin = User.find_or_create_by!(email: 'nicomutale@gmail.com') do |u|
   u.name = 'Keelfin Admin'
-  u.password = 'password123'
-  u.password_confirmation = 'password123'
+  u.password = admin_password
+  u.password_confirmation = admin_password
   u.role = 'admin'
   u.monthly_income = 15_000.00
   u.currency = 'ZMW'
   u.phone_number = '+260971000001'
   u.confirmed_at = Time.current
 end
-puts "  ✓ Admin: admin@keelfin.co.zm / password123"
+puts "  ✓ Admin: nicomutale@gmail.com"
 
 demo_users = [
   { email: 'mwila@example.com', name: 'Mwila Chanda', income: 8_500.00, phone: '+260971000002', persona: :professional },
@@ -35,15 +37,15 @@ users = {}
 demo_users.each do |u_data|
   user = User.find_or_create_by!(email: u_data[:email]) do |u|
     u.name = u_data[:name]
-    u.password = 'password123'
-    u.password_confirmation = 'password123'
+    u.password = demo_password
+    u.password_confirmation = demo_password
     u.monthly_income = u_data[:income]
     u.currency = 'ZMW'
     u.phone_number = u_data[:phone]
     u.confirmed_at = Time.current
   end
   users[u_data[:persona]] = user
-  puts "  ✓ #{u_data[:persona].capitalize}: #{u_data[:email]} / password123"
+  puts "  ✓ #{u_data[:persona].capitalize}: #{u_data[:email]}"
 end
 
 # ─── Subscriptions ──────────────────────────────────────────────
@@ -399,8 +401,8 @@ puts "  Recurring:     #{RecurringTransaction.count}"
 puts "  Economic Data: #{EconomicIndicator.count}"
 puts "  BNNB Data:     #{BnnbData.count}"
 puts ""
-puts "  Login credentials (all use password: password123):"
-puts "  Admin:        admin@keelfin.co.zm"
+puts "  Login credentials (passwords from ENV):"
+puts "  Admin:        nicomutale@gmail.com"
 puts "  Professional: mwila@example.com"
 puts "  Student:      bupe@example.com"
 puts "  Family:       chileshe@example.com"

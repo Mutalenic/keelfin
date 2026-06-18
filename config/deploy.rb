@@ -17,7 +17,7 @@ set :rbenv_path, '/home/deploy/.rbenv'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 
 # Default value for :linked_files
-append :linked_files, "config/database.yml", "config/master.key"
+append :linked_files, "config/database.yml", "config/master.key", ".env"
 
 # Default value for linked_dirs
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage"
