@@ -1,7 +1,7 @@
 class InvestmentTransactionsController < ApplicationController
   before_action :set_investment
   before_action :set_investment_transaction, only: %i[show edit update destroy]
-  load_and_authorize_resource
+  before_action :authorize_investment!
 
   def index
     @transactions = @investment.investment_transactions.order(transaction_date: :desc)
@@ -77,6 +77,10 @@ class InvestmentTransactionsController < ApplicationController
     @transaction = @investment.investment_transactions.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     redirect_to investment_investment_transactions_path(@investment), alert: 'Transaction not found.'
+  end
+
+  def authorize_investment!
+    authorize! :manage, @investment if @investment
   end
 
   def investment_transaction_params

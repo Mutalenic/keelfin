@@ -39,6 +39,7 @@ class DpoPayService
     uri = URI("#{BASE_URL}#{endpoint}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
+    http.open_timeout = 10
     http.read_timeout = 15
     request = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/xml')
     request.body = body

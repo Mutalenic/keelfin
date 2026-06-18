@@ -15,6 +15,7 @@ class Ability
     can :manage, InvestmentTransaction, user_id: user.id
     can :manage, RecurringTransaction, user_id: user.id
     can :manage, Subscription, user_id: user.id
+    can :manage, IncomeSource, user_id: user.id
 
     # Admin users can manage everything
     can :manage, :all if user.admin?

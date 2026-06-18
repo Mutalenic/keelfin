@@ -1,7 +1,6 @@
 class PaymentsController < ApplicationController
   before_action :set_category, except: %i[create_global export_all]
   before_action :set_payment, only: %i[show edit update destroy]
-  before_action :authorize_payment, only: %i[show edit update destroy]
 
   def create_global
     category = current_user.categories.find_by(id: params.dig(:payment, :category_id))
@@ -84,15 +83,11 @@ class PaymentsController < ApplicationController
   end
 
   def payment_params
-    params.require(:payment).permit(:name, :amount, :payment_method, :is_essential, :notes, :created_at)
+    params.require(:payment).permit(:name, :amount, :payment_method, :is_essential, :notes)
   end
 
   def global_payment_params
-    params.require(:payment).permit(:name, :amount, :payment_method, :is_essential, :notes, :created_at)
-  end
-
-  def authorize_payment
-    authorize! :manage, @payment
+    params.require(:payment).permit(:name, :amount, :payment_method, :is_essential, :notes)
   end
 
   def send_csv(payments, filename:, include_category: false)

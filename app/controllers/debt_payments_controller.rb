@@ -35,4 +35,8 @@ class DebtPaymentsController < ApplicationController
   def debt_payment_params
     params.require(:debt_payment).permit(:amount, :paid_on, :notes)
   end
+
+  def authorize_debt_payment!
+    authorize! :manage, @debt
+  end
 end

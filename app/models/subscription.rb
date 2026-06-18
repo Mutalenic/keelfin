@@ -86,7 +86,10 @@ class Subscription < ApplicationRecord
     return false unless %w[free standard premium].include?(new_plan)
 
     # Don't downgrade from premium to standard
-    return false if plan_name == 'premium' && new_plan == 'standard'
+    if plan_name == 'premium' && new_plan == 'standard'
+      errors.add(:base, 'Downgrading from Premium to Standard is not allowed. Please cancel first.')
+      return false
+    end
 
     # Don't process if same plan
     return true if plan_name == new_plan

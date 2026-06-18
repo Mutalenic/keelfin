@@ -15,10 +15,6 @@ class Debt < ApplicationRecord
     [principal_amount.to_f - total_paid_amount, 0].max
   end
 
-  def remaining_balance_from_payments
-    [principal_amount.to_f - total_paid_amount, 0].max
-  end
-
   def total_paid_amount
     debt_payments.sum(:amount).to_f
   end
