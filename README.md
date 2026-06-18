@@ -1,14 +1,13 @@
 # Keelfin
 
 > Keelfin is a mobile-friendly personal finance app that helps users manage budgets, categorize transactions, track spending patterns, monitor debts, and set financial goals from one unified dashboard.
+![ror3](https://user-images.githubusercontent.com/19844175/179044384-adb97a02-4ca4-4963-8681-c0ebfbc4c30b.jpg)
+![ror2](https://user-images.githubusercontent.com/19844175/179044408-7b3664fb-4748-4999-b1cd-c2d9dca4c40f.jpg)
+![ror](https://user-images.githubusercontent.com/19844175/179044443-45b4074f-ab51-407b-84b8-709fc9c62a04.jpg)
 
-## Screenshots
 
-![Login screen](public/readme-images/login.png)
-![Dashboard](public/readme-images/dashboard.png)
-![Financial goals](public/readme-images/goals.png)
-![Annual overview](public/readme-images/annual-overview.png)
-![Investment portfolio](public/readme-images/portfolio.png)
+> The project is following data model below: 
+> ![diagram](https://github.com/microverseinc/curriculum-rails/blob/main/capstone/images/erd_diagram.png)
 
 ## Built With
 
