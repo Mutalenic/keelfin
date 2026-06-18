@@ -10,7 +10,7 @@ class FinancialGoal < ApplicationRecord
 
   validate :target_date_after_start_date
 
-  scope :active, -> { where(target_date: Date.current..) }
+  scope :active, -> { where(completed: false, target_date: Date.current..) }
   scope :completed, -> { where(completed: true) }
   scope :in_progress, -> { active.where(completed: false) }
   scope :overdue, -> { where(completed: false).where(target_date: ...Date.current) }

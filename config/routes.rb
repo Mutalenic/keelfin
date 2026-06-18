@@ -87,6 +87,9 @@ Rails.application.routes.draw do
         patch :toggle_admin
         patch :impersonate
       end
+      collection do
+        delete :stop_impersonating
+      end
     end
     resources :subscriptions, only: [:index, :show, :edit, :update]
     resources :category_presets

@@ -74,13 +74,20 @@ class InvestmentsController < ApplicationController
   end
 
   def update_value
-    new_value = params[:current_value].to_f
+    raw = params[:current_value].to_s.strip
+    new_value = Float(raw)
+
+    unless new_value.positive?
+      return redirect_to investment_path(@investment), alert: 'Value must be greater than zero.'
+    end
 
     if @investment.update_current_value(new_value)
       redirect_to investment_path(@investment), notice: 'Investment value was successfully updated.'
     else
       redirect_to investment_path(@investment), alert: 'Failed to update investment value.'
     end
+  rescue ArgumentError, TypeError
+    redirect_to investment_path(@investment), alert: 'Invalid value entered.'
   end
 
   private

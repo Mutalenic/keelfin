@@ -2,7 +2,7 @@ class RecurringTransactionsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @active_transactions = current_user.recurring_transactions.active.order(next_occurrence: :asc)
+    @active_transactions = current_user.recurring_transactions.active.includes(:category).order(next_occurrence: :asc)
     @inactive_transactions = current_user.recurring_transactions.where(active: false).order(updated_at: :desc)
 
     # Analytics

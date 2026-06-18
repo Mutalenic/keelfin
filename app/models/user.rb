@@ -42,7 +42,8 @@ class User < ApplicationRecord
   alias is_over_indebted? over_indebted?
 
   def total_monthly_income
-    return income_sources.active.sum(&:monthly_equivalent) if income_sources.any?
+    total = income_sources.active.sum(:amount)
+    return total if total.positive?
 
     monthly_income.to_f
   end

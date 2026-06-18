@@ -1,6 +1,7 @@
 module Admin
   class UsersController < BaseController
     before_action :set_user, only: %i[show edit update toggle_admin impersonate]
+    before_action :ensure_not_already_impersonating, only: :impersonate
 
     def index
       users = User.order(created_at: :desc)
@@ -38,14 +39,35 @@ module Admin
     end
 
     def impersonate
+      session[:impersonating_admin_id] = current_user.id
+      Rails.logger.warn "[IMPERSONATE] Admin ##{current_user.id} (#{current_user.email}) " \
+                        "impersonating User ##{@user.id} (#{@user.email}) " \
+                        "at #{Time.current.iso8601} from #{request.remote_ip}"
       sign_in(:user, @user)
-      redirect_to root_path, notice: "Now impersonating #{@user.name}."
+      redirect_to root_path, notice: "Now impersonating #{@user.name}. " \
+                                     'Use the Stop Impersonating button to return.'
+    end
+
+    def stop_impersonating
+      admin_id = session.delete(:impersonating_admin_id)
+      admin = User.find_by(id: admin_id)
+      if admin
+        sign_in(:user, admin)
+        redirect_to admin_root_path, notice: 'Stopped impersonating. Welcome back.'
+      else
+        sign_out
+        redirect_to new_user_session_path, alert: 'Session expired. Please log in again.'
+      end
     end
 
     private
 
     def set_user
       @user = User.find(params[:id])
+    end
+
+    def ensure_not_already_impersonating
+      redirect_to admin_root_path, alert: 'You are already impersonating a user.' if session[:impersonating_admin_id].present?
     end
 
     def user_params

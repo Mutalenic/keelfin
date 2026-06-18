@@ -50,7 +50,8 @@ class SubscriptionsController < ApplicationController
     if @subscription.upgrade_to(plan_name)
       redirect_to subscription_path, notice: "Successfully upgraded to #{plan_name.capitalize} plan!"
     else
-      redirect_to plans_subscription_path, alert: 'Could not upgrade subscription. Please try again.'
+      alert = @subscription.errors.full_messages.first || 'Could not upgrade subscription. Please try again.'
+      redirect_to plans_subscription_path, alert: alert
     end
   end
 
