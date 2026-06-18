@@ -17,29 +17,43 @@
 ### Dashboard
 ![Dashboard](public/screenshots/dashboard_desktop.png)
 
-### Navigation
-![Navigation](public/screenshots/navigation.png)
-
-### Income Sources
-![Income Sources](public/screenshots/income.png)
-
-### Spending Categories
-![Categories](public/screenshots/categories.png)
-
-### Budget Management
-![Budgets](public/screenshots/budgets.png)
-
-### Recurring Transactions
-![Recurring](public/screenshots/recurring.png)
-
-### Debt Management
-![Debts](public/screenshots/debts.png)
-
-### Financial Goals
-![Goals](public/screenshots/goals.png)
-
 ### Investment Portfolio
 ![Investments](public/screenshots/investments_desktop.png)
+
+### Mobile Views
+
+<table>
+  <tr>
+    <td align="center"><b>Navigation</b></td>
+    <td align="center"><b>Income Sources</b></td>
+    <td align="center"><b>Categories</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/navigation.png" width="220"/></td>
+    <td><img src="public/screenshots/income.png" width="220"/></td>
+    <td><img src="public/screenshots/categories.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Budget Management</b></td>
+    <td align="center"><b>Recurring Transactions</b></td>
+    <td align="center"><b>Debt Management</b></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/budgets.png" width="220"/></td>
+    <td><img src="public/screenshots/recurring.png" width="220"/></td>
+    <td><img src="public/screenshots/debts.png" width="220"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Financial Goals</b></td>
+    <td align="center"><b>Investment Portfolio</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/goals.png" width="220"/></td>
+    <td><img src="public/screenshots/investments_mobile.png" width="220"/></td>
+    <td></td>
+  </tr>
+</table>
 
 ---
 
