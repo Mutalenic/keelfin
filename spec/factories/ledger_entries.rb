@@ -3,7 +3,7 @@ FactoryBot.define do
     association :ledger_transaction
     association :account, factory: :ledger_account
     direction    { 'debit' }
-    amount_cents { 5000 }
+    amount_ngwee { 5000 }
     currency     { 'ZMW' }
 
     trait :debit  do direction { 'debit' }  end

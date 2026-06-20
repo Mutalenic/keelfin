@@ -10,7 +10,7 @@ module Ledger
     belongs_to :account, class_name: 'Ledger::Account'
 
     validates :direction, inclusion: { in: DIRECTIONS }
-    validates :amount_cents, numericality: { greater_than: 0, only_integer: true }
+    validates :amount_ngwee, numericality: { greater_than: 0, only_integer: true }
     validates :currency, presence: true
 
     def debit?

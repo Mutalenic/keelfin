@@ -20,14 +20,14 @@ module Ledger
       DEBIT_NORMAL.include?(account_type)
     end
 
-    def balance_cents
-      debits = entries.where(direction: 'debit').sum(:amount_cents)
-      credits = entries.where(direction: 'credit').sum(:amount_cents)
+    def balance_ngwee
+      debits = entries.where(direction: 'debit').sum(:amount_ngwee)
+      credits = entries.where(direction: 'credit').sum(:amount_ngwee)
       debit_normal? ? debits - credits : credits - debits
     end
 
     def balance
-      Money.new(balance_cents, currency)
+      Money.new(balance_ngwee, currency)
     end
   end
 end

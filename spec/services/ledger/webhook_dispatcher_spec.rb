@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Ledger::WebhookDispatcher, type: :service do
-  let(:user)     { create(:user) }
-  let(:wallet)   { create(:ledger_account, :asset,  user: user) }
-  let(:equity)   { create(:ledger_account, :equity, user: user) }
+  let(:user) { create(:user) }
+  let(:wallet) { create(:ledger_account, :asset, user: user) }
+  let(:equity) { create(:ledger_account, :equity, user: user) }
   let(:endpoint) { create(:ledger_webhook_endpoint, user: user) }
   let(:txn) do
     t = create(:ledger_transaction, :posted, user: user)
-    create(:ledger_entry, ledger_transaction: t, account: wallet,  direction: 'debit',  amount_cents: 5000)
-    create(:ledger_entry, ledger_transaction: t, account: equity,  direction: 'credit', amount_cents: 5000)
+    create(:ledger_entry, ledger_transaction: t, account: wallet, direction: 'debit', amount_ngwee: 5000)
+    create(:ledger_entry, ledger_transaction: t, account: equity, direction: 'credit', amount_ngwee: 5000)
     t
   end
 
@@ -31,11 +31,11 @@ RSpec.describe Ledger::WebhookDispatcher, type: :service do
       it 'sends the correct HMAC-SHA256 signature header' do
         described_class.call(txn)
 
-        expect(WebMock).to have_requested(:post, endpoint.url)
-          .with { |req|
+        expect(WebMock).to(have_requested(:post, endpoint.url)
+          .with do |req|
             expected_sig = "sha256=#{OpenSSL::HMAC.hexdigest('SHA256', endpoint.secret, req.body)}"
             req.headers['X-Keelfine-Signature'] == expected_sig
-          }
+          end)
       end
 
       it 'increments the attempt_count' do

@@ -77,7 +77,7 @@ module Ledger
           {
             account_id: e.account_id,
             direction: e.direction,
-            amount_cents: e.amount_cents,
+            amount_ngwee: e.amount_ngwee,
             currency: e.currency
           }
         end

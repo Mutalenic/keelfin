@@ -14,10 +14,10 @@ module Ledger
 
     scope :recent, -> { order(created_at: :desc) }
 
-    def balance_delta_cents
-      return nil if balance_before_cents.nil? || balance_after_cents.nil?
+    def balance_delta_ngwee
+      return nil if balance_before_ngwee.nil? || balance_after_ngwee.nil?
 
-      balance_after_cents - balance_before_cents
+      balance_after_ngwee - balance_before_ngwee
     end
   end
 end

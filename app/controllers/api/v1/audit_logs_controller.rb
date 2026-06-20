@@ -31,9 +31,9 @@ module Api
           account_id: log.account_id,
           account_name: log.account&.name,
           transaction_id: log.transaction_id,
-          balance_before_cents: log.balance_before_cents,
-          balance_after_cents: log.balance_after_cents,
-          balance_delta_cents: log.balance_delta_cents,
+          balance_before_ngwee: log.balance_before_ngwee,
+          balance_after_ngwee: log.balance_after_ngwee,
+          balance_delta_ngwee: log.balance_delta_ngwee,
           currency: log.currency,
           metadata: log.metadata,
           created_at: log.created_at.iso8601

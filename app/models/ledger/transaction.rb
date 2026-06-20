@@ -48,7 +48,7 @@ module Ledger
 
     def entries_must_balance
       net = entries.to_a.sum do |entry|
-        entry.direction == 'debit' ? entry.amount_cents : -entry.amount_cents
+        entry.direction == 'debit' ? entry.amount_ngwee : -entry.amount_ngwee
       end
       return if net.zero?
 

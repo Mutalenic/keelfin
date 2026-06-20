@@ -25,7 +25,7 @@ module Api
       def balance
         render json: {
           account_id: account.id,
-          balance_cents: account.balance_cents,
+          balance_ngwee: account.balance_ngwee,
           currency: account.currency
         }
       end
@@ -47,7 +47,7 @@ module Api
           account_type: acct.account_type,
           currency: acct.currency,
           active: acct.active,
-          balance_cents: acct.balance_cents,
+          balance_ngwee: acct.balance_ngwee,
           created_at: acct.created_at.iso8601
         }
       end

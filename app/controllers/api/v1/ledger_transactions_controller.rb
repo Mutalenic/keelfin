@@ -58,7 +58,7 @@ module Api
           {
             account: account,
             direction: e[:direction],
-            amount_cents: e[:amount_cents].to_i,
+            amount_ngwee: e[:amount_ngwee].to_i,
             currency: e[:currency].presence || account.currency
           }
         end
@@ -83,7 +83,7 @@ module Api
           account_id: entry.account_id,
           account_name: entry.account.name,
           direction: entry.direction,
-          amount_cents: entry.amount_cents,
+          amount_ngwee: entry.amount_ngwee,
           currency: entry.currency
         }
       end

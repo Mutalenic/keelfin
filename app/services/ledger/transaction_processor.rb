@@ -9,8 +9,8 @@ module Ledger
   #     description:      "Transfer to savings",
   #     idempotency_key:  params[:idempotency_key],
   #     entries: [
-  #       { account: checking_account, direction: 'credit', amount_cents: 5000 },
-  #       { account: savings_account,  direction: 'debit',  amount_cents: 5000 }
+  #       { account: checking_account, direction: 'credit', amount_ngwee: 5000 },
+  #       { account: savings_account,  direction: 'debit',  amount_ngwee: 5000 }
   #     ]
   #   )
   class TransactionProcessor
@@ -58,36 +58,36 @@ module Ledger
           # prevent concurrent transactions from reading a stale balance.
           account = attrs[:account].lock!
 
-          balance_before = account.balance_cents
+          balance_before = account.balance_ngwee
 
           # CORRECTED funds check: money leaves an asset account on a CREDIT
           # (credit-normal accounts like liabilities/equity/income empty on debit).
-          if account.account_type == 'asset' && attrs[:direction] == 'credit' && (balance_before < attrs[:amount_cents])
+          if account.account_type == 'asset' && attrs[:direction] == 'credit' && (balance_before < attrs[:amount_ngwee])
             raise InsufficientFunds,
                   "Account '#{account.name}' has insufficient funds " \
-                  "(balance: #{balance_before} cents, required: #{attrs[:amount_cents]} cents)"
+                  "(balance: #{balance_before} ngwee, required: #{attrs[:amount_ngwee]} ngwee)"
           end
 
           txn.entries.create!(
             account: account,
             direction: attrs[:direction],
-            amount_cents: attrs[:amount_cents],
+            amount_ngwee: attrs[:amount_ngwee],
             currency: attrs[:currency] || account.currency
           )
 
-          balance_after = account.reload.balance_cents
+          balance_after = account.reload.balance_ngwee
 
           Ledger::AuditLog.create!(
             user: @user,
             ledger_transaction: txn,
             account: account,
             event_type: 'transaction_posted',
-            balance_before_cents: balance_before,
-            balance_after_cents: balance_after,
+            balance_before_ngwee: balance_before,
+            balance_after_ngwee: balance_after,
             currency: account.currency,
             metadata: {
               direction: attrs[:direction],
-              amount_cents: attrs[:amount_cents]
+              amount_ngwee: attrs[:amount_ngwee]
             }
           )
         end
@@ -106,12 +106,12 @@ module Ledger
 
     def validate_entries_balance!
       net = @entries.sum do |e|
-        e[:direction] == 'debit' ? e[:amount_cents] : -e[:amount_cents]
+        e[:direction] == 'debit' ? e[:amount_ngwee] : -e[:amount_ngwee]
       end
       return if net.zero?
 
       raise ImbalancedEntries,
-            "Entries do not balance: net #{net} cents " \
+            "Entries do not balance: net #{net} ngwee " \
             '(all debits must equal all credits)'
     end
   end

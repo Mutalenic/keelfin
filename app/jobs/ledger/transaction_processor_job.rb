@@ -22,7 +22,7 @@ module Ledger
         {
           account: account,
           direction: e['direction'],
-          amount_cents: e['amount_cents'].to_i,
+          amount_ngwee: e['amount_ngwee'].to_i,
           currency: e.fetch('currency', account.currency)
         }
       end
