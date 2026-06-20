@@ -71,6 +71,9 @@
 - **Subscriptions** — Free / Standard / Premium plan management
 - **Economic Indicators** — Live Bank of Zambia inflation and USD/ZMW exchange rates
 - **Admin Panel** — Full user and data management for administrators
+- **Ledger Engine** — Double-entry accounting with asset, liability, equity, income, and expense accounts
+- **REST API** — JWT-authenticated API for accounts, ledger transactions, audit logs, and webhooks
+- **Async Webhooks** — HMAC-signed `transaction.posted` events delivered via Sidekiq
 
 ---
 
@@ -91,6 +94,9 @@
 - **CanCanCan** — authorisation
 - **Pagy** — pagination
 - **Passenger + NGINX** — production server
+- **devise-jwt** — JWT token authentication for the API
+- **Sidekiq + Redis** — background jobs for transaction processing and webhook delivery
+- **money-rails** — ZMW-first money handling
 
 ---
 
@@ -126,6 +132,18 @@ Required variables:
 |----------------------|------------------------------------|
 | `ADMIN_PASSWORD`     | Password for the admin seed user   |
 | `DEMO_USER_PASSWORD` | Shared password for demo seed users |
+| `DEVISE_JWT_SECRET_KEY` | Secret used to sign API JWT tokens (falls back to `secret_key_base`) |
+| `REDIS_URL`          | Redis connection string for Sidekiq |
+
+### Services
+
+The ledger engine uses Redis + Sidekiq for asynchronous work. Start Sidekiq with:
+
+```bash
+bundle exec sidekiq -C config/sidekiq.yml
+```
+
+The Sidekiq Web UI is mounted at `/sidekiq` and restricted to admin users.
 
 ### Database
 
@@ -168,6 +186,57 @@ npx stylelint "app/assets/stylesheets/**/*.{css,scss}"
 ```bash
 bundle exec brakeman
 ```
+
+---
+
+## REST API
+
+The API is available under `/api/v1` and uses JWT Bearer tokens for authentication.
+
+### Authentication
+
+1. Obtain a token:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/auth/sign_in \
+  -H 'Content-Type: application/json' \
+  -d '{"user":{"email":"you@example.com","password":"yourpassword"}}'
+```
+
+The response includes an `Authorization` header: `Bearer <jwt>`.
+
+2. Use the token on subsequent requests:
+
+```bash
+curl -H 'Authorization: Bearer <jwt>' http://localhost:3000/api/v1/accounts
+```
+
+### Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST`   | `/api/v1/auth/sign_in` | Sign in and receive a JWT |
+| `DELETE` | `/api/v1/auth/sign_out` | Revoke the current JWT |
+| `GET`    | `/api/v1/accounts` | List current user's accounts |
+| `POST`   | `/api/v1/accounts` | Create a ledger account |
+| `GET`    | `/api/v1/accounts/:id/balance` | Get account balance |
+| `GET`    | `/api/v1/ledger_transactions` | List transactions |
+| `POST`   | `/api/v1/ledger_transactions` | Post a double-entry transaction |
+| `GET`    | `/api/v1/audit_logs` | Audit trail for ledger changes |
+| `GET`    | `/api/v1/webhook_endpoints` | List webhook endpoints |
+| `POST`   | `/api/v1/webhook_endpoints` | Register a webhook endpoint |
+| `DELETE` | `/api/v1/webhook_endpoints/:id` | Remove a webhook endpoint |
+| `GET`    | `/api/v1/webhook_deliveries` | List webhook delivery attempts |
+
+### Webhooks
+
+Webhook endpoints receive `POST` requests with a JSON body and three headers:
+
+- `X-Keelfine-Event` — `transaction.posted`
+- `X-Keelfine-Delivery-Id` — delivery attempt ID
+- `X-Keelfine-Signature` — `sha256=<hmac>` (HMAC-SHA256 of the raw body using the endpoint secret)
+
+All webhook deliveries are recorded in `Ledger::WebhookDelivery` and retried automatically on transient failures.
 
 ---
 

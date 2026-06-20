@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_29_111607) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_20_110458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -188,6 +188,91 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_29_111607) do
     t.index ["user_id"], name: "index_investments_on_user_id"
   end
 
+  create_table "ledger_accounts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.string "account_type", null: false
+    t.string "currency", default: "ZMW", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "active"], name: "index_ledger_accounts_on_user_id_and_active"
+    t.index ["user_id"], name: "index_ledger_accounts_on_user_id"
+  end
+
+  create_table "ledger_audit_logs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "transaction_id"
+    t.bigint "account_id"
+    t.string "event_type", null: false
+    t.bigint "balance_before_ngwee"
+    t.bigint "balance_after_ngwee"
+    t.string "currency", default: "ZMW"
+    t.jsonb "metadata", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_ledger_audit_logs_on_account_id"
+    t.index ["transaction_id"], name: "index_ledger_audit_logs_on_transaction_id"
+    t.index ["user_id", "created_at"], name: "index_ledger_audit_logs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_ledger_audit_logs_on_user_id"
+  end
+
+  create_table "ledger_entries", force: :cascade do |t|
+    t.bigint "transaction_id", null: false
+    t.bigint "account_id", null: false
+    t.string "direction", null: false
+    t.bigint "amount_ngwee", null: false
+    t.string "currency", default: "ZMW", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "direction"], name: "index_ledger_entries_on_account_id_and_direction"
+    t.index ["account_id"], name: "index_ledger_entries_on_account_id"
+    t.index ["transaction_id"], name: "index_ledger_entries_on_transaction_id"
+  end
+
+  create_table "ledger_transactions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "description", null: false
+    t.string "status", default: "pending", null: false
+    t.string "idempotency_key", null: false
+    t.string "transaction_type", default: "transfer", null: false
+    t.text "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["idempotency_key"], name: "index_ledger_transactions_on_idempotency_key", unique: true
+    t.index ["user_id", "status"], name: "index_ledger_transactions_on_user_id_and_status"
+    t.index ["user_id"], name: "index_ledger_transactions_on_user_id"
+  end
+
+  create_table "ledger_webhook_deliveries", force: :cascade do |t|
+    t.bigint "webhook_endpoint_id", null: false
+    t.bigint "transaction_id", null: false
+    t.string "event_type", null: false
+    t.jsonb "payload", default: {}, null: false
+    t.string "status", default: "pending", null: false
+    t.integer "http_status_code"
+    t.text "response_body"
+    t.integer "attempt_count", default: 0, null: false
+    t.datetime "last_attempted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transaction_id"], name: "index_ledger_webhook_deliveries_on_transaction_id"
+    t.index ["webhook_endpoint_id", "status"], name: "idx_on_webhook_endpoint_id_status_2e1484f4a1"
+    t.index ["webhook_endpoint_id"], name: "index_ledger_webhook_deliveries_on_webhook_endpoint_id"
+  end
+
+  create_table "ledger_webhook_endpoints", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "url", null: false
+    t.string "secret", null: false
+    t.boolean "active", default: true, null: false
+    t.string "event_types", default: [], null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "active"], name: "index_ledger_webhook_endpoints_on_user_id_and_active"
+    t.index ["user_id"], name: "index_ledger_webhook_endpoints_on_user_id"
+  end
+
   create_table "payments", force: :cascade do |t|
     t.string "name"
     t.decimal "amount"
@@ -270,8 +355,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_29_111607) do
     t.string "unconfirmed_email"
     t.decimal "opening_balance", precision: 12, scale: 2
     t.date "balance_as_of"
+    t.string "jti", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["phone_number"], name: "index_users_on_phone_number"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -287,6 +374,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_29_111607) do
   add_foreign_key "investment_transactions", "investments"
   add_foreign_key "investment_transactions", "users"
   add_foreign_key "investments", "users"
+  add_foreign_key "ledger_accounts", "users"
+  add_foreign_key "ledger_audit_logs", "ledger_accounts", column: "account_id"
+  add_foreign_key "ledger_audit_logs", "ledger_transactions", column: "transaction_id"
+  add_foreign_key "ledger_audit_logs", "users"
+  add_foreign_key "ledger_entries", "ledger_accounts", column: "account_id"
+  add_foreign_key "ledger_entries", "ledger_transactions", column: "transaction_id"
+  add_foreign_key "ledger_transactions", "users"
+  add_foreign_key "ledger_webhook_deliveries", "ledger_transactions", column: "transaction_id"
+  add_foreign_key "ledger_webhook_deliveries", "ledger_webhook_endpoints", column: "webhook_endpoint_id"
+  add_foreign_key "ledger_webhook_endpoints", "users"
   add_foreign_key "payments", "categories"
   add_foreign_key "payments", "users"
   add_foreign_key "recurring_transactions", "categories"

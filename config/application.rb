@@ -18,5 +18,9 @@ module Keelfin
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Background jobs: use Sidekiq in all environments except test, where
+    # :test adapter keeps jobs in-process and inspectable via enqueued_jobs.
+    config.active_job.queue_adapter = Rails.env.test? ? :test : :sidekiq
   end
 end

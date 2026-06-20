@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   resource :subscription, only: [:show, :new, :create, :update] do
     collection do
@@ -76,6 +78,34 @@ Rails.application.routes.draw do
     end
     collection do
       post :add_preset
+    end
+  end
+
+  # Sidekiq Web UI — admin-only, session-authenticated (not JWT)
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  # -----------------------------------------------------------------------
+  # REST API — JWT authenticated, versioned, CORS-enabled
+  # We use `devise_scope :user` (not a second `devise_for`) to avoid duplicate
+  # Devise mappings and keep the API session routes on the `:user` scope.
+  # -----------------------------------------------------------------------
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      devise_scope :user do
+        post   'auth/sign_in',  to: 'sessions#create'
+        delete 'auth/sign_out', to: 'sessions#destroy'
+      end
+
+      resources :accounts, only: %i[index show create] do
+        member { get :balance }
+      end
+
+      resources :ledger_transactions, only: %i[index show create]
+      resources :audit_logs,          only: %i[index]
+      resources :webhook_endpoints,   only: %i[index create destroy]
+      resources :webhook_deliveries,  only: %i[index]
     end
   end
 
