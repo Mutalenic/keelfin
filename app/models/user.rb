@@ -1,8 +1,12 @@
 class User < ApplicationRecord
+  # devise-jwt revocation strategy: a per-user JTI is matched against the token.
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
+         :recoverable, :rememberable, :validatable, :confirmable,
+         :jwt_authenticatable, jwt_revocation_strategy: self
 
   DEBT_TO_INCOME_THRESHOLD = 40
 
@@ -16,6 +20,12 @@ class User < ApplicationRecord
   has_many :investments, dependent: :destroy
   has_many :investment_transactions, through: :investments
   has_one :subscription, dependent: :destroy
+
+  # Double-entry ledger engine associations
+  has_many :ledger_accounts, class_name: 'Ledger::Account', dependent: :destroy
+  has_many :ledger_transactions, class_name: 'Ledger::Transaction', dependent: :destroy
+  has_many :ledger_audit_logs, class_name: 'Ledger::AuditLog', dependent: :destroy
+  has_many :ledger_webhook_endpoints, class_name: 'Ledger::WebhookEndpoint', dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 50, minimum: 2 }
   validates :monthly_income, numericality: { greater_than: 0 }, allow_nil: true
