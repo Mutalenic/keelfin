@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :ledger_account, class: 'Ledger::Account' do
     association :user
-    name         { 'Wallet' }
+    name { 'Wallet' }
     account_type { 'asset' }
-    currency     { 'ZMW' }
-    active       { true }
+    currency { 'ZMW' }
+    active { true }
 
     trait :asset do
       account_type { 'asset' }
