@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: keelfin_production
-  username: keelfin
-  password: <%= ENV["KEELFIN_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
