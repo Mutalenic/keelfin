@@ -16,8 +16,8 @@ gem 'sprockets-rails'
 gem 'devise'
 gem 'pg', '~> 1.5'
 
-# Use Passenger as the app server
-gem 'passenger', '~> 6.0', require: false
+# Use Puma as the app server
+gem 'puma', '~> 6.0'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
@@ -75,9 +75,6 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-
-  # Use Puma as the app server
-  gem 'puma', '~> 6.0'
 end
 
 group :test do

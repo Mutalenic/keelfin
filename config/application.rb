@@ -1,6 +1,6 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,8 +19,16 @@ module Keelfin
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # Background jobs: use Sidekiq in all environments except test, where
-    # :test adapter keeps jobs in-process and inspectable via enqueued_jobs.
-    config.active_job.queue_adapter = Rails.env.test? ? :test : :sidekiq
+    # Background jobs: Sidekiq when Redis is configured (REDIS_URL);
+    # otherwise run jobs in-process with the async adapter, e.g. on free-tier
+    # hosting without a worker process or local development without Redis.
+    # Test keeps jobs inspectable via enqueued_jobs.
+    config.active_job.queue_adapter = if Rails.env.test?
+                                        :test
+                                      elsif ENV['REDIS_URL'].present?
+                                        :sidekiq
+                                      else
+                                        :async
+                                      end
   end
 end
