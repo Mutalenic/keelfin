@@ -1,0 +1,6 @@
+:concurrency: 5
+:queues:
+  - [critical, 3]
+  - [transactions, 2]
+  - [webhooks, 1]
+  - [default, 1]

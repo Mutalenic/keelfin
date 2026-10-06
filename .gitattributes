@@ -11,5 +11,5 @@ public/** linguist-vendored
 
 # Ensure Ruby and HTML ERB templates are classified correctly.
 *.rb linguist-language=Ruby
-*.html.erb linguist-language=HTML+ERB
+*.html.erb linguist-language=Ruby
 *.text.erb linguist-language=ERB

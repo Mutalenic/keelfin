@@ -104,4 +104,15 @@ gem 'pagy', '~> 9.0'
 
 gem 'ffi'
 
+# Ledger engine: double-entry API, async processing, webhooks
+gem 'devise-jwt' # JWT auth for the REST API
+gem 'faraday' # Outbound HTTP for webhook delivery
+gem 'faraday-retry' # Retry/backoff middleware for webhooks
+gem 'lograge' # Structured JSON request logging
+gem 'money-rails' # Currency handling (integer cents)
+gem 'rack-attack' # API rate limiting
+gem 'rack-cors' # CORS for the dashboard frontend
+gem 'redis' # Sidekiq backing store
+gem 'sidekiq' # Background job processing
+
 # Deployment
