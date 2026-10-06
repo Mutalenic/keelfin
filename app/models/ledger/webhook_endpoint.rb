@@ -17,9 +17,7 @@ module Ledger
       return if url.blank?
 
       uri = URI.parse(url)
-      unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
-        errors.add(:url, 'must be a valid HTTP(S) URL')
-      end
+      errors.add(:url, 'must be a valid HTTP(S) URL') unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
     rescue URI::InvalidURIError
       errors.add(:url, 'must be a valid HTTP(S) URL')
     end
