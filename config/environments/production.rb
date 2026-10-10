@@ -10,6 +10,8 @@ Rails.application.configure do
   config.hosts << /.*\.keelfin\.app/
   # Koyeb's default deployment domain
   config.hosts << /.*\.koyeb\.app/
+  # Render's default deployment domain
+  config.hosts << /.*\.onrender\.com/
 
   # Code is not reloaded between requests.
   config.cache_classes = true

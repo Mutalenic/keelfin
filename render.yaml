@@ -1,0 +1,29 @@
+# Render Blueprint for Keelfin. Deploy from the Render Dashboard:
+# New -> Blueprint -> select this repository, then enter the values for
+# DATABASE_URL and SECRET_KEY_BASE when prompted (sync: false).
+# See https://render.com/docs/blueprint-spec for the full schema.
+services:
+  - type: web
+    name: keelfin
+    runtime: ruby
+    plan: free
+    region: frankfurt # same side of the Atlantic as the Supabase project (West EU / Ireland)
+    branch: main
+    buildCommand: ./bin/render-build.sh
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: 'true'
+      - key: RAILS_LOG_TO_STDOUT
+        value: 'true'
+      - key: RAILS_MAX_THREADS
+        value: '2'
+      # Supabase session pooler connection string, e.g.
+      # postgres://postgres.<PROJECT-REF>:<PASSWORD>@aws-0-eu-west-1.pooler.supabase.com:5432/postgres?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      # Generate with `bin/rails secret`
+      - key: SECRET_KEY_BASE
+        sync: false
